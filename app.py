@@ -25,30 +25,22 @@ if st.button("Submit Code"):
     if not user_row.empty:
         user_name = user_row['name'].values[0]
         st.success(f"Hi {user_name}. Are you ready to get started?")
+
+        # Initialize session state for questions
+        if 'current_question_index' not in st.session_state:
+            st.session_state.current_question_index = 0
         
-        # Proceed with the chatbot interaction
-        question_list = [
+        # List of questions
+        questions = [
             "Describe your symptoms:",
             "How long have you been experiencing these symptoms?",
             "Have you taken any medications for this?",
             "Do you have any allergies we should know about?"
         ]
 
-        # Initialize session state for questions
-        if 'current_question_index' not in st.session_state:
-            st.session_state.current_question_index = 0
-        
-        # Function to get the current question
-        def get_current_question():
-            if st.session_state.current_question_index < len(question_list):
-                return question_list[st.session_state.current_question_index]
-            else:
-                return None
-
-        # Display the current question
-        current_question = get_current_question()
-
-        if current_question:
+        # Display the current question based on the index
+        if st.session_state.current_question_index < len(questions):
+            current_question = questions[st.session_state.current_question_index]
             user_input = st.text_input(current_question)
 
             if st.button("Submit"):
@@ -71,6 +63,8 @@ if st.button("Submit Code"):
                     st.warning("Please enter your response.")
         else:
             st.success("Thank you for your responses!")
+
     else:
         st.error("Code not recognized. Please try again.")
+
 
