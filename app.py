@@ -38,12 +38,12 @@ if st.button("Submit Code"):
             "Do you have any allergies we should know about?"
         ]
 
-        # Display the current question based on the index
-        if st.session_state.current_question_index < len(questions):
-            current_question = questions[st.session_state.current_question_index]
-            user_input = st.text_input(current_question)
+        # Function to display the current question and get user input
+        def ask_question(index):
+            current_question = questions[index]
+            user_input = st.text_input(current_question, key=f"input_{index}")
 
-            if st.button("Submit"):
+            if st.button("Submit", key=f"submit_{index}"):
                 if user_input:
                     try:
                         response = openai.ChatCompletion.create(
@@ -55,15 +55,20 @@ if st.button("Submit Code"):
                         # Increment the question index for the next question
                         st.session_state.current_question_index += 1
 
-                        # Clear the input field for the next question
+                        # Clear the input field and show the next question
                         st.experimental_rerun()
                     except Exception as e:
                         st.error(f"Error: {e}")
                 else:
                     st.warning("Please enter your response.")
+
+        # Check if there are more questions to ask
+        if st.session_state.current_question_index < len(questions):
+            ask_question(st.session_state.current_question_index)
         else:
             st.success("Thank you for your responses!")
-
+            # Optionally reset the question index for next time
+            st.session_state.current_question_index = 0  # Reset if needed
     else:
         st.error("Code not recognized. Please try again.")
 
