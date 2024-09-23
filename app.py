@@ -15,10 +15,13 @@ user_input = st.text_input("Describe your symptoms:")
 
 if st.button("Submit"):
     if user_input:
-        response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
-            messages=[{"role": "user", "content": user_input}]
-        )
-        st.write(response['choices'][0]['message']['content'])
+        try:
+            response = openai.ChatCompletion.create(
+                model="gpt-3.5-turbo",
+                messages=[{"role": "user", "content": user_input}]
+            )
+            st.write(response.choices[0].message['content'])
+        except Exception as e:
+            st.error(f"Error: {e}")
     else:
         st.warning("Please enter your symptoms.")
