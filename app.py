@@ -19,6 +19,6 @@ if st.button("Submit"):
             model="gpt-3.5-turbo",
             messages=[{"role": "user", "content": user_input}]
         )
-        st.write(response.choices[0].message['content'])
+        st.write(response['choices'][0]['message']['content'])
     else:
         st.warning("Please enter your symptoms.")
