@@ -14,6 +14,7 @@ FIRESTORE_COLLECTION = os.getenv('FIRESTORE_COLLECTION')
 def initialize_firebase():
     if not firebase_admin._apps:  # Check if any app is already initialized
         try:
+            print(f"Using Firebase key path: {FIREBASE_KEY_PATH}")  # Debug line
             cred = credentials.Certificate(FIREBASE_KEY_PATH)
             firebase_admin.initialize_app(cred)
             return firestore.client()  # Return Firestore client
@@ -82,7 +83,6 @@ def main():
 
 if __name__ == '__main__':
     main()
-
 
 
 
