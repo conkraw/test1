@@ -2,4 +2,5 @@ streamlit
 openai==0.28.0
 python-dotenv
 pandas
-google-cloud-storage
+os
+boto3
