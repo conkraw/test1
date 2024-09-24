@@ -4,3 +4,4 @@ python-dotenv
 pandas
 globus_sdk 
 firebase-admin
+firebase_admin
