@@ -12,23 +12,34 @@ FIRESTORE_COLLECTION = os.getenv('FIRESTORE_COLLECTION')
 
 # Initialize Firebase
 def initialize_firebase():
-    cred = credentials.Certificate(FIREBASE_KEY_PATH)
-    firebase_admin.initialize_app(cred)
+    if not firebase_admin._apps:  # Check if any app is already initialized
+        try:
+            cred = credentials.Certificate(FIREBASE_KEY_PATH)
+            firebase_admin.initialize_app(cred)
+            return firestore.client()  # Return Firestore client
+        except Exception as e:
+            st.error(f"Error initializing Firebase: {e}")
+            return None
+    return firestore.client()  # Return Firestore client if already initialized
 
-def upload_to_firebase(data):
-    for entry in data:
-        db.collection(FIRESTORE_COLLECTION).add(entry)
-    return "Data uploaded to Firebase."
+def upload_to_firebase(db, data):
+    try:
+        for entry in data:
+            db.collection(FIRESTORE_COLLECTION).add(entry)
+        return "Data uploaded to Firebase."
+    except Exception as e:
+        st.error(f"Error uploading to Firebase: {e}")
+        return None
 
 # Main Streamlit App
 def main():
     st.title("Data Entry and Upload to Firebase")
 
-    # Initialize Firebase only once
-    if not firebase_admin._apps:
-        initialize_firebase()
-    
-    db = firestore.client()
+    db = initialize_firebase()  # Initialize Firebase and get Firestore client
+
+    if db is None:
+        st.error("Firebase could not be initialized. Please check your configuration.")
+        return
 
     # Input form for user data
     st.header("Enter Data")
@@ -38,7 +49,7 @@ def main():
     # Button to add data to the list
     if st.button("Add Entry"):
         if name:
-            if st.session_state.get('data') is None:
+            if 'data' not in st.session_state:
                 st.session_state['data'] = []
             st.session_state['data'].append({'name': name, 'age': age})
             st.success(f"Added: {name}, Age: {age}")
@@ -60,8 +71,9 @@ def main():
             st.success(f"Data saved to {csv_filename}")
 
             # Upload to Firebase
-            result = upload_to_firebase(st.session_state['data'])
-            st.success(result)
+            result = upload_to_firebase(db, st.session_state['data'])
+            if result:
+                st.success(result)
 
             # Clear the data after upload
             st.session_state['data'] = []
@@ -70,7 +82,6 @@ def main():
 
 if __name__ == '__main__':
     main()
-
 
 
 
