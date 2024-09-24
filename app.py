@@ -20,12 +20,11 @@ else:
             cred = credentials.Certificate(firebase_credentials)
             firebase_admin.initialize_app(cred)
 
-        # Upload data to Firestore
+        # Get Firestore client
         db = firestore.client()
 
-        def upload_to_firebase(data):
-            for entry in data:
-                db.collection('your_collection_name').add(entry)  # Change 'your_collection_name' to your collection name
+        def upload_to_firebase(entry):
+            db.collection('your_collection_name').add(entry)  # Change 'your_collection_name' to your collection name
             return "Data uploaded to Firebase."
 
         # Main Streamlit App
@@ -37,36 +36,22 @@ else:
             name = st.text_input("Enter Name")
             age = st.number_input("Enter Age", min_value=0)
 
-            # Button to add data to the list
+            # Button to add data to the list and upload to Firebase
             if st.button("Add Entry"):
                 if name:
-                    if 'data' not in st.session_state:
-                        st.session_state['data'] = []
-                    st.session_state['data'].append({'name': name, 'age': age})
+                    entry = {'name': name, 'age': age}
+                    # Immediately upload to Firebase
+                    result = upload_to_firebase(entry)
+                    st.success(result)
                     st.success(f"Added: {name}, Age: {age}")
                 else:
                     st.error("Please enter a name.")
-
-            # Show entered data
-            if 'data' in st.session_state and st.session_state['data']:
-                st.write("Current Entries:")
-                st.write(st.session_state['data'])
-
-            # Button to upload to Firebase
-            if st.button("Upload to Firebase"):
-                if 'data' in st.session_state and st.session_state['data']:
-                    result = upload_to_firebase(st.session_state['data'])
-                    st.success(result)
-
-                    # Clear the data after upload
-                    st.session_state['data'] = []
-                else:
-                    st.error("No data to upload.")
 
         if __name__ == '__main__':
             main()
 
     except Exception as e:
         st.error(f"Error initializing Firebase: {e}")
+
 
 
