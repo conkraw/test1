@@ -3,8 +3,7 @@ import pandas as pd
 import streamlit as st
 import openai
 from dotenv import load_dotenv
-import boto3
-from botocore.exceptions import NoCredentialsError
+from globus_sdk import NativeAppAuthFlowManager, TransferClient, TransferData
 
 # Load environment variables from .env file
 load_dotenv()
@@ -12,17 +11,13 @@ load_dotenv()
 # Set your OpenAI API key
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
-# AWS S3 configuration
-aws_access_key_id = os.getenv("AWS_ACCESS_KEY_ID")
-aws_secret_access_key = os.getenv("AWS_SECRET_ACCESS_KEY")
-bucket_name = os.getenv("BUCKET_NAME")
+# Globus configuration
+CLIENT_ID = os.getenv("GLOBUS_CLIENT_ID")
+GLOBUS_TOKEN = os.getenv("GLOBUS_ACCESS_TOKEN")
+destination_endpoint_id = os.getenv("GLOBUS_DESTINATION_ENDPOINT_ID")
 
-# Initialize S3 client
-s3_client = boto3.client(
-    's3',
-    aws_access_key_id=aws_access_key_id,
-    aws_secret_access_key=aws_secret_access_key
-)
+# Initialize Globus Transfer Client
+transfer_client = TransferClient(authorizer=GlobusAuthorizer(GLOBUS_TOKEN))
 
 # Load user data from CSV
 user_data = pd.read_csv('users.csv')
@@ -65,10 +60,10 @@ if st.button("Submit Code"):
                     csv_file_path = 'user_responses.csv'
                     responses_df.to_csv(csv_file_path, mode='a', header=not os.path.isfile(csv_file_path), index=False)
 
-                    # Upload the CSV file to Amazon S3
-                    upload_to_s3(bucket_name, csv_file_path)
+                    # Upload the CSV file to Globus
+                    upload_to_globus(destination_endpoint_id, csv_file_path)
 
-                    st.success("Responses saved and uploaded to Amazon S3 successfully!")
+                    st.success("Responses saved and uploaded to Globus successfully!")
 
                 except Exception as e:
                     st.error(f"Error: {e}")
@@ -77,17 +72,12 @@ if st.button("Submit Code"):
     else:
         st.error("Code not recognized. Please try again.")
 
-def upload_to_s3(bucket_name, file_path):
-    """Uploads a file to the specified S3 bucket."""
-    try:
-        s3_client.upload_file(file_path, os.path.basename(file_path), file_path)
-        st.success(f"File {file_path} uploaded to {bucket_name} on S3.")
-    except FileNotFoundError:
-        st.error("The file was not found.")
-    except NoCredentialsError:
-        st.error("Credentials not available.")
-    except Exception as e:
-        st.error(f"Failed to upload to S3: {e}")
+def upload_to_globus(destination_endpoint_id, file_path):
+    """Uploads a file to the specified Globus endpoint."""
+    transfer_data = TransferData(transfer_client, destination_endpoint_id, file_path, os.path.basename(file_path))
+    transfer_client.submit_transfer(transfer_data)
+    st.success(f"File {file_path} uploaded to Globus endpoint {destination_endpoint_id}.")
+
 
 
 
