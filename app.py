@@ -1,82 +1,76 @@
-import os
 import pandas as pd
+import firebase_admin
+from firebase_admin import credentials, firestore
 import streamlit as st
-import openai
+import os
 from dotenv import load_dotenv
-from globus_sdk import NativeAppAuthFlowManager, TransferClient, TransferData
 
-# Load environment variables from .env file
+# Load environment variables
 load_dotenv()
+FIREBASE_KEY_PATH = os.getenv('FIREBASE_KEY_PATH')
+FIRESTORE_COLLECTION = os.getenv('FIRESTORE_COLLECTION')
 
-# Set your OpenAI API key
-openai.api_key = os.getenv("OPENAI_API_KEY")
+# Initialize Firebase
+def initialize_firebase():
+    cred = credentials.Certificate(FIREBASE_KEY_PATH)
+    firebase_admin.initialize_app(cred)
 
-# Globus configuration
-CLIENT_ID = os.getenv("GLOBUS_CLIENT_ID")
-GLOBUS_TOKEN = os.getenv("GLOBUS_ACCESS_TOKEN")
-destination_endpoint_id = os.getenv("GLOBUS_DESTINATION_ENDPOINT_ID")
+def upload_to_firebase(data):
+    for entry in data:
+        db.collection(FIRESTORE_COLLECTION).add(entry)
+    return "Data uploaded to Firebase."
 
-# Initialize Globus Transfer Client
-transfer_client = TransferClient(authorizer=GlobusAuthorizer(GLOBUS_TOKEN))
+# Main Streamlit App
+def main():
+    st.title("Data Entry and Upload to Firebase")
 
-# Load user data from CSV
-user_data = pd.read_csv('users.csv')
-
-st.title("Virtual Patient Chatbot")
-
-# Ask for the user code
-user_code = st.text_input("What is your code number?")
-
-if st.button("Submit Code"):
-    user_row = user_data[user_data['code'] == int(user_code)]
+    # Initialize Firebase only once
+    if not firebase_admin._apps:
+        initialize_firebase()
     
-    if not user_row.empty:
-        user_name = user_row['name'].values[0]
-        st.success(f"Hi {user_name}. Are you ready to get started?")
-        
-        # Prepare to log responses
-        user_responses = []
+    db = firestore.client()
 
-        # Proceed with the chatbot interaction
-        user_input = st.text_input("Describe your symptoms:")
-        
-        if st.button("Submit Symptoms"):
-            if user_input:
-                # Log the user input
-                user_responses.append({"Code": user_code, "Name": user_name, "Symptoms": user_input})
-                try:
-                    response = openai.ChatCompletion.create(
-                        model="gpt-3.5-turbo",
-                        messages=[{"role": "user", "content": user_input}]
-                    )
-                    chatbot_response = response.choices[0].message['content']
-                    st.write(chatbot_response)
-                    
-                    # Log the chatbot response
-                    user_responses[-1]["Chatbot Response"] = chatbot_response
-                    
-                    # Save responses to CSV
-                    responses_df = pd.DataFrame(user_responses)
-                    csv_file_path = 'user_responses.csv'
-                    responses_df.to_csv(csv_file_path, mode='a', header=not os.path.isfile(csv_file_path), index=False)
+    # Input form for user data
+    st.header("Enter Data")
+    name = st.text_input("Enter Name")
+    age = st.number_input("Enter Age", min_value=0)
 
-                    # Upload the CSV file to Globus
-                    upload_to_globus(destination_endpoint_id, csv_file_path)
+    # Button to add data to the list
+    if st.button("Add Entry"):
+        if name:
+            if st.session_state.get('data') is None:
+                st.session_state['data'] = []
+            st.session_state['data'].append({'name': name, 'age': age})
+            st.success(f"Added: {name}, Age: {age}")
+        else:
+            st.error("Please enter a name.")
 
-                    st.success("Responses saved and uploaded to Globus successfully!")
+    # Show entered data
+    if 'data' in st.session_state and st.session_state['data']:
+        st.write("Current Entries:")
+        st.write(st.session_state['data'])
 
-                except Exception as e:
-                    st.error(f"Error: {e}")
-            else:
-                st.warning("Please enter your symptoms.")
-    else:
-        st.error("Code not recognized. Please try again.")
+    # Button to save data to CSV and upload to Firebase
+    if st.button("Upload to Firebase"):
+        if 'data' in st.session_state and st.session_state['data']:
+            # Save to CSV
+            df = pd.DataFrame(st.session_state['data'])
+            csv_filename = "data.csv"
+            df.to_csv(csv_filename, index=False)
+            st.success(f"Data saved to {csv_filename}")
 
-def upload_to_globus(destination_endpoint_id, file_path):
-    """Uploads a file to the specified Globus endpoint."""
-    transfer_data = TransferData(transfer_client, destination_endpoint_id, file_path, os.path.basename(file_path))
-    transfer_client.submit_transfer(transfer_data)
-    st.success(f"File {file_path} uploaded to Globus endpoint {destination_endpoint_id}.")
+            # Upload to Firebase
+            result = upload_to_firebase(st.session_state['data'])
+            st.success(result)
+
+            # Clear the data after upload
+            st.session_state['data'] = []
+        else:
+            st.error("No data to upload.")
+
+if __name__ == '__main__':
+    main()
+
 
 
 
