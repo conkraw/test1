@@ -15,9 +15,10 @@ else:
         # Parse the JSON string into a dictionary
         firebase_credentials = json.loads(FIREBASE_KEY_JSON)
 
-        # Initialize Firebase
-        cred = credentials.Certificate(firebase_credentials)
-        firebase_admin.initialize_app(cred)
+        # Initialize Firebase only if not already initialized
+        if not firebase_admin._apps:
+            cred = credentials.Certificate(firebase_credentials)
+            firebase_admin.initialize_app(cred)
 
         # Upload data to Firestore
         db = firestore.client()
