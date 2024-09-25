@@ -90,7 +90,7 @@ else:
                 # Create and display a table with diagnoses as column headers
                 if st.session_state.diagnoses:
                     diagnosis_df = pd.DataFrame(columns=st.session_state.diagnoses)
-                    diagnosis_df.loc[0] = [f"No diagnosis entered" if not diag else diag for diag in st.session_state.diagnoses]
+                    diagnosis_df.loc[0] = [""] * len(st.session_state.diagnoses)  # Blank first row
                     st.table(diagnosis_df)
 
                 # Upload all answers to Firestore
@@ -113,6 +113,5 @@ else:
         st.error("Error parsing FIREBASE_KEY: Invalid JSON format.")
     except Exception as e:
         st.error(f"Error initializing Firebase: {e}")
-
 
 
