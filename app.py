@@ -38,7 +38,6 @@ def main():
                 st.error("Please enter a code.")
 
 def show_welcome_page():
-    st.title("Welcome Page")
     st.write(f"Welcome, {st.session_state.user_name}!")
 
 if __name__ == "__main__":
