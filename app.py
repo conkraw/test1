@@ -48,7 +48,12 @@ else:
             # Display the current question
             if current_index < len(questions):
                 question = questions[current_index]
-                answer = st.text_input(question, key=f"answer_{current_index}")
+                
+                # Use text_area for the first question to expand the input box
+                if current_index == 0:
+                    answer = st.text_area(question, key=f"answer_{current_index}", height=150)
+                else:
+                    answer = st.text_input(question, key=f"answer_{current_index}")
 
                 # Button to go to the next question
                 if st.button("Next"):
@@ -83,5 +88,6 @@ else:
         st.error("Error parsing FIREBASE_KEY: Invalid JSON format.")
     except Exception as e:
         st.error(f"Error initializing Firebase: {e}")
+
 
 
