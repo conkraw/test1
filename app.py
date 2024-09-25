@@ -90,7 +90,7 @@ else:
                 # Create and display a table with Historical Facts and diagnoses
                 if st.session_state.diagnoses:
                     # Create a DataFrame with the first column as "Historical Facts"
-                    diagnosis_df = pd.DataFrame(columns=["Historical Facts"] + [""] * len(st.session_state.diagnoses))
+                    diagnosis_df = pd.DataFrame(columns=["Historical Facts"] + [f"Diagnosis {i + 1}" for i in range(5)])
                     diagnosis_df.loc[0] = [st.session_state.answers[0]] + st.session_state.diagnoses
                     st.table(diagnosis_df)
 
@@ -114,5 +114,6 @@ else:
         st.error("Error parsing FIREBASE_KEY: Invalid JSON format.")
     except Exception as e:
         st.error(f"Error initializing Firebase: {e}")
+
 
 
