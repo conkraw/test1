@@ -49,7 +49,10 @@ else:
                 answer = st.text_input(question, key=f"answer_{current_index}")
 
                 # Button to go to the next question
-                if st.button("Next"):
+                next_button = st.button("Next")
+
+                # Logic to handle the Next button
+                if next_button:
                     if answer:  # Check if an answer is provided
                         st.session_state.answers.append(answer)
                         st.session_state.question_index += 1  # Move to the next question
