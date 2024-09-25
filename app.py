@@ -28,8 +28,8 @@ def main():
                 st.success(f"Hi, {user_name}! Welcome to the assessment.")
             else:
                 st.error("Invalid code. Please try again.")
-    except ValueError:
-        st.error("Please enter a valid code.")
+        except ValueError:
+            st.error("Please enter a valid code.")
 
 
 if __name__ == "__main__":
