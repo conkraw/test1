@@ -41,7 +41,10 @@ else:
 
             # Ask the user each question
             for i, question in enumerate(questions):
-                if i == 1:  # Special handling for question 2
+                if i == 0:  # Special handling for the first question
+                    answer = st.text_area(f"{question}:", key=f"answer_{i}", height=150)  # Larger input box
+                    answers.append([answer])  # Wrap in a list for consistency
+                elif i == 1:  # Special handling for question 2
                     st.subheader(f"{question} (enter up to 5 unique answers):")
                     question_answers = []
                     for j in range(5):  # Create 5 input fields horizontally
