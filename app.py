@@ -47,14 +47,14 @@ else:
             # Show the table after question 2
             if len(answers) > 1:
                 st.subheader("Historical Facts Table")
-                df = pd.DataFrame(columns=["Historical Fact"])
+                df = pd.DataFrame(columns=[f"question_{i+1}" for i in range(len(questions))])
 
-                # Limit the number of rows to 5
+                # Fill the DataFrame with answers
                 for i in range(5):
                     if i < len(answers):
-                        df.loc[i] = [answers[i]]
+                        df.loc[0, f"question_{i + 1}"] = answers[i]
                     else:
-                        df.loc[i] = [""]  # Leave blank if no answer
+                        df.loc[0, f"question_{i + 1}"] = ""  # Leave blank if no answer
 
                 st.table(df)
 
@@ -65,17 +65,15 @@ else:
                     return
                 
                 # Save answers to Firestore
-                data = {
-                    "answers": answers[:5]  # Store only the first 5 answers
-                }
-
+                data = {f"question_{i + 1}": answers[i] for i in range(len(answers))}
+                collection_name = os.getenv('FIREBASE_COLLECTION')
+                
+                if collection_name is None:
+                    st.error("FIREBASE_COLLECTION environment variable not set.")
+                    return
+                
                 try:
                     # Store data in Firestore
-                    collection_name = os.getenv('FIREBASE_COLLECTION')
-                    if collection_name is None:
-                        st.error("FIREBASE_COLLECTION environment variable not set.")
-                        return
-                    
                     db.collection(collection_name).add(data)
                     st.success("Answers saved to Firestore!")
 
