@@ -71,7 +71,12 @@ else:
 
                 try:
                     # Store data in Firestore
-                    db.collection(os.getenv('FIREBASE_COLLECTION')).add(data)
+                    collection_name = os.getenv('FIREBASE_COLLECTION')
+                    if collection_name is None:
+                        st.error("FIREBASE_COLLECTION environment variable not set.")
+                        return
+                    
+                    db.collection(collection_name).add(data)
                     st.success("Answers saved to Firestore!")
 
                 except Exception as e:
