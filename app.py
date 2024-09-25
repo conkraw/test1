@@ -87,10 +87,10 @@ else:
             if current_index >= len(questions):
                 st.success("You have completed all questions!")
 
-                # Create and display a table with exactly 5 columns for diagnoses
+                # Create and display a table with diagnoses as headers
                 if st.session_state.diagnoses:
-                    diagnosis_df = pd.DataFrame(columns=["", "", "", "", ""])  # Create 5 empty columns
-                    diagnosis_df.loc[0] = st.session_state.diagnoses  # Populate with diagnosis answers
+                    diagnosis_df = pd.DataFrame(columns=["Historical Facts"] + st.session_state.diagnoses)
+                    diagnosis_df.loc[0] = [''] + st.session_state.diagnoses  # First row with empty string and diagnoses
 
                     st.table(diagnosis_df)
 
@@ -114,4 +114,5 @@ else:
         st.error("Error parsing FIREBASE_KEY: Invalid JSON format.")
     except Exception as e:
         st.error(f"Error initializing Firebase: {e}")
+
 
