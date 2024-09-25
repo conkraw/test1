@@ -42,7 +42,7 @@ else:
             # Ask the user each question
             for i, question in enumerate(questions):
                 if i == 0:  # Special handling for the first question
-                    answer = st.text_area(f"{question}:", key=f"answer_{i}", height=150)  # Larger input box
+                    answer = st.text_area(question, key=f"answer_{i}", height=150)  # Larger input box
                     answers.append([answer])  # Wrap in a list for consistency
                 elif i == 1:  # Special handling for question 2
                     st.subheader(f"{question} (enter up to 5 unique diagnoses):")
@@ -52,7 +52,7 @@ else:
                         question_answers.append(answer)
                     answers.append(question_answers)
                 else:
-                    answer = st.text_input(f"{question}:", key=f"answer_{i}")
+                    answer = st.text_input(question, key=f"answer_{i}")
                     answers.append([answer])  # Wrap in a list for consistency
 
             # Show the table after question 2
@@ -100,6 +100,5 @@ else:
         st.error("Error parsing FIREBASE_KEY: Invalid JSON format.")
     except Exception as e:
         st.error(f"Error initializing Firebase: {e}")
-
 
 
