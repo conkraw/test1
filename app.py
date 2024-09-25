@@ -71,42 +71,28 @@ else:
                     else:
                         st.success("You have reached the end of the questions.")
 
-            # If we are on the last question, show the diagnoses table
-            if current_index == len(questions):
-                # Show a table with the answers from the second prompt as column headers
-                if len(st.session_state.answers) > 1:
-                    st.subheader("Diagnoses Entered")
-                    diagnosis_answers = st.session_state.answers[1]  # Use the answers from question 2
-                    diagnosis_headers = [answer if answer else "No diagnosis entered" for answer in diagnosis_answers]  # Replace empty answers
+            # Save answers to Firestore when the user clicks the button
+            if current_index == len(questions) and st.button("Submit Answers"):
+                # Prepare data for Firestore
+                data = {}
+                for idx, answer_list in enumerate(st.session_state.answers):
+                    for answer_idx, answer in enumerate(answer_list):
+                        if answer:  # Only save non-empty answers
+                            data[f"question_{idx + 1}_{answer_idx + 1}"] = answer
 
-                    # Create a DataFrame with the diagnosis answers as column headers
-                    diagnosis_df = pd.DataFrame(columns=diagnosis_headers)
-                    diagnosis_df.loc[0] = [""] * len(diagnosis_headers)  # Initialize the first row
+                collection_name = os.getenv('FIREBASE_COLLECTION')
 
-                    st.table(diagnosis_df)
+                if collection_name is None:
+                    st.error("FIREBASE_COLLECTION environment variable not set.")
+                    return
 
-                # Save answers to Firestore when the user clicks the button
-                if st.button("Submit Answers"):
-                    # Prepare data for Firestore
-                    data = {}
-                    for idx, answer_list in enumerate(st.session_state.answers):
-                        for answer_idx, answer in enumerate(answer_list):
-                            if answer:  # Only save non-empty answers
-                                data[f"question_{idx + 1}_{answer_idx + 1}"] = answer
+                try:
+                    # Store data in Firestore
+                    db.collection(collection_name).add(data)
+                    st.success("Answers saved to Firestore!")
 
-                    collection_name = os.getenv('FIREBASE_COLLECTION')
-
-                    if collection_name is None:
-                        st.error("FIREBASE_COLLECTION environment variable not set.")
-                        return
-
-                    try:
-                        # Store data in Firestore
-                        db.collection(collection_name).add(data)
-                        st.success("Answers saved to Firestore!")
-
-                    except Exception as e:
-                        st.error(f"Error saving answers: {e}")
+                except Exception as e:
+                    st.error(f"Error saving answers: {e}")
 
         if __name__ == '__main__':
             main()
