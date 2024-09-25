@@ -87,13 +87,14 @@ else:
             if current_index >= len(questions):
                 st.success("You have completed all questions!")
 
-                # Create and display a table with Historical Facts and diagnoses
+                # Create and display a table with only diagnoses
                 if st.session_state.diagnoses:
                     # Create a DataFrame with diagnoses as headers
-                    columns = ["Historical Facts"] + st.session_state.diagnoses
+                    columns = st.session_state.diagnoses
                     diagnosis_df = pd.DataFrame(columns=columns)
-                    # Populate the first row with the answer from the first question and diagnoses
-                    diagnosis_df.loc[0] = [st.session_state.answers[0]] + [''] * 5  # Empty for diagnosis answers initially
+                    # Populate the first row with empty strings since prompt 1's answer isn't included
+                    diagnosis_df.loc[0] = [''] * len(columns)  # Blank row
+
                     st.table(diagnosis_df)
 
                 # Upload all answers to Firestore
@@ -116,3 +117,4 @@ else:
         st.error("Error parsing FIREBASE_KEY: Invalid JSON format.")
     except Exception as e:
         st.error(f"Error initializing Firebase: {e}")
+
