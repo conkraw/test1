@@ -9,25 +9,24 @@ def load_users():
 # Main app function
 def main():
     st.title("Pediatric Clerkship Virtual Clinical Reasoning Assessment")
+    st.write("Welcome! Please enter your unique code to access the assessment.")
     
-    # Load the user data
+    # Load user data
     users = load_users()
-    st.write(users)  # Check if users are loaded correctly
     
     # Prompt user for unique code
-    unique_code = st.text_input("Please enter your unique code:")
+    unique_code = st.text_input("Unique Code:")
     
     if st.button("Submit"):
         unique_code = unique_code.strip()  # Clean the input
         if unique_code in users['code'].values:
             user_name = users.loc[users['code'] == unique_code, 'name'].values[0]
-            st.success(f"Hi, {user_name}!")
+            st.success(f"Hi, {user_name}! Welcome to the assessment.")
         else:
             st.error("Invalid code. Please try again.")
 
-
 if __name__ == "__main__":
     main()
-    
+
 
 
