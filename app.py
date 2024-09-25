@@ -40,8 +40,6 @@ else:
                 st.session_state.answers = []
             if 'question_index' not in st.session_state:
                 st.session_state.question_index = 0
-            if 'diagnosis_submitted' not in st.session_state:
-                st.session_state.diagnosis_submitted = False
 
             current_index = st.session_state.question_index
 
@@ -61,57 +59,40 @@ else:
 
                     # Check if all answers have been entered
                     if all(question_answers):
-                        st.session_state.diagnosis_submitted = True
                         st.session_state.question_index += 1  # Move to the next question
                 else:
                     answer = st.text_input(question, key=f"answer_{current_index}")
                     st.session_state.answers.append([answer])  # Wrap in a list for consistency
 
                 # Navigation buttons
-                if st.button("Next") and not st.session_state.diagnosis_submitted:
+                if st.button("Next"):
                     if current_index + 1 < len(questions):
                         st.session_state.question_index += 1
                     else:
                         st.success("You have reached the end of the questions.")
 
-            # If we are on the last question
-            if current_index == len(questions):
-                # Create a new prompt and table with the answers from question 2 as column headers
-                if st.session_state.diagnosis_submitted:
-                    st.subheader("Diagnoses Entered")
-                    diagnosis_answers = st.session_state.answers[1]  # Use the answers from question 2
-                    diagnosis_headers = [f"Diagnosis {i + 1}" for i in range(5)]
-                    
-                    # Create a DataFrame for diagnoses
-                    diagnosis_df = pd.DataFrame(columns=diagnosis_headers)
-                    
-                    # Fill the first row with the answers from question 2, ensuring 5 columns
-                    diagnosis_df.loc[0] = diagnosis_answers + [""] * (5 - len(diagnosis_answers))  # Fill empty slots
+            # Save answers to Firestore when the user clicks the button
+            if current_index == len(questions) and st.button("Submit Answers"):
+                # Prepare data for Firestore
+                data = {}
+                for idx, answer_list in enumerate(st.session_state.answers):
+                    for answer_idx, answer in enumerate(answer_list):
+                        if answer:  # Only save non-empty answers
+                            data[f"question_{idx + 1}_{answer_idx + 1}"] = answer
 
-                    st.table(diagnosis_df)
+                collection_name = os.getenv('FIREBASE_COLLECTION')
 
-                # Save answers to Firestore when the user clicks the button
-                if st.button("Submit Answers"):
-                    # Prepare data for Firestore
-                    data = {}
-                    for idx, answer_list in enumerate(st.session_state.answers):
-                        for answer_idx, answer in enumerate(answer_list):
-                            if answer:  # Only save non-empty answers
-                                data[f"question_{idx + 1}_{answer_idx + 1}"] = answer
+                if collection_name is None:
+                    st.error("FIREBASE_COLLECTION environment variable not set.")
+                    return
 
-                    collection_name = os.getenv('FIREBASE_COLLECTION')
-                    
-                    if collection_name is None:
-                        st.error("FIREBASE_COLLECTION environment variable not set.")
-                        return
-                    
-                    try:
-                        # Store data in Firestore
-                        db.collection(collection_name).add(data)
-                        st.success("Answers saved to Firestore!")
+                try:
+                    # Store data in Firestore
+                    db.collection(collection_name).add(data)
+                    st.success("Answers saved to Firestore!")
 
-                    except Exception as e:
-                        st.error(f"Error saving answers: {e}")
+                except Exception as e:
+                    st.error(f"Error saving answers: {e}")
 
         if __name__ == '__main__':
             main()
