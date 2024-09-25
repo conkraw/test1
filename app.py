@@ -53,23 +53,30 @@ else:
                     if answer:  # Check if an answer is provided
                         st.session_state.answers.append(answer)
                         st.session_state.question_index += 1  # Move to the next question
-
-                        # Upload to Firebase
-                        collection_name = os.getenv('FIREBASE_COLLECTION')
-                        if collection_name is None:
-                            st.error("FIREBASE_COLLECTION environment variable not set.")
-                            return
-                        try:
-                            data = {f"question_{current_index + 1}": answer}
-                            db.collection(collection_name).add(data)
-                            st.success("Answer saved to Firebase!")
-                        except Exception as e:
-                            st.error(f"Error saving answer: {e}")
                     else:
                         st.error("Please provide an answer before submitting.")
 
-            else:
+            # When all questions are answered
+            if current_index >= len(questions):
                 st.success("You have completed all questions!")
+
+                # Show a summary of answers
+                st.subheader("Your Answers:")
+                for i, ans in enumerate(st.session_state.answers):
+                    st.write(f"Question {i + 1}: {ans}")
+
+                # Upload all answers to Firestore
+                if st.button("Upload All Answers"):
+                    collection_name = os.getenv('FIREBASE_COLLECTION')
+                    if collection_name is None:
+                        st.error("FIREBASE_COLLECTION environment variable not set.")
+                        return
+                    try:
+                        data = {f"question_{i + 1}": ans for i, ans in enumerate(st.session_state.answers)}
+                        db.collection(collection_name).add(data)
+                        st.success("All answers saved to Firebase!")
+                    except Exception as e:
+                        st.error(f"Error saving answers: {e}")
 
         if __name__ == '__main__':
             main()
@@ -78,4 +85,5 @@ else:
         st.error("Error parsing FIREBASE_KEY: Invalid JSON format.")
     except Exception as e:
         st.error(f"Error initializing Firebase: {e}")
+
 
