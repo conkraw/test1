@@ -15,8 +15,8 @@ def main():
     
     # Check if the user is logged in
     if "user_name" in st.session_state:
-        # Display welcome message if user is logged in
-        st.success(f"Hi, {st.session_state.user_name}! Welcome to the assessment.")
+        # Navigate to the new page
+        show_user_page()
     else:
         st.write("Welcome! Please enter your unique code to access the assessment.")
         
@@ -29,7 +29,8 @@ def main():
                     unique_code = int(unique_code.strip())  # Convert input to integer
                     if unique_code in users['code'].values:
                         st.session_state.user_name = users.loc[users['code'] == unique_code, 'name'].values[0]
-                        st.session_state.show_welcome = True  # Set flag to show welcome message
+                        # Navigate to user page
+                        show_user_page()
                     else:
                         st.error("Invalid code. Please try again.")
                 except ValueError:
@@ -37,12 +38,12 @@ def main():
             else:
                 st.error("Please enter a code.")
 
-        # Show the welcome message if the user name is set
-        if st.session_state.get("show_welcome", False):
-            st.success(f"Hi, {st.session_state.user_name}! Welcome to the assessment.")
-            st.session_state.show_welcome = False  # Reset the flag
+def show_user_page():
+    st.title("Welcome Page")
+    st.write(f"Welcome, {st.session_state.user_name}!")
 
 if __name__ == "__main__":
     main()
+
 
 
