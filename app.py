@@ -92,11 +92,12 @@ else:
                     diagnosis_columns = ["Historical Facts"] + st.session_state.diagnoses
                     diagnosis_df = pd.DataFrame(columns=diagnosis_columns)
 
-                    # Add input fields for 5 rows
+                    # Create input fields in a 6x6 table
                     for i in range(5):
                         row_data = [""]  # First cell for Historical Facts
                         for j in range(5):
-                            row_data.append(st.text_input(f"Row {i+1}, {diagnosis_columns[j+1]}", key=f"input_row_{i}_{j}"))
+                            input_value = st.text_input(f"Input for Row {i + 1}, Column {j + 1}", key=f"input_row_{i}_{j}")
+                            row_data.append(input_value)
                         diagnosis_df.loc[i] = row_data
 
                     st.table(diagnosis_df)  # Display the table
@@ -121,5 +122,6 @@ else:
         st.error("Error parsing FIREBASE_KEY: Invalid JSON format.")
     except Exception as e:
         st.error(f"Error initializing Firebase: {e}")
+
 
 
