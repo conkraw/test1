@@ -1,6 +1,5 @@
 import streamlit as st
 import pandas as pd
-from docx import Document
 import os
 import json
 import firebase_admin
@@ -24,18 +23,17 @@ else:
         # Get Firestore client
         db = firestore.client()
 
-        # Function to load questions from a Word document
+        # Function to load questions from a CSV file
         def load_questions(doc_path):
-            doc = Document(doc_path)
-            questions = [p.text for p in doc.paragraphs if p.text]
-            return questions
+            df = pd.read_csv(doc_path)
+            return df['prompt'].tolist()  # Return the list of prompts
 
         # Main Streamlit App
         def main():
             st.title("Questionnaire Application")
 
-            # Load questions from a Word document
-            questions = load_questions("questions.docx")  # Ensure this file is in the same directory
+            # Load questions from a CSV file
+            questions = load_questions("questions.csv")  # Ensure this file is in the same directory
 
             answers = []
 
