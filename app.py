@@ -90,9 +90,7 @@ else:
                 # Create and display a table with diagnosis answers as headers
                 if st.session_state.diagnoses:
                     diagnosis_df = pd.DataFrame(columns=st.session_state.diagnoses)  # Set diagnosis answers as column headers
-                    diagnosis_df.loc[0] = st.session_state.diagnoses  # Populate with diagnosis answers
-
-                    st.table(diagnosis_df)
+                    st.table(diagnosis_df)  # Display the table with only the headers
 
                 # Upload all answers to Firestore
                 if st.button("Upload Answers"):
