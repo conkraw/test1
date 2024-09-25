@@ -89,8 +89,9 @@ else:
 
                 # Create and display a table with diagnoses as column headers
                 if st.session_state.diagnoses:
-                    diagnosis_df = pd.DataFrame(columns=st.session_state.diagnoses)
-                    diagnosis_df.loc[0] = [""] * len(st.session_state.diagnoses)  # Blank first row
+                    columns = ['Historical Facts'] + st.session_state.diagnoses
+                    diagnosis_df = pd.DataFrame(columns=columns)
+                    diagnosis_df.loc[0] = [""] + [f"No diagnosis entered" if not diag else diag for diag in st.session_state.diagnoses]
                     st.table(diagnosis_df)
 
                 # Upload all answers to Firestore
