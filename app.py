@@ -87,11 +87,11 @@ else:
             if current_index >= len(questions):
                 st.success("You have completed all questions!")
 
-                # Create and display a table with diagnoses as column headers
+                # Create and display a table with Historical Facts and diagnoses
                 if st.session_state.diagnoses:
-                    columns = ['Historical Facts'] + st.session_state.diagnoses
-                    diagnosis_df = pd.DataFrame(columns=columns)
-                    diagnosis_df.loc[0] = [""] + [f"No diagnosis entered" if not diag else diag for diag in st.session_state.diagnoses]
+                    # Create a DataFrame with the first column as "Historical Facts"
+                    diagnosis_df = pd.DataFrame(columns=["Historical Facts"] + [""] * len(st.session_state.diagnoses))
+                    diagnosis_df.loc[0] = [st.session_state.answers[0]] + st.session_state.diagnoses
                     st.table(diagnosis_df)
 
                 # Upload all answers to Firestore
