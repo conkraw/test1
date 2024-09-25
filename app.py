@@ -89,10 +89,11 @@ else:
 
                 # Create and display a table with Historical Facts and diagnoses
                 if st.session_state.diagnoses:
-                    # Create a DataFrame with 6 columns
-                    columns = ["Historical Facts"] + [f"Diagnosis {i + 1}" for i in range(5)]
+                    # Create a DataFrame with diagnoses as headers
+                    columns = ["Historical Facts"] + st.session_state.diagnoses
                     diagnosis_df = pd.DataFrame(columns=columns)
-                    diagnosis_df.loc[0] = [st.session_state.answers[0]] + st.session_state.diagnoses
+                    # Populate the first row with the answer from the first question and diagnoses
+                    diagnosis_df.loc[0] = [st.session_state.answers[0]] + [''] * 5  # Empty for diagnosis answers initially
                     st.table(diagnosis_df)
 
                 # Upload all answers to Firestore
@@ -115,5 +116,3 @@ else:
         st.error("Error parsing FIREBASE_KEY: Invalid JSON format.")
     except Exception as e:
         st.error(f"Error initializing Firebase: {e}")
-
-
