@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+from docx import Document
 import os
 import json
 import firebase_admin
@@ -23,58 +24,61 @@ else:
         # Get Firestore client
         db = firestore.client()
 
-        # Function to load questions from a CSV file
+        # Function to load questions from a Word document
         def load_questions(doc_path):
-            df = pd.read_csv(doc_path)
-            return df['prompt'].tolist()  # Return the list of prompts
+            doc = Document(doc_path)
+            questions = [p.text for p in doc.paragraphs if p.text]
+            return questions
 
         # Main Streamlit App
         def main():
             st.title("Questionnaire Application")
 
-            # Load questions from a CSV file
-            questions = load_questions("questions.csv")  # Ensure this file is in the same directory
+            # Load questions from a Word document
+            questions = load_questions("questions.docx")  # Ensure this file is in the same directory
 
-            # Initialize session state for answers and question index
-            if 'answers' not in st.session_state:
-                st.session_state.answers = []
-            if 'question_index' not in st.session_state:
-                st.session_state.question_index = 0
+            answers = []
 
-            current_index = st.session_state.question_index
+            # Ask the user each question
+            for i, question in enumerate(questions):
+                answer = st.text_input(f"{question}:", key=f"answer_{i}")
+                answers.append(answer)
 
-            # Display the current question
-            if current_index < len(questions):
-                question = questions[current_index]
-                answer = st.text_input(question, key=f"answer_{current_index}")
+            # Show the table after question 2
+            if len(answers) > 1:
+                st.subheader("Historical Facts Table")
+                df = pd.DataFrame(columns=[f"question_{i+1}" for i in range(len(questions))])
 
-                # Button to go to the next question
-                next_button = st.button("Next")
-
-                # Logic to handle the Next button
-                if next_button:
-                    if answer:  # Check if an answer is provided
-                        st.session_state.answers.append(answer)
-                        st.session_state.question_index += 1  # Move to the next question
+                # Fill the DataFrame with answers
+                for i in range(5):
+                    if i < len(answers):
+                        df.loc[0, f"question_{i + 1}"] = answers[i]
                     else:
-                        st.error("Please provide an answer before proceeding to the next question.")
+                        df.loc[0, f"question_{i + 1}"] = ""  # Leave blank if no answer
 
-            # When all questions are answered
-            if current_index >= len(questions):
-                st.success("You have completed all questions!")
+                st.table(df)
 
-                # Upload all answers to Firestore
-                if st.button("Upload Answers"):
-                    collection_name = os.getenv('FIREBASE_COLLECTION')
-                    if collection_name is None:
-                        st.error("FIREBASE_COLLECTION environment variable not set.")
-                        return
-                    try:
-                        data = {f"question_{i + 1}": ans for i, ans in enumerate(st.session_state.answers)}
-                        db.collection(collection_name).add(data)
-                        st.success("All answers saved to Firebase!")
-                    except Exception as e:
-                        st.error(f"Error saving answers: {e}")
+            # Save answers to Firestore when the user clicks the button
+            if st.button("Submit Answers"):
+                if not any(answers):  # Check if all answers are empty
+                    st.error("Please provide at least one answer.")
+                    return
+                
+                # Save answers to Firestore
+                data = {f"question_{i + 1}": answers[i] for i in range(len(answers))}
+                collection_name = os.getenv('FIREBASE_COLLECTION')
+                
+                if collection_name is None:
+                    st.error("FIREBASE_COLLECTION environment variable not set.")
+                    return
+                
+                try:
+                    # Store data in Firestore
+                    db.collection(collection_name).add(data)
+                    st.success("Answers saved to Firestore!")
+
+                except Exception as e:
+                    st.error(f"Error saving answers: {e}")
 
         if __name__ == '__main__':
             main()
@@ -83,4 +87,5 @@ else:
         st.error("Error parsing FIREBASE_KEY: Invalid JSON format.")
     except Exception as e:
         st.error(f"Error initializing Firebase: {e}")
+
 
