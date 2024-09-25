@@ -34,8 +34,8 @@ else:
         def main():
             st.title("Questionnaire Application")
 
-            # Load questions from a Word document
-            questions = load_questions("questions.docx")  # Ensure this file is in the same directory
+            # Load questions from a CSV file
+            questions = pd.read_csv("questions.csv")  # Ensure this file is in the same directory
 
             # Initialize session state for answers and question index
             if 'answers' not in st.session_state:
@@ -49,7 +49,7 @@ else:
 
             # Display the current question
             if current_index < len(questions):
-                question = questions[current_index]
+                question = questions.iloc[current_index]['prompt']
 
                 # Handle the first prompt with a larger text area
                 if current_index == 0:
