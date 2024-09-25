@@ -48,21 +48,38 @@ else:
             # Display the current question
             if current_index < len(questions):
                 question = questions[current_index]
-                
-                # Use text_area for the first question to expand the input box
+
+                # Handle the first prompt with a larger text area
                 if current_index == 0:
                     answer = st.text_area(question, key=f"answer_{current_index}", height=150)
+
+                # Handle the second prompt with five separate inputs for diagnoses
+                elif current_index == 1:
+                    diagnoses = []
+                    for i in range(5):
+                        diagnosis = st.text_input(f"Diagnosis {i + 1}:", key=f"diagnosis_{i}")
+                        diagnoses.append(diagnosis)
+                    answer = diagnoses
+
                 else:
                     answer = st.text_input(question, key=f"answer_{current_index}")
 
                 # Button to go to the next question
                 if st.button("Next"):
-                    if answer:  # Check if an answer is provided
-                        st.session_state.answers.append(answer)
-                        st.session_state.question_index += 1  # Move to the next question
-                        st.success("Answer recorded! Click Next for the next question.")
+                    if current_index == 1:  # For the second question, check all diagnoses
+                        if all(diagnosis for diagnosis in answer):
+                            st.session_state.answers.extend(answer)  # Add all diagnoses to answers
+                            st.session_state.question_index += 1  # Move to the next question
+                            st.success("Diagnoses recorded! Click Next for the next question.")
+                        else:
+                            st.error("Please provide all 5 diagnoses before proceeding.")
                     else:
-                        st.error("Please provide an answer before proceeding to the next question.")
+                        if answer:  # Check if an answer is provided for other questions
+                            st.session_state.answers.append(answer)
+                            st.session_state.question_index += 1  # Move to the next question
+                            st.success("Answer recorded! Click Next for the next question.")
+                        else:
+                            st.error("Please provide an answer before proceeding to the next question.")
 
             # When all questions are answered
             if current_index >= len(questions):
