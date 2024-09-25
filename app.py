@@ -12,12 +12,12 @@ def main():
     
     # Load the user data
     users = load_users()
+    st.write(users)  # Check if users are loaded correctly
     
     # Prompt user for unique code
-    unique_code = st.text_input("Welcome! Please enter your unique code to access this assessment:")
+    unique_code = st.text_input("Please enter your unique code:")
     
     if st.button("Submit"):
-        # Check if the entered code is valid
         if unique_code in users['code'].values:
             user_name = users.loc[users['code'] == unique_code, 'name'].values[0]
             st.success(f"Hi, {user_name}!")
