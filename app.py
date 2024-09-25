@@ -29,7 +29,8 @@ def main():
                     unique_code = int(unique_code.strip())  # Convert input to integer
                     if unique_code in users['code'].values:
                         st.session_state.user_name = users.loc[users['code'] == unique_code, 'name'].values[0]
-                        st.session_state.show_welcome = True  # Set flag to show welcome message
+                        st.rerun()
+                        #st.session_state.show_welcome = True  # Set flag to show welcome message
                     else:
                         st.error("Invalid code. Please try again.")
                 except ValueError:
