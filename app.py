@@ -14,7 +14,10 @@ def main():
     users = load_users()
     
     # Check if the user is logged in
-    if "user_name" not in st.session_state:
+    if "user_name" in st.session_state:
+        # Display welcome message if user is logged in
+        st.success(f"Hi, {st.session_state.user_name}! Welcome to the assessment.")
+    else:
         st.write("Welcome! Please enter your unique code to access the assessment.")
         
         # Prompt user for unique code
@@ -25,16 +28,14 @@ def main():
                 unique_code = int(unique_code.strip())  # Convert input to integer
                 if unique_code in users['code'].values:
                     st.session_state.user_name = users.loc[users['code'] == unique_code, 'name'].values[0]
-                    st.experimental_rerun()  # Rerun the app to show the welcome page
+                    st.success(f"Hi, {st.session_state.user_name}! Welcome to the assessment.")
                 else:
                     st.error("Invalid code. Please try again.")
             except ValueError:
                 st.error("Please enter a valid code.")
-    else:
-        # Display welcome message if user is logged in
-        st.success(f"Hi, {st.session_state.user_name}! Welcome to the assessment.")
 
 if __name__ == "__main__":
     main()
+
 
 
