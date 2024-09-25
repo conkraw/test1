@@ -48,17 +48,10 @@ else:
                 question = questions[current_index]
                 answer = st.text_input(question, key=f"answer_{current_index}")
 
-                # Submit button
-                if st.button("Submit"):
-                    if answer:  # Check if an answer is provided
-                        st.session_state.answers.append(answer)
-                        st.session_state.question_index += 1  # Move to the next question
-                    else:
-                        st.error("Please provide an answer before submitting.")
-
                 # Button to go to the next question
                 if st.button("Next"):
-                    if answer:
+                    if answer:  # Check if an answer is provided
+                        st.session_state.answers.append(answer)
                         st.session_state.question_index += 1  # Move to the next question
                     else:
                         st.error("Please provide an answer before proceeding to the next question.")
@@ -68,7 +61,7 @@ else:
                 st.success("You have completed all questions!")
 
                 # Upload all answers to Firestore
-                if st.button("Upload All Answers"):
+                if st.button("Upload Answers"):
                     collection_name = os.getenv('FIREBASE_COLLECTION')
                     if collection_name is None:
                         st.error("FIREBASE_COLLECTION environment variable not set.")
