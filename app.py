@@ -94,9 +94,11 @@ else:
                     diagnosis_answers = st.session_state.answers[1]  # Use the answers from question 2
                     diagnosis_headers = [f"Diagnosis {i + 1}" for i in range(5)]
                     
-                    # Ensure we only use up to 5 answers
+                    # Create a DataFrame for diagnoses
                     diagnosis_df = pd.DataFrame(columns=diagnosis_headers)
-                    diagnosis_df.loc[0] = diagnosis_answers[:5] + [""] * (5 - len(diagnosis_answers))  # Fill empty slots
+                    
+                    # Fill the first row with the answers from question 2
+                    diagnosis_df.loc[0] = diagnosis_answers + [""] * (5 - len(diagnosis_answers))  # Fill empty slots
 
                     st.table(diagnosis_df)
 
