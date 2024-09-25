@@ -89,17 +89,8 @@ else:
 
                 # Create and display a table with diagnosis answers as headers
                 if st.session_state.diagnoses:
-                    st.subheader("Enter Answers:")
                     diagnosis_df = pd.DataFrame(columns=st.session_state.diagnoses)  # Set diagnosis answers as column headers
-
-                    # Create input fields for each row
-                    for i in range(5):  # Five rows for answers
-                        row = {}
-                        for diagnosis in st.session_state.diagnoses:
-                            row[diagnosis] = st.text_input(f"Answer for {diagnosis}:", key=f"answer_row_{i}_{diagnosis}")
-                        diagnosis_df = diagnosis_df.append(row, ignore_index=True)
-
-                    st.table(diagnosis_df)  # Display the table with input fields
+                    st.table(diagnosis_df)  # Display the table with only the headers
 
                 # Upload all answers to Firestore
                 if st.button("Upload Answers"):
@@ -121,6 +112,5 @@ else:
         st.error("Error parsing FIREBASE_KEY: Invalid JSON format.")
     except Exception as e:
         st.error(f"Error initializing Firebase: {e}")
-
 
 
