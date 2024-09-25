@@ -35,61 +35,76 @@ else:
             # Load questions from a CSV file
             questions = load_questions("questions.csv")  # Ensure this file is in the same directory
 
-            answers = []
+            # Initialize session state for answers and question index
+            if 'answers' not in st.session_state:
+                st.session_state.answers = []
+            if 'question_index' not in st.session_state:
+                st.session_state.question_index = 0
 
-            # Ask the user each question
-            for i, question in enumerate(questions):
-                if i == 0:  # Special handling for the first question
-                    answer = st.text_area(question, key=f"answer_{i}", height=150)  # Larger input box
-                    answers.append([answer])  # Wrap in a list for consistency
-                elif i == 1:  # Special handling for question 2
+            current_index = st.session_state.question_index
+
+            # Display the current question
+            if current_index < len(questions):
+                question = questions[current_index]
+                if current_index == 0:  # Special handling for the first question
+                    answer = st.text_area(question, key=f"answer_{current_index}", height=150)
+                    st.session_state.answers.append([answer])  # Wrap in a list for consistency
+                elif current_index == 1:  # Special handling for question 2
                     st.subheader(f"{question} (enter up to 5 unique diagnoses):")
                     question_answers = []
                     for j in range(5):  # Create 5 input fields horizontally
-                        answer = st.text_input(f"Diagnosis {j + 1}:", key=f"answer_{i}_{j}")
+                        answer = st.text_input(f"Diagnosis {j + 1}:", key=f"answer_{current_index}_{j}")
                         question_answers.append(answer)
-                    answers.append(question_answers)
+                    st.session_state.answers.append(question_answers)
                 else:
-                    answer = st.text_input(question, key=f"answer_{i}")
-                    answers.append([answer])  # Wrap in a list for consistency
+                    answer = st.text_input(question, key=f"answer_{current_index}")
+                    st.session_state.answers.append([answer])  # Wrap in a list for consistency
 
-            # Show the table after question 2
-            if len(answers) > 1:
+                # Navigation buttons
+                if st.button("Next"):
+                    if current_index + 1 < len(questions):
+                        st.session_state.question_index += 1
+                    else:
+                        st.success("You have reached the end of the questions.")
+
+            # If we are on the last question
+            if current_index == len(questions):
+                # Show the table with answers
                 st.subheader("Historical Facts Table")
                 df = pd.DataFrame(columns=[f"question_{i + 1}" for i in range(len(questions))])
 
                 # Fill the DataFrame with answers
                 for i in range(5):
-                    for j in range(len(answers)):
-                        if i < len(answers[j]):
-                            df.loc[i, f"question_{j + 1}"] = answers[j][i]
+                    for j in range(len(st.session_state.answers)):
+                        if i < len(st.session_state.answers[j]):
+                            df.loc[i, f"question_{j + 1}"] = st.session_state.answers[j][i]
                         else:
                             df.loc[i, f"question_{j + 1}"] = ""  # Leave blank if no answer
 
                 st.table(df)
 
-            # Save answers to Firestore when the user clicks the button
-            if st.button("Submit Answers"):
-                # Prepare data for Firestore
-                data = {}
-                for idx, answer_list in enumerate(answers):
-                    for answer_idx, answer in enumerate(answer_list):
-                        if answer:  # Only save non-empty answers
-                            data[f"question_{idx + 1}_{answer_idx + 1}"] = answer
+                # Save answers to Firestore when the user clicks the button
+                if st.button("Submit Answers"):
+                    # Prepare data for Firestore
+                    data = {}
+                    for idx, answer_list in enumerate(st.session_state.answers):
+                        for answer_idx, answer in enumerate(answer_list):
+                            if answer:  # Only save non-empty answers
+                                data[f"question_{idx + 1}_{answer_idx + 1}"] = answer
 
-                collection_name = os.getenv('FIREBASE_COLLECTION')
-                
-                if collection_name is None:
-                    st.error("FIREBASE_COLLECTION environment variable not set.")
-                    return
-                
-                try:
-                    # Store data in Firestore
-                    db.collection(collection_name).add(data)
-                    st.success("Answers saved to Firestore!")
+                    collection_name = os.getenv('FIREBASE_COLLECTION')
+                    
+                    if collection_name is None:
+                        st.error("FIREBASE_COLLECTION environment variable not set.")
+                        return
+                    
+                    try:
+                        # Store data in Firestore
+                        db.collection(collection_name).add(data)
+                        st.success("Answers saved to Firestore!")
 
-                except Exception as e:
-                    st.error(f"Error saving answers: {e}")
+                    except Exception as e:
+                        st.error(f"Error saving answers: {e}")
 
         if __name__ == '__main__':
             main()
@@ -98,6 +113,7 @@ else:
         st.error("Error parsing FIREBASE_KEY: Invalid JSON format.")
     except Exception as e:
         st.error(f"Error initializing Firebase: {e}")
+
 
 
 
