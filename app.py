@@ -28,7 +28,8 @@ def main():
                 unique_code = int(unique_code.strip())  # Convert input to integer
                 if unique_code in users['code'].values:
                     st.session_state.user_name = users.loc[users['code'] == unique_code, 'name'].values[0]
-                    st.success(f"Hi, {st.session_state.user_name}! Welcome to the assessment.")
+                    # Redirect to welcome message by refreshing
+                    st.experimental_rerun()  # Refresh to show the welcome page
                 else:
                     st.error("Invalid code. Please try again.")
             except ValueError:
