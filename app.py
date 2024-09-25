@@ -18,11 +18,13 @@ def main():
     unique_code = st.text_input("Please enter your unique code:")
     
     if st.button("Submit"):
-        if unique_code in users['code'].values:
-            user_name = users.loc[users['code'] == unique_code, 'name'].values[0]
-            st.success(f"Hi, {user_name}!")
-        else:
-            st.error("Invalid code. Please try again.")
+    unique_code = unique_code.strip()  # Clean the input
+    if unique_code in users['code'].values:
+        user_name = users.loc[users['code'] == unique_code, 'name'].values[0]
+        st.success(f"Hi, {user_name}!")
+    else:
+        st.error("Invalid code. Please try again.")
+
 
 if __name__ == "__main__":
     main()
