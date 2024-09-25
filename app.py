@@ -76,18 +76,6 @@ else:
 
             # If we are on the last question
             if current_index == len(questions):
-                # Show the table with answers
-                st.subheader("Historical Facts Table")
-                df = pd.DataFrame(columns=[f"question_{i + 1}" for i in range(len(questions))])
-
-                # Fill the DataFrame with answers
-                for i in range(5):
-                    for j in range(len(st.session_state.answers)):
-                        if i < len(st.session_state.answers[j]):
-                            df.loc[i, f"question_{j + 1}"] = st.session_state.answers[j][i]
-                        else:
-                            df.loc[i, f"question_{j + 1}"] = ""  # Leave blank if no answer
-
                 # Create a new prompt and table with the answers from question 2 as column headers
                 if st.session_state.diagnosis_submitted:
                     st.subheader("Diagnoses Entered")
@@ -100,13 +88,7 @@ else:
                     # Fill the first row with the answers from question 2, ensuring 5 columns
                     diagnosis_df.loc[0] = diagnosis_answers + [""] * (5 - len(diagnosis_answers))  # Fill empty slots
 
-                    # Ensure the number of columns matches
-                    if len(diagnosis_df.columns) == 5:
-                        st.table(diagnosis_df)
-                    else:
-                        st.error("Error: Mismatched number of columns in diagnosis DataFrame.")
-
-                st.table(df)
+                    st.table(diagnosis_df)
 
                 # Save answers to Firestore when the user clicks the button
                 if st.button("Submit Answers"):
