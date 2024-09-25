@@ -41,31 +41,41 @@ else:
 
             # Ask the user each question
             for i, question in enumerate(questions):
-                answer = st.text_input(f"{question}:", key=f"answer_{i}")
-                answers.append(answer)
+                if i == 1:  # Special handling for question 2
+                    answer = st.text_input(f"{question} (separate answers with commas or spaces):", key=f"answer_{i}")
+                    if answer:
+                        # Split the answers by comma or space and take up to 5
+                        split_answers = [ans.strip() for ans in answer.replace(',', ' ').split()]
+                        answers.append(split_answers[:5])  # Limit to 5 answers
+                    else:
+                        answers.append([])
+                else:
+                    answer = st.text_input(f"{question}:", key=f"answer_{i}")
+                    answers.append([answer])  # Wrap in a list for consistency
 
             # Show the table after question 2
             if len(answers) > 1:
                 st.subheader("Historical Facts Table")
-                df = pd.DataFrame(columns=[f"question_{i+1}" for i in range(len(questions))])
+                df = pd.DataFrame(columns=[f"question_{i + 1}" for i in range(len(questions))])
 
                 # Fill the DataFrame with answers
                 for i in range(5):
-                    if i < len(answers):
-                        df.loc[0, f"question_{i + 1}"] = answers[i]
-                    else:
-                        df.loc[0, f"question_{i + 1}"] = ""  # Leave blank if no answer
+                    for j in range(len(answers)):
+                        if i < len(answers[j]):
+                            df.loc[i, f"question_{j + 1}"] = answers[j][i]
+                        else:
+                            df.loc[i, f"question_{j + 1}"] = ""  # Leave blank if no answer
 
                 st.table(df)
 
             # Save answers to Firestore when the user clicks the button
             if st.button("Submit Answers"):
-                if not any(answers):  # Check if all answers are empty
-                    st.error("Please provide at least one answer.")
-                    return
-                
-                # Save answers to Firestore
-                data = {f"question_{i + 1}": answers[i] for i in range(len(answers))}
+                # Prepare data for Firestore
+                data = {}
+                for idx, answer_list in enumerate(answers):
+                    for answer_idx, answer in enumerate(answer_list):
+                        data[f"question_{idx + 1}_{answer_idx + 1}"] = answer
+
                 collection_name = os.getenv('FIREBASE_COLLECTION')
                 
                 if collection_name is None:
