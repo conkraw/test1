@@ -53,6 +53,7 @@ else:
                     if answer:  # Check if an answer is provided
                         st.session_state.answers.append(answer)
                         st.session_state.question_index += 1  # Move to the next question
+                        st.experimental_rerun()  # Rerun the app to display the next question
                     else:
                         st.error("Please provide an answer before proceeding to the next question.")
 
@@ -80,5 +81,4 @@ else:
         st.error("Error parsing FIREBASE_KEY: Invalid JSON format.")
     except Exception as e:
         st.error(f"Error initializing Firebase: {e}")
-
 
