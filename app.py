@@ -2,63 +2,96 @@ import streamlit as st
 import pandas as pd
 from docx import Document
 import os
+import json
 import firebase_admin
-from firebase_admin import credentials, firestore
+from firebase_admin import credentials, firestore, storage
 
-# Initialize Firebase
-cred = credentials.Certificate('serviceAccountKey.json')  # Path to your service account key
-firebase_admin.initialize_app(cred)
+# Load Firebase credentials from environment variable
+FIREBASE_KEY_JSON = os.getenv('FIREBASE_KEY')
 
-db = firestore.client()
+if FIREBASE_KEY_JSON is None:
+    st.error("FIREBASE_KEY environment variable not set.")
+else:
+    try:
+        # Parse the JSON string into a dictionary
+        firebase_credentials = json.loads(FIREBASE_KEY_JSON)
 
-# Function to load questions from a Word document
-def load_questions(doc_path):
-    doc = Document(doc_path)
-    questions = [p.text for p in doc.paragraphs if p.text]
-    return questions
+        # Initialize Firebase only if not already initialized
+        if not firebase_admin._apps:
+            cred = credentials.Certificate(firebase_credentials)
+            firebase_admin.initialize_app(cred, {
+                'storageBucket': 'your-bucket-name.appspot.com'  # Replace with your Firebase storage bucket name
+            })
 
-# Streamlit app
-def main():
-    st.title("Questionnaire Application")
+        # Get Firestore and Storage clients
+        db = firestore.client()
+        bucket = storage.bucket()
 
-    # Load questions from a Word document
-    questions = load_questions("questions.docx")  # Ensure this file is in the same directory
+        # Function to load questions from a Word document
+        def load_questions(doc_path):
+            doc = Document(doc_path)
+            questions = [p.text for p in doc.paragraphs if p.text]
+            return questions
 
-    answers = []
+        # Main Streamlit App
+        def main():
+            st.title("Questionnaire Application")
 
-    # Ask the user each question
-    for i, question in enumerate(questions):
-        answer = st.text_input(f"{question}:", key=f"answer_{i}")
-        answers.append(answer)
+            # Load questions from a Word document
+            questions = load_questions("questions.docx")  # Ensure this file is in the same directory
 
-    # Show the table after question 2
-    if len(answers) > 1:
-        st.subheader("Historical Facts Table")
-        df = pd.DataFrame(columns=["Historical Fact"])
+            answers = []
 
-        # Limit the number of rows to 5
-        for i in range(5):
-            if i < len(answers):
-                df.loc[i] = [answers[i]]
-            else:
-                df.loc[i] = [""]  # Leave blank if no answer
+            # Ask the user each question
+            for i, question in enumerate(questions):
+                answer = st.text_input(f"{question}:", key=f"answer_{i}")
+                answers.append(answer)
 
-        st.table(df)
+            # Show the table after question 2
+            if len(answers) > 1:
+                st.subheader("Historical Facts Table")
+                df = pd.DataFrame(columns=["Historical Fact"])
 
-    # Save answers to Firestore when the user clicks the button
-    if st.button("Submit Answers"):
-        data = {
-            "answers": answers[:5]  # Store only the first 5 answers
-        }
+                # Limit the number of rows to 5
+                for i in range(5):
+                    if i < len(answers):
+                        df.loc[i] = [answers[i]]
+                    else:
+                        df.loc[i] = [""]  # Leave blank if no answer
 
-        try:
-            # Store data in Firestore
-            db.collection(os.getenv('FIRESTORE_COLLECTION')).add(data)
-            st.success("Answers saved to Firestore!")
-        except Exception as e:
-            st.error(f"Error saving answers: {e}")
+                st.table(df)
 
-if __name__ == "__main__":
-    main()
+            # File upload
+            uploaded_file = st.file_uploader("Upload a file", type=['pdf', 'docx', 'txt'])
+
+            # Save answers and file to Firestore and Firebase Storage when the user clicks the button
+            if st.button("Submit Answers"):
+                # Save answers to Firestore
+                data = {
+                    "answers": answers[:5]  # Store only the first 5 answers
+                }
+
+                try:
+                    # Store data in Firestore
+                    db.collection(os.getenv('FIREBASE_COLLECTION')).add(data)
+
+                    # Save the uploaded file to Firebase Storage
+                    if uploaded_file is not None:
+                        blob = bucket.blob(uploaded_file.name)
+                        blob.upload_from_file(uploaded_file)
+                        st.success(f"File {uploaded_file.name} uploaded to Firebase Storage!")
+
+                    st.success("Answers saved to Firestore!")
+
+                except Exception as e:
+                    st.error(f"Error saving answers or uploading file: {e}")
+
+        if __name__ == '__main__':
+            main()
+
+    except Exception as e:
+        st.error(f"Error initializing Firebase: {e}")
+
+
 
 
