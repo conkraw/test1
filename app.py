@@ -77,14 +77,13 @@ else:
                 if len(st.session_state.answers) > 1:
                     st.subheader("Diagnoses Entered")
                     diagnosis_answers = st.session_state.answers[1]  # Use the answers from question 2
-                    diagnosis_headers = [answer for answer in diagnosis_answers if answer]  # Filter out empty answers
+                    diagnosis_headers = [answer if answer else "No diagnosis entered" for answer in diagnosis_answers]  # Replace empty answers
 
-                    if diagnosis_headers:
-                        # Create a DataFrame with the diagnosis answers as column headers
-                        diagnosis_df = pd.DataFrame(columns=diagnosis_headers)
-                        diagnosis_df.loc[0] = [""] * len(diagnosis_headers)  # Initialize the first row
+                    # Create a DataFrame with the diagnosis answers as column headers
+                    diagnosis_df = pd.DataFrame(columns=diagnosis_headers)
+                    diagnosis_df.loc[0] = [""] * len(diagnosis_headers)  # Initialize the first row
 
-                        st.table(diagnosis_df)
+                    st.table(diagnosis_df)
 
                 # Save answers to Firestore when the user clicks the button
                 if st.button("Submit Answers"):
@@ -116,5 +115,4 @@ else:
         st.error("Error parsing FIREBASE_KEY: Invalid JSON format.")
     except Exception as e:
         st.error(f"Error initializing Firebase: {e}")
-
 
