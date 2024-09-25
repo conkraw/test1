@@ -26,8 +26,8 @@ def main():
             if unique_code in users['code'].values:
                 user_name = users.loc[users['code'] == unique_code, 'name'].values[0]
                 st.success(f"Hi, {user_name}! Welcome to the assessment.")
-        else:
-            st.error("Invalid code. Please try again.")
+            else:
+                st.error("Invalid code. Please try again.")
     except ValueError:
         st.error("Please enter a valid code.")
 
