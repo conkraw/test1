@@ -46,57 +46,30 @@ else:
             # Display the current question
             if current_index < len(questions):
                 question = questions[current_index]
-                if current_index == 0:  # Special handling for the first question
-                    answer = st.text_area(question, key=f"answer_{current_index}", height=150)
-                    st.session_state.answers.append([answer])  # Wrap in a list for consistency
-                elif current_index == 1:  # Special handling for question 2
-                    st.subheader(f"{question} (enter up to 5 unique diagnoses):")
-                    question_answers = []
-                    for j in range(5):  # Create 5 input fields horizontally
-                        answer = st.text_input(f"Diagnosis {j + 1}:", key=f"answer_{current_index}_{j}")
-                        question_answers.append(answer)
-                    st.session_state.answers.append(question_answers)
+                answer = st.text_input(question, key=f"answer_{current_index}")
 
-                    # Check if all answers have been entered
-                    if all(question_answers):
+                # Submit button
+                if st.button("Submit"):
+                    if answer:  # Check if an answer is provided
+                        st.session_state.answers.append(answer)
                         st.session_state.question_index += 1  # Move to the next question
-                else:
-                    answer = st.text_input(question, key=f"answer_{current_index}")
-                    st.session_state.answers.append([answer])  # Wrap in a list for consistency
 
-                # Navigation buttons
-                if st.button("Next"):
-                    if current_index + 1 < len(questions):
-                        st.session_state.question_index += 1
+                        # Upload to Firebase
+                        collection_name = os.getenv('FIREBASE_COLLECTION')
+                        if collection_name is None:
+                            st.error("FIREBASE_COLLECTION environment variable not set.")
+                            return
+                        try:
+                            data = {f"question_{current_index + 1}": answer}
+                            db.collection(collection_name).add(data)
+                            st.success("Answer saved to Firebase!")
+                        except Exception as e:
+                            st.error(f"Error saving answer: {e}")
                     else:
-                        st.success("You have reached the end of the questions.")
+                        st.error("Please provide an answer before submitting.")
 
-            # Save answers to Firestore when the user clicks the button
-            if current_index == len(questions) and st.button("Submit Answers"):
-                # Prepare data for Firestore
-                data = {}
-                for idx, answer_list in enumerate(st.session_state.answers):
-                    for answer_idx, answer in enumerate(answer_list):
-                        if idx == 1:  # For the second question (diagnoses)
-                            # Save answers as a list under a single key
-                            data['diagnoses'] = [answer if answer else "No diagnosis entered" for answer in answer_list]
-                        else:
-                            if answer:  # Only save non-empty answers for other questions
-                                data[f"question_{idx + 1}_{answer_idx + 1}"] = answer
-
-                collection_name = os.getenv('FIREBASE_COLLECTION')
-
-                if collection_name is None:
-                    st.error("FIREBASE_COLLECTION environment variable not set.")
-                    return
-
-                try:
-                    # Store data in Firestore
-                    db.collection(collection_name).add(data)
-                    st.success("Answers saved to Firestore!")
-
-                except Exception as e:
-                    st.error(f"Error saving answers: {e}")
+            else:
+                st.success("You have completed all questions!")
 
         if __name__ == '__main__':
             main()
@@ -105,5 +78,4 @@ else:
         st.error("Error parsing FIREBASE_KEY: Invalid JSON format.")
     except Exception as e:
         st.error(f"Error initializing Firebase: {e}")
-
 
