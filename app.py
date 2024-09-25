@@ -4,6 +4,7 @@ import os
 import json
 import firebase_admin
 from firebase_admin import credentials, firestore
+from docx import Document
 
 # Load Firebase credentials from environment variable
 FIREBASE_KEY_JSON = os.getenv('FIREBASE_KEY')
@@ -23,69 +24,81 @@ else:
         # Get Firestore client
         db = firestore.client()
 
-        # Load questions from a CSV file
-        questions = pd.read_csv("questions.csv")
-
-        # Initialize session state for answers and question index
-        if 'answers' not in st.session_state:
-            st.session_state.answers = []
-        if 'question_index' not in st.session_state:
-            st.session_state.question_index = 0
+        # Function to load questions from a Word document
+        def load_questions(doc_path):
+            doc = Document(doc_path)
+            questions = [p.text for p in doc.paragraphs if p.text]
+            return questions
 
         # Main Streamlit App
         def main():
             st.title("Questionnaire Application")
 
+            # Load questions from a Word document
+            questions = load_questions("questions.docx")  # Ensure this file is in the same directory
+
+            # Initialize session state for answers and question index
+            if 'answers' not in st.session_state:
+                st.session_state.answers = []
+            if 'diagnoses' not in st.session_state:
+                st.session_state.diagnoses = []
+            if 'question_index' not in st.session_state:
+                st.session_state.question_index = 0
+
             current_index = st.session_state.question_index
 
             # Display the current question
             if current_index < len(questions):
-                question = questions.iloc[current_index]['prompt']
+                question = questions[current_index]
 
-                # For the first prompt, use a larger text area
+                # Handle the first prompt with a larger text area
                 if current_index == 0:
                     answer = st.text_area(question, key=f"answer_{current_index}", height=150)
-                # For the second prompt, get 5 diagnoses
+
+                # Handle the second prompt with five separate inputs for diagnoses
                 elif current_index == 1:
-                    diagnosis_answers = []
+                    diagnoses = []
                     for i in range(5):
                         diagnosis = st.text_input(f"Diagnosis {i + 1}:", key=f"diagnosis_{i}")
-                        diagnosis_answers.append(diagnosis)
-                    answer = diagnosis_answers
+                        diagnoses.append(diagnosis)
+                    answer = diagnoses
+
                 else:
                     answer = st.text_input(question, key=f"answer_{current_index}")
 
                 # Button to go to the next question
                 if st.button("Next"):
-                    if current_index == 1 and any(not d for d in answer):
-                        st.error("Please provide all 5 diagnoses before proceeding.")
+                    if current_index == 1:  # For the second question, check all diagnoses
+                        if all(diagnosis for diagnosis in answer):
+                            st.session_state.diagnoses = answer  # Store the diagnoses
+                            st.session_state.question_index += 1  # Move to the next question
+                            st.success("Diagnoses recorded! Click Next for the next question.")
+                        else:
+                            st.error("Please provide all 5 diagnoses before proceeding.")
                     else:
-                        if answer:  # Check if an answer is provided
+                        if answer:  # Check if an answer is provided for other questions
                             st.session_state.answers.append(answer)
-                            st.session_state.question_index += 1
+                            st.session_state.question_index += 1  # Move to the next question
                             st.success("Answer recorded! Click Next for the next question.")
                         else:
-                            st.error("Please provide an answer before proceeding.")
+                            st.error("Please provide an answer before proceeding to the next question.")
 
             # When all questions are answered
             if current_index >= len(questions):
                 st.success("You have completed all questions!")
 
-                # Create a 6x6 table for user inputs
-                st.subheader("Enter Historical Facts and Diagnoses")
-                diagnosis_columns = ["Historical Facts"] + st.session_state.answers[1]  # Using the answers from the diagnosis
-                diagnosis_df = pd.DataFrame(columns=diagnosis_columns)
+                # Create and display a 6x6 table
+                if st.session_state.diagnoses:
+                    diagnosis_columns = ["Historical Facts"] + st.session_state.diagnoses
+                    diagnosis_df = pd.DataFrame(columns=diagnosis_columns)
 
-                # Create input fields in the table
-                for i in range(5):
-                    row_data = [st.text_input(f"Row {i + 1} - Historical Facts", key=f"fact_{i}")]
-                    for j in range(5):
-                        row_data.append(st.text_input(f"Row {i + 1}, Diagnosis {j + 1}", key=f"diagnosis_input_{i}_{j}"))
-                    diagnosis_df.loc[i] = row_data
+                    # Add 5 blank rows for user input
+                    for i in range(5):
+                        diagnosis_df.loc[i] = [""] + [""] * 5  # One blank row with Historical Facts and five blank columns
 
-                st.table(diagnosis_df)  # Display the table
+                    st.table(diagnosis_df)  # Display the table
 
-                # Upload all answers to Firestore when done
+                # Upload all answers to Firestore
                 if st.button("Upload Answers"):
                     collection_name = os.getenv('FIREBASE_COLLECTION')
                     if collection_name is None:
@@ -105,6 +118,5 @@ else:
         st.error("Error parsing FIREBASE_KEY: Invalid JSON format.")
     except Exception as e:
         st.error(f"Error initializing Firebase: {e}")
-
 
 
