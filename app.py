@@ -4,7 +4,7 @@ from docx import Document
 import os
 import json
 import firebase_admin
-from firebase_admin import credentials, firestore, storage
+from firebase_admin import credentials, firestore
 
 # Load Firebase credentials from environment variable
 FIREBASE_KEY_JSON = os.getenv('FIREBASE_KEY')
@@ -19,13 +19,10 @@ else:
         # Initialize Firebase only if not already initialized
         if not firebase_admin._apps:
             cred = credentials.Certificate(firebase_credentials)
-            firebase_admin.initialize_app(cred, {
-                'storageBucket': 'your-bucket-name.appspot.com'  # Replace with your Firebase storage bucket name
-            })
+            firebase_admin.initialize_app(cred)
 
-        # Get Firestore and Storage clients
+        # Get Firestore client
         db = firestore.client()
-        bucket = storage.bucket()
 
         # Function to load questions from a Word document
         def load_questions(doc_path):
@@ -61,10 +58,7 @@ else:
 
                 st.table(df)
 
-            # File upload
-            uploaded_file = st.file_uploader("Upload a file", type=['pdf', 'docx', 'txt'])
-
-            # Save answers and file to Firestore and Firebase Storage when the user clicks the button
+            # Save answers to Firestore when the user clicks the button
             if st.button("Submit Answers"):
                 # Save answers to Firestore
                 data = {
@@ -74,24 +68,16 @@ else:
                 try:
                     # Store data in Firestore
                     db.collection(os.getenv('FIREBASE_COLLECTION')).add(data)
-
-                    # Save the uploaded file to Firebase Storage
-                    if uploaded_file is not None:
-                        blob = bucket.blob(uploaded_file.name)
-                        blob.upload_from_file(uploaded_file)
-                        st.success(f"File {uploaded_file.name} uploaded to Firebase Storage!")
-
                     st.success("Answers saved to Firestore!")
 
                 except Exception as e:
-                    st.error(f"Error saving answers or uploading file: {e}")
+                    st.error(f"Error saving answers: {e}")
 
         if __name__ == '__main__':
             main()
 
     except Exception as e:
         st.error(f"Error initializing Firebase: {e}")
-
 
 
 
