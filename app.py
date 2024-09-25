@@ -87,14 +87,17 @@ else:
             if current_index >= len(questions):
                 st.success("You have completed all questions!")
 
-                # Create and display a 6x6 table
+                # Create and display a 6x6 table with input fields
                 if st.session_state.diagnoses:
                     diagnosis_columns = ["Historical Facts"] + st.session_state.diagnoses
                     diagnosis_df = pd.DataFrame(columns=diagnosis_columns)
 
-                    # Add 5 blank rows for user input
+                    # Add input fields for 5 rows
                     for i in range(5):
-                        diagnosis_df.loc[i] = [""] + [""] * 5  # One blank row with Historical Facts and five blank columns
+                        row_data = [""]  # First cell for Historical Facts
+                        for j in range(5):
+                            row_data.append(st.text_input(f"Row {i+1}, {diagnosis_columns[j+1]}", key=f"input_row_{i}_{j}"))
+                        diagnosis_df.loc[i] = row_data
 
                     st.table(diagnosis_df)  # Display the table
 
