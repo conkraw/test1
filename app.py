@@ -96,11 +96,6 @@ else:
                     for i in range(5):
                         diagnosis_df.loc[i] = [""] + [""] * 5  # One blank row with Historical Facts and five blank columns
 
-                    # Display the table with text input in each cell
-                    for i in range(5):
-                        for j in range(len(diagnosis_columns)):
-                            diagnosis_df.iloc[i, j] = st.text_input(f"Cell ({i+1}, {j+1})", value="", key=f"cell_{i}_{j}")
-
                     st.table(diagnosis_df)  # Display the table
 
                 # Upload all answers to Firestore
