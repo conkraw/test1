@@ -1,57 +1,54 @@
-import pandas as pd
-import firebase_admin
-from firebase_admin import credentials, firestore
 import streamlit as st
+import pandas as pd
+from docx import Document
 import os
-import json
 
-# Load Firebase credentials from environment variable
-FIREBASE_KEY_JSON = os.getenv('FIREBASE_KEY')
+# Load Firebase credentials from environment variables
+firebase_api_key = os.getenv('FIREBASE_KEY')
+firebase_project_id = os.getenv('FIREBASE_COLLECTION')
+# Add more Firebase credentials as needed
 
-if FIREBASE_KEY_JSON is None:
-    st.error("FIREBASE_KEY environment variable not set.")
-else:
-    try:
-        # Parse the JSON string into a dictionary
-        firebase_credentials = json.loads(FIREBASE_KEY_JSON)
+# Function to load questions from a Word document
+def load_questions(doc_path):
+    doc = Document(doc_path)
+    questions = [p.text for p in doc.paragraphs if p.text]
+    return questions
 
-        # Initialize Firebase only if not already initialized
-        if not firebase_admin._apps:
-            cred = credentials.Certificate(firebase_credentials)
-            firebase_admin.initialize_app(cred)
+# Streamlit app
+def main():
+    st.title("Questionnaire Application")
 
-        # Get Firestore client
-        db = firestore.client()
+    # Load questions from a Word document
+    questions = load_questions("questions.docx")  # Make sure this file is in the same directory
 
-        def upload_to_firebase(entry):
-            db.collection('your_collection_name').add(entry)  # Change 'your_collection_name' to your collection name
-            return "Data uploaded to Firebase."
+    answers = []
 
-        # Main Streamlit App
-        def main():
-            st.title("Data Entry and Upload to Firebase")
+    # Ask the user each question
+    for i, question in enumerate(questions):
+        answer = st.text_input(f"{question}:", key=f"answer_{i}")
+        answers.append(answer)
 
-            # Input form for user data
-            st.header("Enter Data")
-            name = st.text_input("Enter Name")
-            age = st.number_input("Enter Age", min_value=0)
+    # Show the table after question 2
+    if len(answers) > 1:
+        st.subheader("Historical Facts Table")
+        df = pd.DataFrame(columns=["Historical Fact"])
+        
+        # Limit the number of rows to 5
+        for i in range(5):
+            if i < len(answers):
+                df.loc[i] = [answers[i]]
+            else:
+                df.loc[i] = [""]  # Leave blank if no answer
 
-            # Button to add data to the list and upload to Firebase
-            if st.button("Add Entry"):
-                if name:
-                    entry = {'name': name, 'age': age}
-                    # Immediately upload to Firebase
-                    result = upload_to_firebase(entry)
-                    st.success(result)
-                    st.success(f"Added: {name}, Age: {age}")
-                else:
-                    st.error("Please enter a name.")
+        st.table(df)
 
-        if __name__ == '__main__':
-            main()
+    # Save answers to a CSV file when the user clicks the button
+    if st.button("Submit Answers"):
+        df.to_csv("answers.csv", index=False)
+        st.success("Answers saved to answers.csv")
 
-    except Exception as e:
-        st.error(f"Error initializing Firebase: {e}")
+if __name__ == "__main__":
+    main()
 
 
 
