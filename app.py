@@ -98,7 +98,7 @@ else:
                     diagnosis_df = pd.DataFrame(columns=diagnosis_headers)
                     
                     # Fill the first row with the answers from question 2
-                    diagnosis_df.loc[0] = diagnosis_answers + [""] * (5 - len(diagnosis_answers))  # Fill empty slots
+                    diagnosis_df.loc[0] = [answer if answer else "" for answer in diagnosis_answers]
 
                     st.table(diagnosis_df)
 
