@@ -91,8 +91,15 @@ else:
                 # Create a new prompt and table with the answers from question 2 as column headers
                 if st.session_state.diagnosis_submitted:
                     st.subheader("Diagnoses Entered")
-                    diagnosis_df = pd.DataFrame(columns=[f"Diagnosis {i + 1}" for i in range(5)])
+                    diagnosis_headers = [f"Diagnosis {i + 1}" for i in range(5)]
+                    diagnosis_df = pd.DataFrame(columns=diagnosis_headers)
                     diagnosis_df.loc[0] = st.session_state.answers[1]  # Use the answers from question 2
+                    
+                    # Ensure all columns have values (if some are empty, replace with "")
+                    for col in diagnosis_headers:
+                        if col not in diagnosis_df.columns:
+                            diagnosis_df[col] = ""
+
                     st.table(diagnosis_df)
 
                 st.table(df)
