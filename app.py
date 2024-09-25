@@ -16,7 +16,6 @@ def main():
     # Check if the user is logged in
     if "user_name" in st.session_state:
         # Display welcome message if user is logged in
-        st.title("Welcome Page")
         st.write(f"Welcome, {st.session_state.user_name}!")
     else:
         st.write("Welcome! Please enter your unique code to access the assessment.")
