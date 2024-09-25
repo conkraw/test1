@@ -60,6 +60,19 @@ else:
                     # Check if all answers have been entered
                     if all(question_answers):
                         st.session_state.question_index += 1  # Move to the next question
+                elif current_index == 2:  # Special handling for question 3
+                    st.subheader("Diagnoses Entered:")
+                    diagnosis_answers = st.session_state.answers[1]  # Use answers from question 2
+                    diagnosis_headers = [f"dx{i + 1}" for i in range(5)]  # Create headers dx1, dx2, dx3, dx4, dx5
+
+                    # Create a DataFrame for display
+                    diagnosis_df = pd.DataFrame(columns=diagnosis_headers)
+
+                    # Fill the DataFrame with the diagnosis answers
+                    diagnosis_df.loc[0] = [answer if answer else "No diagnosis entered" for answer in diagnosis_answers]
+
+                    st.table(diagnosis_df)  # Display the DataFrame
+                    st.session_state.question_index += 1  # Move to the next question
                 else:
                     answer = st.text_input(question, key=f"answer_{current_index}")
                     st.session_state.answers.append([answer])  # Wrap in a list for consistency
@@ -77,8 +90,13 @@ else:
                 data = {}
                 for idx, answer_list in enumerate(st.session_state.answers):
                     for answer_idx, answer in enumerate(answer_list):
-                        if answer:  # Only save non-empty answers
-                            data[f"question_{idx + 1}_{answer_idx + 1}"] = answer
+                        if idx == 1:  # For the second question (diagnoses)
+                            # Save answers as dx1, dx2, ..., dx5
+                            if answer:
+                                data[f"dx{answer_idx + 1}"] = answer
+                        else:
+                            if answer:  # Only save non-empty answers for other questions
+                                data[f"question_{idx + 1}_{answer_idx + 1}"] = answer
 
                 collection_name = os.getenv('FIREBASE_COLLECTION')
 
