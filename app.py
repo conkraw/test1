@@ -16,6 +16,9 @@ def main():
     
     # Prompt user for unique code
     unique_code = st.text_input("Unique Code:")
+
+    st.write(f"Entered code: '{unique_code}'")
+    st.write(f"Available codes: {users['code'].tolist()}")
     
     if st.button("Submit"):
         unique_code = unique_code.strip()  # Clean the input
