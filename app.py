@@ -21,12 +21,16 @@ def main():
     st.write(f"Available codes: {users['code'].tolist()}")
     
     if st.button("Submit"):
-        unique_code = unique_code.strip()  # Clean the input
+    try:
+        unique_code = int(unique_code.strip())  # Convert input to integer
         if unique_code in users['code'].values:
             user_name = users.loc[users['code'] == unique_code, 'name'].values[0]
             st.success(f"Hi, {user_name}! Welcome to the assessment.")
         else:
             st.error("Invalid code. Please try again.")
+    except ValueError:
+        st.error("Please enter a valid code.")
+
 
 if __name__ == "__main__":
     main()
