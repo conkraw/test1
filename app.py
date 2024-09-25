@@ -87,12 +87,10 @@ else:
             if current_index >= len(questions):
                 st.success("You have completed all questions!")
 
-                # Create and display a table with only diagnoses
+                # Create and display a table with exactly 5 columns for diagnoses
                 if st.session_state.diagnoses:
-                    # Create a DataFrame with exactly 5 columns for diagnoses
-                    diagnosis_df = pd.DataFrame(columns=st.session_state.diagnoses)
-                    # Populate the first row with empty strings
-                    diagnosis_df.loc[0] = [''] * 5  # Empty first row for the diagnosis columns
+                    diagnosis_df = pd.DataFrame(columns=["", "", "", "", ""])  # Create 5 empty columns
+                    diagnosis_df.loc[0] = st.session_state.diagnoses  # Populate with diagnosis answers
 
                     st.table(diagnosis_df)
 
