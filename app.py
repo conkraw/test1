@@ -87,10 +87,16 @@ else:
             if current_index >= len(questions):
                 st.success("You have completed all questions!")
 
-                # Create and display a table with diagnosis answers as headers
+                # Create and display a 6x6 table
                 if st.session_state.diagnoses:
-                    diagnosis_df = pd.DataFrame(columns=st.session_state.diagnoses)  # Set diagnosis answers as column headers
-                    st.table(diagnosis_df)  # Display the table with only the headers
+                    diagnosis_columns = ["Historical Facts"] + st.session_state.diagnoses
+                    diagnosis_df = pd.DataFrame(columns=diagnosis_columns)
+
+                    # Add 5 blank rows for user input
+                    for i in range(5):
+                        diagnosis_df.loc[i] = [""] + [""] * 5  # One blank row with Historical Facts and five blank columns
+
+                    st.table(diagnosis_df)  # Display the table
 
                 # Upload all answers to Firestore
                 if st.button("Upload Answers"):
