@@ -87,10 +87,10 @@ else:
             if current_index >= len(questions):
                 st.success("You have completed all questions!")
 
-                # Create and display a table with diagnoses as headers
+                # Create and display a table with diagnosis answers as headers
                 if st.session_state.diagnoses:
-                    diagnosis_df = pd.DataFrame(columns=["Historical Facts"] + st.session_state.diagnoses)
-                    diagnosis_df.loc[0] = [''] + st.session_state.diagnoses  # First row with empty string and diagnoses
+                    diagnosis_df = pd.DataFrame(columns=st.session_state.diagnoses)  # Set diagnosis answers as column headers
+                    diagnosis_df.loc[0] = st.session_state.diagnoses  # Populate with diagnosis answers
 
                     st.table(diagnosis_df)
 
