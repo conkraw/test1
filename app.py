@@ -56,14 +56,16 @@ else:
                     else:
                         st.error("Please provide an answer before submitting.")
 
+                # Button to go to the next question
+                if st.button("Next"):
+                    if answer:
+                        st.session_state.question_index += 1  # Move to the next question
+                    else:
+                        st.error("Please provide an answer before proceeding to the next question.")
+
             # When all questions are answered
             if current_index >= len(questions):
                 st.success("You have completed all questions!")
-
-                # Show a summary of answers
-                st.subheader("Your Answers:")
-                for i, ans in enumerate(st.session_state.answers):
-                    st.write(f"Question {i + 1}: {ans}")
 
                 # Upload all answers to Firestore
                 if st.button("Upload All Answers"):
