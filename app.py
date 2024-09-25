@@ -29,9 +29,7 @@ def main():
                     unique_code = int(unique_code.strip())  # Convert input to integer
                     if unique_code in users['code'].values:
                         st.session_state.user_name = users.loc[users['code'] == unique_code, 'name'].values[0]
-                        # Set a flag to indicate the welcome message should be shown
-                        st.session_state.show_welcome = True
-                        st.experimental_rerun()  # Rerun to display the welcome message
+                        st.session_state.show_welcome = True  # Set flag to show welcome message
                     else:
                         st.error("Invalid code. Please try again.")
                 except ValueError:
@@ -39,7 +37,7 @@ def main():
             else:
                 st.error("Please enter a code.")
 
-        # Show the welcome message if the flag is set
+        # Show the welcome message if the user name is set
         if st.session_state.get("show_welcome", False):
             st.success(f"Hi, {st.session_state.user_name}! Welcome to the assessment.")
             st.session_state.show_welcome = False  # Reset the flag
