@@ -60,6 +60,10 @@ else:
 
             # Save answers to Firestore when the user clicks the button
             if st.button("Submit Answers"):
+                if not any(answers):  # Check if all answers are empty
+                    st.error("Please provide at least one answer.")
+                    return
+                
                 # Save answers to Firestore
                 data = {
                     "answers": answers[:5]  # Store only the first 5 answers
@@ -76,6 +80,8 @@ else:
         if __name__ == '__main__':
             main()
 
+    except json.JSONDecodeError:
+        st.error("Error parsing FIREBASE_KEY: Invalid JSON format.")
     except Exception as e:
         st.error(f"Error initializing Firebase: {e}")
 
