@@ -45,10 +45,10 @@ else:
                     answer = st.text_area(f"{question}:", key=f"answer_{i}", height=150)  # Larger input box
                     answers.append([answer])  # Wrap in a list for consistency
                 elif i == 1:  # Special handling for question 2
-                    st.subheader(f"{question} (enter up to 5 unique answers):")
+                    st.subheader(f"{question} (enter up to 5 unique diagnoses):")
                     question_answers = []
                     for j in range(5):  # Create 5 input fields horizontally
-                        answer = st.text_input(f"Answer {j + 1}:", key=f"answer_{i}_{j}")
+                        answer = st.text_input(f"Diagnosis {j + 1}:", key=f"answer_{i}_{j}")
                         question_answers.append(answer)
                     answers.append(question_answers)
                 else:
@@ -100,7 +100,6 @@ else:
         st.error("Error parsing FIREBASE_KEY: Invalid JSON format.")
     except Exception as e:
         st.error(f"Error initializing Firebase: {e}")
-
 
 
 
