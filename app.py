@@ -97,10 +97,14 @@ else:
                     # Create a DataFrame for diagnoses
                     diagnosis_df = pd.DataFrame(columns=diagnosis_headers)
                     
-                    # Fill the first row with the answers from question 2
-                    diagnosis_df.loc[0] = [answer if answer else "" for answer in diagnosis_answers]
+                    # Fill the first row with the answers from question 2, ensuring 5 columns
+                    diagnosis_df.loc[0] = diagnosis_answers + [""] * (5 - len(diagnosis_answers))  # Fill empty slots
 
-                    st.table(diagnosis_df)
+                    # Ensure the number of columns matches
+                    if len(diagnosis_df.columns) == 5:
+                        st.table(diagnosis_df)
+                    else:
+                        st.error("Error: Mismatched number of columns in diagnosis DataFrame.")
 
                 st.table(df)
 
