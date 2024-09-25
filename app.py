@@ -2,11 +2,14 @@ import streamlit as st
 import pandas as pd
 from docx import Document
 import os
+import firebase_admin
+from firebase_admin import credentials, firestore
 
-# Load Firebase credentials from environment variables
-firebase_api_key = os.getenv('FIREBASE_KEY')
-firebase_project_id = os.getenv('FIREBASE_COLLECTION')
-# Add more Firebase credentials as needed
+# Initialize Firebase
+cred = credentials.Certificate('serviceAccountKey.json')  # Path to your service account key
+firebase_admin.initialize_app(cred)
+
+db = firestore.client()
 
 # Function to load questions from a Word document
 def load_questions(doc_path):
@@ -19,7 +22,7 @@ def main():
     st.title("Questionnaire Application")
 
     # Load questions from a Word document
-    questions = load_questions("questions.docx")  # Make sure this file is in the same directory
+    questions = load_questions("questions.docx")  # Ensure this file is in the same directory
 
     answers = []
 
@@ -32,7 +35,7 @@ def main():
     if len(answers) > 1:
         st.subheader("Historical Facts Table")
         df = pd.DataFrame(columns=["Historical Fact"])
-        
+
         # Limit the number of rows to 5
         for i in range(5):
             if i < len(answers):
@@ -42,13 +45,20 @@ def main():
 
         st.table(df)
 
-    # Save answers to a CSV file when the user clicks the button
+    # Save answers to Firestore when the user clicks the button
     if st.button("Submit Answers"):
-        df.to_csv("answers.csv", index=False)
-        st.success("Answers saved to answers.csv")
+        data = {
+            "answers": answers[:5]  # Store only the first 5 answers
+        }
+
+        try:
+            # Store data in Firestore
+            db.collection(os.getenv('FIRESTORE_COLLECTION')).add(data)
+            st.success("Answers saved to Firestore!")
+        except Exception as e:
+            st.error(f"Error saving answers: {e}")
 
 if __name__ == "__main__":
     main()
-
 
 
