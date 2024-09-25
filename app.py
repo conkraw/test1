@@ -42,13 +42,12 @@ else:
             # Ask the user each question
             for i, question in enumerate(questions):
                 if i == 1:  # Special handling for question 2
-                    answer = st.text_input(f"{question} (separate answers with commas or spaces):", key=f"answer_{i}")
-                    if answer:
-                        # Split the answers by comma or space and take up to 5
-                        split_answers = [ans.strip() for ans in answer.replace(',', ' ').split()]
-                        answers.append(split_answers[:5])  # Limit to 5 answers
-                    else:
-                        answers.append([])
+                    st.subheader(f"{question} (enter up to 5 unique answers):")
+                    question_answers = []
+                    for j in range(5):  # Create 5 input fields horizontally
+                        answer = st.text_input(f"Answer {j + 1}:", key=f"answer_{i}_{j}")
+                        question_answers.append(answer)
+                    answers.append(question_answers)
                 else:
                     answer = st.text_input(f"{question}:", key=f"answer_{i}")
                     answers.append([answer])  # Wrap in a list for consistency
@@ -74,7 +73,8 @@ else:
                 data = {}
                 for idx, answer_list in enumerate(answers):
                     for answer_idx, answer in enumerate(answer_list):
-                        data[f"question_{idx + 1}_{answer_idx + 1}"] = answer
+                        if answer:  # Only save non-empty answers
+                            data[f"question_{idx + 1}_{answer_idx + 1}"] = answer
 
                 collection_name = os.getenv('FIREBASE_COLLECTION')
                 
@@ -97,6 +97,7 @@ else:
         st.error("Error parsing FIREBASE_KEY: Invalid JSON format.")
     except Exception as e:
         st.error(f"Error initializing Firebase: {e}")
+
 
 
 
