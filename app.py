@@ -40,6 +40,8 @@ else:
             # Initialize session state for answers and question index
             if 'answers' not in st.session_state:
                 st.session_state.answers = []
+            if 'diagnoses' not in st.session_state:
+                st.session_state.diagnoses = []
             if 'question_index' not in st.session_state:
                 st.session_state.question_index = 0
 
@@ -68,7 +70,7 @@ else:
                 if st.button("Next"):
                     if current_index == 1:  # For the second question, check all diagnoses
                         if all(diagnosis for diagnosis in answer):
-                            st.session_state.answers.extend(answer)  # Add all diagnoses to answers
+                            st.session_state.diagnoses = answer  # Store the diagnoses
                             st.session_state.question_index += 1  # Move to the next question
                             st.success("Diagnoses recorded! Click Next for the next question.")
                         else:
@@ -84,6 +86,12 @@ else:
             # When all questions are answered
             if current_index >= len(questions):
                 st.success("You have completed all questions!")
+
+                # Create and display a table with diagnoses as column headers
+                if st.session_state.diagnoses:
+                    diagnosis_df = pd.DataFrame(columns=[f"Diagnosis {i + 1}" for i in range(5)])
+                    diagnosis_df.loc[0] = st.session_state.diagnoses
+                    st.table(diagnosis_df)
 
                 # Upload all answers to Firestore
                 if st.button("Upload Answers"):
