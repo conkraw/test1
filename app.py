@@ -1,5 +1,11 @@
 import streamlit as st
 
+# Instructions at the top
+st.markdown("""
+    ## Instructions
+    Please enter 5 diagnoses in the columns below. For each diagnosis, provide your assessment by selecting either "Support" or "Does not support" from the dropdown menu next to each row.
+""")
+
 # Custom CSS to style the dropdowns and increase visibility
 st.markdown("""
     <style>
@@ -37,6 +43,9 @@ for i in range(5):
             # Ensure the key is unique by using row index and diagnosis name
             st.selectbox("", options=["Support", "Does not support"], key=f"select_{i}_{diagnosis}",
                           label_visibility="collapsed")
+
+# Add a footer or any additional information if needed
+st.markdown("## Support Matrix")
 
 
 
