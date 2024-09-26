@@ -128,14 +128,35 @@ def display_assessment():
 
     # Patient Vital Signs Table
     col1, col3 = st.columns([1, 2])  # Define three columns
+    labels = [
+        'HEART RATE:',
+        'RESPIRATORY RATE:',
+        'BLOOD PRESSURE:',
+        'PULSE OXIMETRY:',
+        'TEMPERATURE:',
+        'WEIGHT:'
+    ]
 
-    with col1:
-        heart_rate_checkbox = st.checkbox(f'HEART RATE:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{vital_signs.get("heart_rate", "N/A")}', key='heart_rate_checkbox')
-        respiratory_rate_checkbox = st.checkbox(f'RESPIRATORY RATE:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{vital_signs.get("respiratory_rate", "N/A")}', key='respiratory_rate_checkbox')
-        blood_pressure_checkbox = st.checkbox(f'BLOOD PRESSURE:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{vital_signs.get("blood_pressure", "N/A")}', key='blood_pressure_checkbox')
-        pulseox_checkbox = st.checkbox(f'PULSE OXIMETRY:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{vital_signs.get("pulseox", "N/A")}', key='pulseox_checkbox')
-        temperature_checkbox = st.checkbox(f'TEMPERATURE:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{vital_signs.get("temperature", "N/A")}', key='temperature_checkbox')
-        weight_checkbox = st.checkbox(f'WEIGHT:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{vital_signs.get("weight", "N/A")}', key='weight_checkbox')
+# Find the longest label length
+max_label_length = max(len(label) for label in labels)
+
+with col1:
+    for label in labels:
+        # Calculate the number of spaces needed
+        spaces_needed = max_label_length - len(label)
+        # Create the checkbox with dynamic spacing
+        checkbox = st.checkbox(
+            f'{label}{"&nbsp;" * (spaces_needed + 5)}{vital_signs.get(label.split()[0].lower(), "N/A")}', 
+            key=label
+        )
+    #with col1:
+        
+        #heart_rate_checkbox = st.checkbox(f'HEART RATE:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{vital_signs.get("heart_rate", "N/A")}', key='heart_rate_checkbox')
+        #respiratory_rate_checkbox = st.checkbox(f'RESPIRATORY RATE:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{vital_signs.get("respiratory_rate", "N/A")}', key='respiratory_rate_checkbox')
+        #blood_pressure_checkbox = st.checkbox(f'BLOOD PRESSURE:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{vital_signs.get("blood_pressure", "N/A")}', key='blood_pressure_checkbox')
+        #pulseox_checkbox = st.checkbox(f'PULSE OXIMETRY:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{vital_signs.get("pulseox", "N/A")}', key='pulseox_checkbox')
+        #temperature_checkbox = st.checkbox(f'TEMPERATURE:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{vital_signs.get("temperature", "N/A")}', key='temperature_checkbox')
+        #weight_checkbox = st.checkbox(f'WEIGHT:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{vital_signs.get("weight", "N/A")}', key='weight_checkbox')
 
 
     #    st.checkbox('HEART RATE:', key='heart_rate_checkbox')
