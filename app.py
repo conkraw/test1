@@ -6,7 +6,7 @@ import os
 import json
 
 # Set the page config to normal
-st.set_page_config(layout="wide") 
+st.set_page_config(layout="wide")
 
 # Load Firebase credentials from environment variable
 FIREBASE_KEY_JSON = os.getenv('FIREBASE_KEY')
@@ -30,7 +30,7 @@ else:
             db.collection('your_collection_name').add(entry)  # Change 'your_collection_name' to your collection name
             return "Data uploaded to Firebase."
 
-        # Initialize session state for diagnoses and submission status
+        # Initialize session state for diagnoses and historical features
         if 'diagnoses' not in st.session_state:
             st.session_state.diagnoses = [""] * 5  # Initialize with empty strings for 5 diagnoses
         if 'historical_features' not in st.session_state:
@@ -40,8 +40,6 @@ else:
 
         # Title of the app
         st.title("")
-
-
 
         # Input Section
         if not st.session_state.submitted:
@@ -57,13 +55,11 @@ else:
                     st.session_state.diagnoses[i] = st.text_input(
                         f"Diagnosis {i + 1}",
                         value=st.session_state.diagnoses[i],
-                        key=f"diagnosis_{i}",
-                        #max_chars=20  # You can set a character limit if needed
+                        key=f"diagnosis_{i}"
                     )
 
             # Button to submit the diagnoses
             if st.button("Submit Diagnoses"):
-                # Check if all diagnoses have been entered
                 diagnoses = [d.strip() for d in st.session_state.diagnoses]  # Strip whitespace
                 if all(diagnosis for diagnosis in diagnoses):
                     if len(diagnoses) == len(set(diagnoses)):  # Check for duplicates
@@ -98,7 +94,7 @@ else:
             cols = st.columns(len(st.session_state.diagnoses) + 1)
             with cols[0]:  # First column for "Historical Features"
                 st.markdown("<div class='header-cell'>Historical Features</div>", unsafe_allow_html=True)
-            
+
             for diagnosis, col in zip(st.session_state.diagnoses, cols[1:]):
                 with col:
                     st.markdown(f"<div class='header-cell'>{diagnosis}</div>", unsafe_allow_html=True)
@@ -108,12 +104,10 @@ else:
                 cols = st.columns(len(st.session_state.diagnoses) + 1)
 
                 with cols[0]:  # The first column is for row headers
-                    st.text_input("", key=f"row_{i}", label_visibility="collapsed")  # Row header input without label
-
+                    st.session_state.historical_features[i] = st.text_input("", key=f"row_{i}", label_visibility="collapsed")
 
                 for diagnosis, col in zip(st.session_state.diagnoses, cols[1:]):  # The rest are dropdowns
                     with col:
-                        # Ensure the key is unique by using row index and diagnosis name
                         st.selectbox("", options=["Supports", "Does not support"], key=f"select_{i}_{diagnosis}",
                                       label_visibility="collapsed")
 
@@ -125,9 +119,12 @@ else:
                     'historical_features': st.session_state.historical_features,
                     'assessments': {diagnosis: st.session_state[f"select_{i}_{diagnosis}"] for i, diagnosis in enumerate(st.session_state.diagnoses)}
                 }
+                # Debugging: Check what will be uploaded
+                st.write("Entry data being uploaded:", entry)
                 # Upload to Firebase
                 result = upload_to_firebase(entry)
                 st.success(result)
 
     except Exception as e:
         st.error(f"Error initializing Firebase: {e}")
+
