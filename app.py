@@ -30,7 +30,7 @@ if FIREBASE_KEY_JSON:
             content = []
             for para in doc.paragraphs:
                 content.append(para.text)
-            return "\n".join(content)
+            return "\n".join(content).lower()  # Convert to lower case for easier matching
 
         # Load the document content
         croup_info = read_croup_doc()
@@ -40,14 +40,20 @@ if FIREBASE_KEY_JSON:
 
         # Function to get response from ChatGPT
         def get_chatgpt_response(user_input):
-            response = openai.ChatCompletion.create(
-                model="gpt-3.5-turbo",
-                messages=[
-                    {"role": "user", "content": user_input},
-                    {"role": "assistant", "content": "You are a parent whose child is experiencing croup. Answer the history questions as a parent would. You will be asked physical examination questions, please provide the findings as a doctor would. Do not tell the doctor that your child has croup."}
-                ]
-            )
-            return response['choices'][0]['message']['content']
+            user_input_lower = user_input.lower()  # Normalize the user input to lower case
+            
+            # Check if the question is in the croup_info
+            if user_input_lower in croup_info:
+                response = openai.ChatCompletion.create(
+                    model="gpt-3.5-turbo",
+                    messages=[
+                        {"role": "user", "content": user_input},
+                        {"role": "assistant", "content": "You are a parent whose child is experiencing croup. Answer the history questions as a parent would. You will be asked physical examination questions, please provide the findings as a doctor would."}
+                    ]
+                )
+                return response['choices'][0]['message']['content']
+            else:
+                return "I don't know."
 
         # Function to upload data to Firebase
         def upload_to_firebase(question, response):
@@ -99,7 +105,6 @@ if FIREBASE_KEY_JSON:
         st.error(f"Error initializing Firebase: {e}")
 else:
     st.error("FIREBASE_KEY environment variable not set.")
-
 
 
 
