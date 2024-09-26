@@ -1,7 +1,7 @@
 import streamlit as st
 
 # Set the page config to normal
-st.set_page_config(layout="wide")  # Use "centered" for the diagnosis page
+st.set_page_config(layout="centered")  # Use "centered" for the diagnosis page
 
 # Initialize session state for diagnoses and submission status
 if 'diagnoses' not in st.session_state:
@@ -38,7 +38,7 @@ if not st.session_state.submitted:
         if all(diagnosis for diagnosis in diagnoses):
             if len(diagnoses) == len(set(diagnoses)):  # Check for duplicates
                 st.session_state.submitted = True  # Move to the assessment table
-                st.rerun()  # Rerun the app to clear the inputs and show the table
+                st.experimental_rerun()  # Rerun the app to clear the inputs and show the table
             else:
                 st.error("Please do not provide duplicate diagnoses.")
         else:
@@ -51,9 +51,12 @@ if st.session_state.submitted:
         Based on the history that you have collected, please provide up to 5 historical features that will influence the differential diagnosis and using the prompts provided, describe how they influence the differential diagnosis.
     """)
 
-    # Create a wider appearance using columns
+    # Custom CSS for centering headers
     st.markdown("""
         <style>
+        .header-cell {
+            text-align: center;
+        }
         .stSelectbox > div > div {
             width: 100%;  /* Set dropdowns to take full width */
             font-size: 12px; /* Decrease font size */
@@ -64,11 +67,11 @@ if st.session_state.submitted:
     # Create a header row for diagnoses, including "Historical Features"
     cols = st.columns(len(st.session_state.diagnoses) + 1)
     with cols[0]:  # First column for "Historical Features"
-        st.write("Historical Features")
+        st.markdown("<div class='header-cell'>Historical Features</div>", unsafe_allow_html=True)
     
     for diagnosis, col in zip(st.session_state.diagnoses, cols[1:]):
         with col:
-            st.write(diagnosis)
+            st.markdown(f"<div class='header-cell'>{diagnosis}</div>", unsafe_allow_html=True)
 
     # Create rows for user inputs and dropdowns
     for i in range(5):
@@ -82,5 +85,6 @@ if st.session_state.submitted:
                 # Ensure the key is unique by using row index and diagnosis name
                 st.selectbox("", options=["Supports", "Does not support"], key=f"select_{i}_{diagnosis}",
                               label_visibility="collapsed")
+
 
 
