@@ -21,12 +21,12 @@ def main():
     col1, col2 = st.columns(2)
     
     with col1:
-        selected_exams1 = st.multiselect("Select options:", options1)
+        selected_exams1 = st.multiselect("Select options:", options1, key="exclude_exams")
 
     st.markdown("<h5>Please select examinations necessary to confirm the most likely hypothesis and to discriminate between others:</h5>", unsafe_allow_html=True)
 
     with col2:
-        selected_exams2 = st.multiselect("Select options:", options1)
+        selected_exams2 = st.multiselect("Select options:", options1, key="confirm_exams")
 
     if st.button("Submit"):
         st.success(f"Examinations selected to exclude hypotheses: {selected_exams1}")
@@ -34,3 +34,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
