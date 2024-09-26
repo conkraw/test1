@@ -12,7 +12,7 @@ st.title("")
 # Input Section
 if not st.session_state.submitted:
     st.markdown("""
-        ## 
+        ## DIFFERENTIAL DIAGNOSIS
         Based on the information provided in the above case, please provide 5 possible diagnoses that you would consider when prompted by your attending? Please do not provide duplicate diagnoses. 
     """)
 
