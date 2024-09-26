@@ -83,7 +83,7 @@ def display_assessment():
     document_text = read_word_text(docx_file_path)
     
     if document_text:
-        st.write("Patient Information:")
+        st.markdown("Patient Information:")
 
         # Use markdown with HTML for custom font and size
         custom_html = f"""
