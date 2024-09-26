@@ -11,7 +11,7 @@ st.markdown("""
     <style>
     .stSelectbox > div > div {
         width: 100%;  /* Set dropdowns to take full width */
-        font-size: 12px; /* Decrease font size */
+        font-size: 10px; /* Decrease font size */
     }
     .css-1y2x8r0 {
         width: 100%;  /* Set columns to take up most of the screen */
