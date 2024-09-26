@@ -1,7 +1,7 @@
 import streamlit as st
 
 # Set the page config to normal
-st.set_page_config(layout="centered")  # Use "centered" for the diagnosis page
+st.set_page_config(layout="wide")  # Use "centered" for the diagnosis page
 
 # Initialize session state for diagnoses and submission status
 if 'diagnoses' not in st.session_state:
@@ -38,7 +38,7 @@ if not st.session_state.submitted:
         if all(diagnosis for diagnosis in diagnoses):
             if len(diagnoses) == len(set(diagnoses)):  # Check for duplicates
                 st.session_state.submitted = True  # Move to the assessment table
-                st.experimental_rerun()  # Rerun the app to clear the inputs and show the table
+                st.rerun()  # Rerun the app to clear the inputs and show the table
             else:
                 st.error("Please do not provide duplicate diagnoses.")
         else:
