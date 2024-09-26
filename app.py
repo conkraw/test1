@@ -130,7 +130,6 @@ def display_assessment():
     col1, col2, col3 = st.columns([1, 2, 2])  # Define three columns
 
     with col1:
-        st.markdown("<div style='display: flex; flex-direction: column; align-items: center;'>", unsafe_allow_html=True)
         st.checkbox('', key='heart_rate_checkbox')
         st.checkbox('', key='respiratory_rate_checkbox')
         st.checkbox('', key='blood_pressure_checkbox')
