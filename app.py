@@ -23,13 +23,10 @@ for row in row_headers:
     
     for diagnosis, col in zip(diagnoses, cols[1:]):  # The rest are dropdowns
         with col:
-            # Using a container to make the dropdown visually larger
-            dropdown_container = st.container()
-            with dropdown_container:
-                selection = st.selectbox("", options=["Support", "Does not support"], key=f"{row}_{diagnosis}", 
-                                          label_visibility="collapsed")
-                st.write(selection)  # Display the selected option for clarity
+            # Larger dropdowns for better visibility
+            selection = st.selectbox("", options=["Support", "Does not support"], key=f"{row}_{diagnosis}", 
+                                      label_visibility="collapsed")
 
 # Add a footer or any additional information if needed
 st.markdown("## Support Matrix")
-st.write("This matrix shows whether each diagnosis is supported or not based on the provided row headers.")
+
