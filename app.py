@@ -19,8 +19,9 @@ def display_selected_component(selected_component):
             component_texts = text.split('\n\n')  # Assuming sections are separated by double newlines
             for component_text in component_texts:
                 if selected_component.lower() in component_text.lower():
-                    st.markdown(f"### {selected_component}\n")
-                    st.markdown(component_text)
+                    # Extract text after the first colon
+                    content = component_text.split(':', 1)[-1].strip()
+                    st.markdown(content)  # Display only the content, not the title
                     break
         else:
             st.write("No text available for the selected component.")
@@ -38,7 +39,7 @@ def display_image(base_image_name):
             break  # Exit loop if an image is found
 
     if not image_found:
-        st.write("There is no image file available for this case.")
+        st.write("No image file named 'image_1' found.")
 
 # Function to check and display audio if present
 def display_audio(base_audio_name):
@@ -53,7 +54,7 @@ def display_audio(base_audio_name):
             break  # Exit loop if an audio file is found
 
     if not audio_found:
-        st.write("There is no audio file available for this case.")
+        st.write("No audio file named 'audio_1' found.")
 
 # Function to check and display video if present
 def display_video(base_video_name):
@@ -68,7 +69,7 @@ def display_video(base_video_name):
             break  # Exit loop if a video file is found
 
     if not video_found:
-        st.write("There is no video file available for this case.")
+        st.write("No video file named 'video_1' found.")
 
 # Main Streamlit app
 def main():
@@ -81,7 +82,7 @@ def main():
 
     # List of examination components
     components = [
-        "General Appearance", "Eyes", "Ears, Neck, Nose, Throat", "Lymph Nodes",
+        "General Appearances", "Eyes", "Ears, Neck, Nose, Throat", "Lymph Nodes",
         "Cardiovascular", "Lungs", "Abdomen", "Skin", "Extremities",
         "Musculoskeletal", "Neurological", "Psychiatry", "Genitourinary", "Image", "Audio", "Video"
     ]
@@ -102,4 +103,5 @@ def main():
 
 if __name__ == '__main__':
     main()
+
 
