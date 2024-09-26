@@ -1,5 +1,14 @@
 import streamlit as st
 
+# Custom CSS to widen the dropdowns
+st.markdown("""
+    <style>
+    .stSelectbox > div > div {
+        width: 200px;  /* Adjust width as needed */
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
 # Sidebar for user inputs
 with st.sidebar:
     num_columns = st.number_input("Number of Diagnoses (Columns)", 1, 10, 5, 1)
