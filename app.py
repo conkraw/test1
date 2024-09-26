@@ -43,7 +43,6 @@ else:
             st.session_state.submitted_physical = False
 
         # Title of the app
-        st.title("Differential Diagnosis App")
 
         # Input Section for Diagnoses
         if not st.session_state.submitted_historical:
