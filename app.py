@@ -49,7 +49,7 @@ def main():
     # Initialize session state for page if not already done
     if "page" not in st.session_state:
         st.session_state.page = "welcome"  # Start on the welcome page
- 
+
     # Check which page to display
     if st.session_state.page == "assessment":
         display_assessment()
@@ -67,7 +67,7 @@ def welcome_page():
     
     if st.button("Next"):
         st.session_state.page = "login"  # Change to login page
-        st.rerun()  # Rerun to refresh the view
+        st.experimental_rerun()  # Rerun to refresh the view
 
 # Login page function
 def login_page(users):
@@ -81,7 +81,7 @@ def login_page(users):
                 if unique_code in users['code'].values:
                     st.session_state.user_name = users.loc[users['code'] == unique_code, 'name'].values[0]
                     st.session_state.page = "assessment"  # Change to assessment page
-                    st.rerun()  # Rerun to refresh the view
+                    st.experimental_rerun()  # Rerun to refresh the view
                 else:
                     st.error("Invalid code. Please try again.")
             except ValueError:
@@ -122,13 +122,11 @@ def display_assessment():
     table_html = f"""
     <table style="border-collapse: collapse; width: 100%; font-family: 'DejaVu Sans';">
         <tr>
-            <td colspan="3" style="border: 1px solid #000; text-align: center; font-weight: bold; font-size: 20px;">
-                PATIENT VITAL SIGNS
+            <td colspan="2" style="border: 1px solid #000; text-align: center; font-weight: bold; font-size: 20px;">
+                VITAL SIGNS
             </td>
-        </tr>
-        <tr>
-            <td colspan="3" style="border: 1px solid #000; text-align: center;">
-                Of the following vital signs that were obtained on patient intake, check the vital signs that are abnormal.
+            <td style="border: 1px solid #000; text-align: center; font-weight: bold; font-size: 20px;">
+                VALUES
             </td>
         </tr>
         <tr>
@@ -162,5 +160,6 @@ def display_assessment():
 
 if __name__ == "__main__":
     main()
+
 
 
