@@ -44,7 +44,7 @@ if st.session_state.submitted:
         <style>
         .stSelectbox > div > div {
             width: 100%;  /* Set dropdowns to take full width */
-            font-size: 14px; /* Decrease font size */
+            font-size: 12px; /* Decrease font size */
         }
         </style>
         """, unsafe_allow_html=True)
