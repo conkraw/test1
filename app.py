@@ -11,8 +11,8 @@ def load_users():
     return pd.read_csv('users.csv')
 
 # Function to read the Word document and extract the table
-def read_word_table(docx_file):
-    doc = Document(docx_file)
+def read_word_table(docx_file_path):
+    doc = Document(docx_file_path)
     table_data = []
     
     # Assuming the table is the first one in the document
@@ -65,21 +65,15 @@ def login_page(users):
 def display_assessment():
     st.write(f"Welcome {st.session_state.user_name}! Here is the assessment.")
 
-    # Upload the Word file for table extraction
-    docx_file = st.file_uploader("Upload a Word Document", type=["docx"])
-
-    if docx_file is not None:
-        # Read and display the table from Word document
-        table_data = read_word_table(docx_file)
-        
-        if table_data:
-            st.write("Table from Word Document:")
-            st.table(table_data)
-        else:
-            st.write("No table found in the document.")
+    # Read and display the table from ptinfo.docx
+    docx_file_path = "ptinfo.docx"
+    table_data = read_word_table(docx_file_path)
     
-    # Option to display the image (e.g., ptinfo.png)
-    st.image("ptinfo.png", use_column_width=True)
+    if table_data:
+        st.write("Table from Word Document:")
+        st.table(table_data)
+    else:
+        st.write("No table found in the document.")
 
 if __name__ == "__main__":
     main()
