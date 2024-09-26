@@ -131,7 +131,7 @@ def display_assessment():
 
     with col1:
     # Create checkboxes with corresponding vital signs displayed
-        heart_rate_checkbox = st.checkbox(f'HEART RATE:      {vital_signs.get("heart_rate", "N/A")}', key='heart_rate_checkbox')
+        heart_rate_checkbox = st.checkbox(f'HEART RATE: {vital_signs.get("heart_rate", "N/A")}', key='heart_rate_checkbox')
         respiratory_rate_checkbox = st.checkbox(f'RESPIRATORY RATE: {vital_signs.get("respiratory_rate", "N/A")}', key='respiratory_rate_checkbox')
         blood_pressure_checkbox = st.checkbox(f'BLOOD PRESSURE: {vital_signs.get("blood_pressure", "N/A")}', key='blood_pressure_checkbox')
         pulseox_checkbox = st.checkbox(f'PULSE OXIMETRY: {vital_signs.get("pulseox", "N/A")}', key='pulseox_checkbox')
