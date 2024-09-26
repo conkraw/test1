@@ -134,22 +134,22 @@ def display_assessment():
     with col1:
         # Create checkboxes and use st.markdown for the labels
         heart_rate_checkbox = st.checkbox('', key='heart_rate_checkbox')
-        st.markdown(f"<div style='display: flex; align-items: left;'><span><b>HEART RATE:</b>&nbsp;&nbsp;{vital_signs.get('heart_rate', 'N/A')}</span>{heart_rate_checkbox}</div>", unsafe_allow_html=True)
+        st.markdown(f"<div style='display: flex; align-items: center;'><span><b>HEART RATE:</b>&nbsp;&nbsp;{vital_signs.get('heart_rate', 'N/A')}</span>{heart_rate_checkbox}</div>", unsafe_allow_html=True)
 
         respiratory_rate_checkbox = st.checkbox('', key='respiratory_rate_checkbox')
-        st.markdown(f"<b>RESPIRATORY RATE:</b>&nbsp;&nbsp;{vital_signs.get('respiratory_rate', 'N/A')}", unsafe_allow_html=True)
+        st.markdown(f"<div style='display: flex; align-items: center;'><span><b>RESPIRATORY RATE:</b>&nbsp;&nbsp;{vital_signs.get('respiratory_rate', 'N/A')}</span>{respiratory_rate_checkbox}</div>", unsafe_allow_html=True)
 
         blood_pressure_checkbox = st.checkbox('', key='blood_pressure_checkbox')
-        st.markdown(f"<b>BLOOD PRESSURE:</b>&nbsp;&nbsp;{vital_signs.get('blood_pressure', 'N/A')}", unsafe_allow_html=True)
+        st.markdown(f"<div style='display: flex; align-items: center;'><span><b>BLOOD PRESSURE:</b>&nbsp;&nbsp;{vital_signs.get('blood_pressure', 'N/A')}</span>{blood_pressure_checkbox}</div>", unsafe_allow_html=True)
 
         pulseox_checkbox = st.checkbox('', key='pulseox_checkbox')
-        st.markdown(f"<b>PULSE OXIMETRY:</b>&nbsp;&nbsp;{vital_signs.get('pulseox', 'N/A')}", unsafe_allow_html=True)
+        st.markdown(f"<div style='display: flex; align-items: center;'><span><b>PULSE OXIMETRY:</b>&nbsp;&nbsp;{vital_signs.get('pulseox', 'N/A')}</span>{pulseox_checkbox}</div>", unsafe_allow_html=True)
 
         temperature_checkbox = st.checkbox('', key='temperature_checkbox')
-        st.markdown(f"<b>TEMPERATURE:</b>&nbsp;&nbsp;{vital_signs.get('temperature', 'N/A')}", unsafe_allow_html=True)
+        st.markdown(f"<div style='display: flex; align-items: center;'><span><b>TEMPERATURE:</b>&nbsp;&nbsp;{vital_signs.get('temperature', 'N/A')}</span>{temperature_checkbox}</div>", unsafe_allow_html=True)
 
         weight_checkbox = st.checkbox('', key='weight_checkbox')
-        st.markdown(f"<b>WEIGHT:</b>&nbsp;&nbsp;{vital_signs.get('weight', 'N/A')}", unsafe_allow_html=True)
+        st.markdown(f"<div style='display: flex; align-items: center;'><span><b>WEIGHT:</b>&nbsp;&nbsp;{vital_signs.get('weight', 'N/A')}</span>{weight_checkbox}</div>", unsafe_allow_html=True)
 
 if __name__ == "__main__":
     main()
