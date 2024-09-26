@@ -21,6 +21,24 @@ def read_text_file(txt_file_path):
         st.error(f"An error occurred: {e}")
         return ""
 
+# Function to load vital signs from a TXT file
+def load_vital_signs(vital_signs_file):
+    vital_signs = {}
+    try:
+        with open(vital_signs_file, 'r') as file:
+            for line in file:
+                parts = line.strip().split(',')
+                if len(parts) == 2:
+                    key = parts[0].strip()  # Get type
+                    value = parts[1].strip()  # Get vital sign
+                    vital_signs[key] = value
+    except FileNotFoundError:
+        st.error(f"File not found: {vital_signs_file}. Please check the file path.")
+    except Exception as e:
+        st.error(f"An error occurred: {e}")
+    
+    return vital_signs
+
 # Main app function
 def main():
     st.title("Pediatric Clerkship Virtual Clinical Reasoning Assessment")
@@ -96,8 +114,12 @@ def display_assessment():
     else:
         st.write("No text found in the document.")
 
+    # Load vital signs
+    vital_signs_file = "vital_signs.txt"
+    vital_signs = load_vital_signs(vital_signs_file)
+
     # Patient Vital Signs Table
-    st.markdown("""
+    table_html = """
     <table style="border-collapse: collapse; width: 100%; font-family: 'DejaVu Sans';">
         <tr>
             <td colspan="3" style="border: 1px solid #000; text-align: center; font-weight: bold; font-size: 20px;">
@@ -110,42 +132,29 @@ def display_assessment():
             </td>
         </tr>
         <tr>
-            <td style="border: 1px solid #000; text-align: center;"></td>
-            <td style="border: 1px solid #000; text-align: center;">VITAL SIGNS</td>
-            <td style="border: 1px solid #000; text-align: center;">VALUES</td>
+            <td style="border: 1px solid #000; text-align: center;">Heart Rate</td>
+            <td style="border: 1px solid #000; text-align: center;">Blood Pressure</td>
+            <td style="border: 1px solid #000; text-align: center;">Respiratory Rate</td>
         </tr>
         <tr>
-            <td style="border: 1px solid #000; text-align: center;">Value 1</td>
-            <td style="border: 1px solid #000; text-align: center;">BLOOD PRESSURE:</td>
-            <td style="border: 1px solid #000; text-align: center;">Value 3</td>
+            <td style="border: 1px solid #000; text-align: center;">{vital_signs.get('heart_rate', 'Value 3')}</td>
+            <td style="border: 1px solid #000; text-align: center;">{vital_signs.get('blood_pressure', 'Value 6')}</td>
+            <td style="border: 1px solid #000; text-align: center;">{vital_signs.get('respiratory_rate', 'Value 9')}</td>
         </tr>
         <tr>
-            <td style="border: 1px solid #000; text-align: center;">Value 4</td>
-            <td style="border: 1px solid #000; text-align: center;">PULSE:</td>
-            <td style="border: 1px solid #000; text-align: center;">Value 6</td>
+            <td style="border: 1px solid #000; text-align: center;">Pulse Oximetry</td>
+            <td style="border: 1px solid #000; text-align: center;">Temperature</td>
+            <td style="border: 1px solid #000; text-align: center;">Weight</td>
         </tr>
         <tr>
-            <td style="border: 1px solid #000; text-align: center;">Value 7</td>
-            <td style="border: 1px solid #000; text-align: center;">RESPIRATORY RATE:</td>
-            <td style="border: 1px solid #000; text-align: center;">Value 9</td>
-        </tr>
-        <tr>
-            <td style="border: 1px solid #000; text-align: center;">Value 10</td>
-            <td style="border: 1px solid #000; text-align: center;">PULSE OXIMETRY:</td>
-            <td style="border: 1px solid #000; text-align: center;">Value 12</td>
-        </tr>
-        <tr>
-            <td style="border: 1px solid #000; text-align: center;">Value 13</td>
-            <td style="border: 1px solid #000; text-align: center;">TEMPERATURE:</td>
-            <td style="border: 1px solid #000; text-align: center;">Value 15</td>
-        </tr>
-        <tr>
-            <td style="border: 1px solid #000; text-align: center;">Value 16</td>
-            <td style="border: 1px solid #000; text-align: center;">WEIGHT:</td>
-            <td style="border: 1px solid #000; text-align: center;">Value 18</td>
+            <td style="border: 1px solid #000; text-align: center;">{vital_signs.get('pulseox', 'Value 12')}</td>
+            <td style="border: 1px solid #000; text-align: center;">{vital_signs.get('temperature', 'Value 15')}</td>
+            <td style="border: 1px solid #000; text-align: center;">{vital_signs.get('weight', 'Value 18')}</td>
         </tr>
     </table>
-    """, unsafe_allow_html=True)
+    """
+    
+    st.markdown(table_html, unsafe_allow_html=True)
 
 if __name__ == "__main__":
     main()
