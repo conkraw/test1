@@ -82,7 +82,7 @@ def main():
 
     # List of examination components
     components = [
-        "General Appearances", "Eyes", "Ears, Neck, Nose, Throat", "Lymph Nodes",
+        "General Appearance", "Eyes", "Ears, Neck, Nose, Throat", "Lymph Nodes",
         "Cardiovascular", "Lungs", "Abdomen", "Skin", "Extremities",
         "Musculoskeletal", "Neurological", "Psychiatry", "Genitourinary", "Image", "Audio", "Video"
     ]
