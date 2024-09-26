@@ -25,7 +25,7 @@ else:
 
         def upload_to_firebase(entry):
             db.collection('your_collection_name').add(entry)  # Change 'your_collection_name' to your collection name
-            return "Data uploaded to Firebase."
+            return ""
 
         # Main Streamlit App
         def main():
@@ -42,7 +42,7 @@ else:
                     # Immediately upload to Firebase
                     result = upload_to_firebase(entry)
                     st.success(result)
-                    st.success("Your interventions have been successfully uploaded.")
+                    st.success("Your proposed interventions have been stored for review.")
                 else:
                     st.error("Please enter a description of the interventions.")
 
