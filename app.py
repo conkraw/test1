@@ -149,6 +149,7 @@ def display_assessment():
         st.markdown("WEIGHT:")
 
     with col3:
+        st.markdown("**VALUES**")
         st.markdown(f"{vital_signs.get('heart_rate', 'N/A')}")
         st.markdown(f"{vital_signs.get('respiratory_rate', 'N/A')}")
         st.markdown(f"{vital_signs.get('blood_pressure', 'N/A')}")
