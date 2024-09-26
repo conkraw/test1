@@ -75,8 +75,6 @@ def login_page(users):
 
 # Function to display the assessment page
 def display_assessment():
-    st.write(f"Welcome {st.session_state.user_name}! Here is the assessment.")
-
     docx_file_path = "ptinfo.docx"
     document_text = read_word_text(docx_file_path)
     
