@@ -2,7 +2,7 @@ import streamlit as st
 
 # Initialize session state for diagnoses and table visibility
 if 'diagnoses' not in st.session_state:
-    st.session_state.diagnoses = []
+    st.session_state.diagnoses = [""] * 5  # Initialize with empty strings for 5 diagnoses
 if 'show_table' not in st.session_state:
     st.session_state.show_table = False
 
@@ -18,8 +18,7 @@ if not st.session_state.show_table:
 
     # Create text input fields for each diagnosis
     for i in range(5):
-        diagnosis = st.text_input(f"Diagnosis {i + 1}", key=f"diagnosis_{i}")
-        st.session_state.diagnoses.append(diagnosis)
+        st.session_state.diagnoses[i] = st.text_input(f"Diagnosis {i + 1}", value=st.session_state.diagnoses[i], key=f"diagnosis_{i}")
 
     # Button to submit the diagnoses
     if st.button("Submit Diagnoses"):
