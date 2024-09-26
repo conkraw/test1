@@ -119,55 +119,34 @@ def display_assessment():
     vital_signs = load_vital_signs(vital_signs_file)
 
     # Patient Vital Signs Table
-    table_html = f"""
-    <table style="border-collapse: collapse; width: 100%; font-family: 'DejaVu Sans';">
-        <tr>
-            <td colspan="3" style="border: 1px solid #000; text-align: center; font-weight: bold; font-size: 20px;">
-                VITAL SIGNS
-            </td>
-        </tr>
-        <tr>
-            <td style="border: 1px solid #000; text-align: center;font-weight: bold; background-color: lightblue; "></td>
-            <td style="border: 1px solid #000; text-align: center;font-weight: bold; background-color: lightblue; ">VITAL SIGNS</td>
-            <td style="border: 1px solid #000; text-align: center;font-weight: bold; background-color: lightblue; ">VALUES</td>
-        </tr>
-        <tr>
-            <td style="border: 1px solid #000; text-align: center;font-weight: bold;"></td>
-            <td style="border: 1px solid #000; text-align: center;font-weight: bold;">HEART RATE:</td>
-            <td style="border: 1px solid #000; text-align: center;">{vital_signs.get('heart_rate', 'N/A')}</td>
-        </tr>
-        <tr>
-            <td style="border: 1px solid #000; text-align: center;font-weight: bold;background-color: Gainsboro;"></td>
-            <td style="border: 1px solid #000; text-align: center;font-weight: bold;background-color: Gainsboro; ">RESPIRATORY RATE:</td>
-            <td style="border: 1px solid #000; text-align: center;background-color: Gainsboro;">{vital_signs.get('respiratory_rate', 'N/A')}</td>
-        </tr>
-        <tr>
-            <td style="border: 1px solid #000; text-align: center;font-weight: bold;"></td>
-            <td style="border: 1px solid #000; text-align: center;font-weight: bold;">BLOOD PRESSURE:</td>
-            <td style="border: 1px solid #000; text-align: center;">{vital_signs.get('blood_pressure', 'N/A')}</td>
-        </tr>
-        <tr>
-            <td style="border: 1px solid #000; text-align: center;font-weight: bold;background-color: Gainsboro;"></td>
-            <td style="border: 1px solid #000; text-align: center;font-weight: bold; background-color: Gainsboro; ">PULSE OXIMETRY:</td>
-            <td style="border: 1px solid #000; text-align: center;background-color: Gainsboro;">{vital_signs.get('pulseox', 'N/A')}</td>
-        </tr>
-        <tr>
-            <td style="border: 1px solid #000; text-align: center;font-weight: bold;"></td>
-            <td style="border: 1px solid #000; text-align: center;font-weight: bold;">TEMPERATURE:</td>
-            <td style="border: 1px solid #000; text-align: center;">{vital_signs.get('temperature', 'N/A')}</td>
-        </tr>
-        <tr>
-            <td style="border: 1px solid #000; text-align: center;font-weight: bold;background-color: Gainsboro;"></td>
-            <td style="border: 1px solid #000; text-align: center;font-weight: bold;background-color: Gainsboro;">WEIGHT:</td>
-            <td style="border: 1px solid #000; text-align: center;background-color: Gainsboro;">{vital_signs.get('weight', 'N/A')}</td>
-        </tr>
-    </table>
-    """
-    
-    st.markdown(table_html, unsafe_allow_html=True)
+    st.write("### VITAL SIGNS")
+    col1, col2, col3 = st.columns([1, 2, 2])  # Define three columns
+
+    with col1:
+        heart_rate_checkbox = st.checkbox('HEART RATE')
+        respiratory_rate_checkbox = st.checkbox('RESPIRATORY RATE')
+        blood_pressure_checkbox = st.checkbox('BLOOD PRESSURE')
+        pulseox_checkbox = st.checkbox('PULSE OXIMETRY')
+        temperature_checkbox = st.checkbox('TEMPERATURE')
+        weight_checkbox = st.checkbox('WEIGHT')
+
+    with col2:
+        st.markdown("**VITAL SIGNS**")
+        st.markdown("HEART RATE:")
+        st.markdown("RESPIRATORY RATE:")
+        st.markdown("BLOOD PRESSURE:")
+        st.markdown("PULSE OXIMETRY:")
+        st.markdown("TEMPERATURE:")
+        st.markdown("WEIGHT:")
+
+    with col3:
+        st.markdown(f"{vital_signs.get('heart_rate', 'N/A')}")
+        st.markdown(f"{vital_signs.get('respiratory_rate', 'N/A')}")
+        st.markdown(f"{vital_signs.get('blood_pressure', 'N/A')}")
+        st.markdown(f"{vital_signs.get('pulseox', 'N/A')}")
+        st.markdown(f"{vital_signs.get('temperature', 'N/A')}")
+        st.markdown(f"{vital_signs.get('weight', 'N/A')}")
 
 if __name__ == "__main__":
     main()
-
-
 
