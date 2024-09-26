@@ -116,7 +116,7 @@ else:
                         )
 
             # Upload Data Button
-            if st.button("Upload Data to Firebase"):
+            if st.button("Submit"):
                 # Gather all the data into a single entry
                 assessments = {}
                 for i in range(5):
@@ -136,7 +136,7 @@ else:
                 }
 
                 # Debugging: Check what will be uploaded
-                st.write("Entry data being uploaded:", entry)
+                #st.write("Entry Saved:", entry)
                 # Upload to Firebase
                 result = upload_to_firebase(entry)
                 st.success(result)
