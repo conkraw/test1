@@ -52,7 +52,7 @@ def welcome_page():
     
     if st.button("Start Assessment"):
         st.session_state.page = "login"  # Change to login page
-        st.experimental_rerun()  # Rerun to refresh the view
+        st.rerun()  # Rerun to refresh the view
 
 # Login page function
 def login_page(users):
@@ -66,7 +66,7 @@ def login_page(users):
                 if unique_code in users['code'].values:
                     st.session_state.user_name = users.loc[users['code'] == unique_code, 'name'].values[0]
                     st.session_state.page = "assessment"  # Change to assessment page
-                    st.experimental_rerun()  # Rerun to refresh the view
+                    st.rerun()  # Rerun to refresh the view
                 else:
                     st.error("Invalid code. Please try again.")
             except ValueError:
