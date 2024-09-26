@@ -108,23 +108,40 @@ else:
 
                 for diagnosis, col in zip(st.session_state.diagnoses, cols[1:]):  # The rest are dropdowns
                     with col:
-                        st.selectbox("", options=["","Supports", "Does not support"], key=f"select_{i}_{diagnosis}",
-                                      label_visibility="collapsed")
+                        st.selectbox(
+                            "",
+                            options=["", "Supports", "Does not support"],  # Added blank option
+                            key=f"select_{i}_{diagnosis}",
+                            label_visibility="collapsed"
+                        )
 
             # Upload Data Button
-            if st.button("Submit"):
+            if st.button("Upload Data to Firebase"):
                 # Gather all the data into a single entry
+                assessments = {}
+                for i in range(5):
+                    for diagnosis in st.session_state.diagnoses:
+                        assessment = st.session_state[f"select_{i}_{diagnosis}"]
+                        if diagnosis not in assessments:
+                            assessments[diagnosis] = []
+                        assessments[diagnosis].append({
+                            'historical_feature': st.session_state.historical_features[i],
+                            'assessment': assessment
+                        })
+
                 entry = {
                     'diagnoses': st.session_state.diagnoses,
                     'historical_features': st.session_state.historical_features,
-                    'assessments': {diagnosis: st.session_state[f"select_{i}_{diagnosis}"] for i, diagnosis in enumerate(st.session_state.diagnoses)}
+                    'assessments': assessments
                 }
+
                 # Debugging: Check what will be uploaded
-                #st.write("Answers Submitted:", entry)
+                st.write("Entry data being uploaded:", entry)
                 # Upload to Firebase
                 result = upload_to_firebase(entry)
                 st.success(result)
 
     except Exception as e:
         st.error(f"Error initializing Firebase: {e}")
+
 
