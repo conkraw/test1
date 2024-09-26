@@ -53,7 +53,6 @@ if FIREBASE_KEY_JSON:
         def upload_to_firebase(question, response):
             entry = {'question': question, 'response': response}
             db.collection('virtual_patient_sessions').add(entry)  # Change to your collection name
-            return "Data uploaded to Firebase."
 
         # Streamlit app layout
         st.title("Virtual Patient: Croup")
@@ -82,9 +81,8 @@ if FIREBASE_KEY_JSON:
                     virtual_patient_response = get_chatgpt_response(user_input)
                     st.write(f"Virtual Patient: {virtual_patient_response}")
 
-                    # Upload the question and response to Firebase
-                    result = upload_to_firebase(user_input, virtual_patient_response)
-                    st.success(result)
+                    # Upload the question and response to Firebase without announcement
+                    upload_to_firebase(user_input, virtual_patient_response)
 
         else:
             st.warning("Session time is up. Please end the session.")
@@ -101,6 +99,7 @@ if FIREBASE_KEY_JSON:
         st.error(f"Error initializing Firebase: {e}")
 else:
     st.error("FIREBASE_KEY environment variable not set.")
+
 
 
 
