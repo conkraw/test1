@@ -19,14 +19,17 @@ if not st.session_state.submitted:
         Based on the information provided in the above case, please provide 5 possible diagnoses that you would consider when prompted by your attending? Please do not provide duplicate diagnoses.
     """)
 
-    # Create text input fields for each diagnosis with specified width
-    for i in range(5):
-        st.session_state.diagnoses[i] = st.text_input(
-            f"Diagnosis {i + 1}",
-            value=st.session_state.diagnoses[i],
-            key=f"diagnosis_{i}",
-            max_chars=30  # You can set a character limit if needed
-        )
+    # Create columns for each diagnosis input
+    cols = st.columns(5)
+    
+    for i, col in enumerate(cols):
+        with col:
+            st.session_state.diagnoses[i] = st.text_input(
+                f"Diagnosis {i + 1}",
+                value=st.session_state.diagnoses[i],
+                key=f"diagnosis_{i}",
+                max_chars=20  # You can set a character limit if needed
+            )
 
     # Button to submit the diagnoses
     if st.button("Submit Diagnoses"):
@@ -35,7 +38,7 @@ if not st.session_state.submitted:
         if all(diagnosis for diagnosis in diagnoses):
             if len(diagnoses) == len(set(diagnoses)):  # Check for duplicates
                 st.session_state.submitted = True  # Move to the assessment table
-                st.experimental_rerun()  # Rerun the app to clear the inputs and show the table
+                st.rerun()  # Rerun the app to clear the inputs and show the table
             else:
                 st.error("Please do not provide duplicate diagnoses.")
         else:
@@ -76,6 +79,5 @@ if st.session_state.submitted:
                 # Ensure the key is unique by using row index and diagnosis name
                 st.selectbox("", options=["Supports", "Does not support"], key=f"select_{i}_{diagnosis}",
                               label_visibility="collapsed")
-
 
 
