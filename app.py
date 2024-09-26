@@ -42,6 +42,11 @@ if FIREBASE_KEY_JSON:
         def get_chatgpt_response(user_input):
             user_input_lower = user_input.lower()  # Normalize the user input to lower case
             
+            # Define common greetings and responses
+            greetings = ["how are you", "how is your child", "how do you feel"]
+            if any(greet in user_input_lower for greet in greetings):
+                return "I'm feeling a bit distressed; my child is sick."
+
             # Check if the question is in the croup_info
             if user_input_lower in croup_info:
                 response = openai.ChatCompletion.create(
