@@ -35,7 +35,7 @@ if not st.session_state.submitted:
 
 # Assessment Table Section
 if st.session_state.submitted:
-    st.markdown("### Assessment Table")
+    st.markdown("### HISTORICAL FEATURES")
 
     # Custom CSS to style the dropdowns
     st.markdown("""
