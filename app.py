@@ -25,7 +25,7 @@ if not st.session_state.submitted:
         input {
             font-size: 12px;  /* Decrease font size of text inputs */
             padding: 1px;     /* Decrease padding for a smaller input */
-            width: 100px;     /* Set a fixed width for inputs */
+            width: 5px;     /* Set a fixed width for inputs */
         }
         </style>
     """, unsafe_allow_html=True)
