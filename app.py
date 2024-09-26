@@ -72,7 +72,7 @@ def display_assessment():
 
         # Use markdown with HTML for custom font and size
         custom_html = f"""
-        <div style="font-family: 'Arial'; font-size: 18px;">
+        <div style="font-family: 'DejaVu Sans'; font-size: 18px;">
             {document_text.replace('\n', '<br>')}
         </div>
         """
