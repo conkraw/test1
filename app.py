@@ -43,7 +43,7 @@ def welcome_page():
     
     if st.button("Next"):
         st.session_state.page = "login"  # Change to login page
-        st.experimental_rerun()  # Rerun to refresh the view
+        st.rerun()  # Rerun to refresh the view
 
 # Login page function
 def login_page(users):
