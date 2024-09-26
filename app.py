@@ -126,31 +126,43 @@ def display_assessment():
     </h2>
     """
     st.markdown(title_html, unsafe_allow_html=True)
-    col1, col2, col3 = st.columns([1, 2, 2])  # Define three columns
+# Vital Signs Title
+title_html = """
+<h2 style="font-family: 'DejaVu Sans'; font-size: 24px; margin-bottom: 10px; color: #2c3e50;">
+    Vital Signs:
+</h2>
+"""
+st.markdown(title_html, unsafe_allow_html=True)
 
-    with col1:
-        heart_rate_checkbox = st.checkbox('', key='heart_rate_checkbox')
-        respiratory_rate_checkbox = st.checkbox('', key='respiratory_rate_checkbox')
-        blood_pressure_checkbox = st.checkbox('', key='blood_pressure_checkbox')
-        pulseox_checkbox = st.checkbox('', key='pulseox_checkbox')
-        temperature_checkbox = st.checkbox('', key='temperature_checkbox')
-        weight_checkbox = st.checkbox('', key='weight_checkbox')
+# Patient Vital Signs Table
+col1, col2, col3 = st.columns([1, 2, 2])  # Define three columns
 
-    with col2:
-        st.markdown("HEART RATE:")
-        st.markdown("RESPIRATORY RATE:")
-        st.markdown("BLOOD PRESSURE:")
-        st.markdown("PULSE OXIMETRY:")
-        st.markdown("TEMPERATURE:")
-        st.markdown("WEIGHT:")
+with col1:
+    st.markdown("<div style='display: flex; flex-direction: column; align-items: center;'>", unsafe_allow_html=True)
+    heart_rate_checkbox = st.checkbox('', key='heart_rate_checkbox')
+    respiratory_rate_checkbox = st.checkbox('', key='respiratory_rate_checkbox')
+    blood_pressure_checkbox = st.checkbox('', key='blood_pressure_checkbox')
+    pulseox_checkbox = st.checkbox('', key='pulseox_checkbox')
+    temperature_checkbox = st.checkbox('', key='temperature_checkbox')
+    weight_checkbox = st.checkbox('', key='weight_checkbox')
+    st.markdown("</div>", unsafe_allow_html=True)
 
-    with col3:
-        st.markdown(f"{vital_signs.get('heart_rate', 'N/A')}")
-        st.markdown(f"{vital_signs.get('respiratory_rate', 'N/A')}")
-        st.markdown(f"{vital_signs.get('blood_pressure', 'N/A')}")
-        st.markdown(f"{vital_signs.get('pulseox', 'N/A')}")
-        st.markdown(f"{vital_signs.get('temperature', 'N/A')}")
-        st.markdown(f"{vital_signs.get('weight', 'N/A')}")
+with col2:
+    st.markdown("HEART RATE:")
+    st.markdown("RESPIRATORY RATE:")
+    st.markdown("BLOOD PRESSURE:")
+    st.markdown("PULSE OXIMETRY:")
+    st.markdown("TEMPERATURE:")
+    st.markdown("WEIGHT:")
+
+with col3:
+    st.markdown(f"{vital_signs.get('heart_rate', 'N/A')}")
+    st.markdown(f"{vital_signs.get('respiratory_rate', 'N/A')}")
+    st.markdown(f"{vital_signs.get('blood_pressure', 'N/A')}")
+    st.markdown(f"{vital_signs.get('pulseox', 'N/A')}")
+    st.markdown(f"{vital_signs.get('temperature', 'N/A')}")
+    st.markdown(f"{vital_signs.get('weight', 'N/A')}")
+
 
 if __name__ == "__main__":
     main()
