@@ -1,7 +1,7 @@
 type,vital_signs
-3,100 beats per minute
-6,100 over 100 mm Hg
-9, 20 breaths per minute
-12, 100% on Room Air
-15, 38.6 Celsius
-18, 100 kilograms
+heart_rate,100 beats per minute
+blood_pressure,100 over 100 mm Hg
+respiratory_rate, 20 breaths per minute
+pulseox, 100% on Room Air
+temperature, 38.6 Celsius
+weight, 100 kilograms
