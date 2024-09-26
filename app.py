@@ -34,7 +34,8 @@ def display_selected_component(selected_component):
 
 # Function to check and display an image if present
 def display_image(base_image_name):
-    image_extensions = ['.png', '.jpg', '.jpeg', '.gif', '.bmp', '.tiff','.PNG','.JPG','.JPEG','.GIF','.BMP','.TIFF']
+    image_extensions = ['.png', '.jpg', '.jpeg', '.gif', '.bmp', '.tiff', 
+                        '.PNG', '.JPG', '.JPEG', '.GIF', '.BMP', '.TIFF']
     image_found = False
 
     for ext in image_extensions:
@@ -58,7 +59,7 @@ def main():
 
     # List of examination components
     components = [
-        "General Appearance", "Eyes", "Ears, Neck, Nose, Throat", "Lymph Nodes",
+        "General Appearances", "Eyes", "Ears, Neck, Nose, Throat", "Lymph Nodes",
         "Cardiovascular", "Lungs", "Abdomen", "Skin", "Extremities",
         "Musculoskeletal", "Neurological", "Psychiatry", "Genitourinary", "Image"
     ]
@@ -66,12 +67,12 @@ def main():
     # User selection
     selected_component = st.selectbox("Select a physical examination component:", components)
 
-    if st.button("Review"):
-        display_selected_component(selected_component)
+    # Automatically display the selected component without an additional button
+    display_selected_component(selected_component)
 
-        # Check for image file if "Image" is selected
-        if selected_component == "Image":
-            display_image("image_1")  # No extension needed here
+    # Check for image file
+    if selected_component == "Image":
+        display_image("image_1")  # Change the base name if needed
 
 if __name__ == '__main__':
     main()
