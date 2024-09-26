@@ -47,12 +47,12 @@ if st.session_state.submitted:
             width: 100%;  /* Set dropdowns to take full width */
             font-size: 12px; /* Decrease font size */
         }
-        .stColumns > div {
-            flex: 1; /* Allow columns to take equal space */
-            min-width: 150px; /* Set minimum width for better spacing */
-        }
         .css-1x8g58p {
             max-width: none; /* Remove any max-width restrictions */
+        }
+        .stColumns > div {
+            width: 200px; /* Set a fixed width for columns */
+            min-width: 200px; /* Minimum width for columns */
         }
         </style>
     """, unsafe_allow_html=True)
