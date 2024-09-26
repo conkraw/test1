@@ -18,7 +18,16 @@ def main():
     # Check if the user is logged in
     if "user_name" in st.session_state:
         st.write(f"Welcome, {st.session_state.user_name}!")
-        st.button("Start Assessment", on_click=display_image)
+
+        # Button to start assessment
+        if st.button("Start Assessment"):
+            st.session_state.page = "assessment"  # Set the current page to assessment
+            st.experimental_rerun()  # Rerun to update the displayed page
+
+        # Display different pages based on session state
+        if st.session_state.get("page") == "assessment":
+            display_image()
+
     else:
         st.write("Welcome! Please enter your unique code to access the assessment.")
         unique_code = st.text_input("Unique Code:")
@@ -28,7 +37,8 @@ def main():
                     unique_code = int(unique_code.strip())
                     if unique_code in users['code'].values:
                         st.session_state.user_name = users.loc[users['code'] == unique_code, 'name'].values[0]
-                        st.rerun()
+                        st.session_state.page = "main"  # Reset to main page
+                        st.experimental_rerun()
                     else:
                         st.error("Invalid code. Please try again.")
                 except ValueError:
@@ -41,5 +51,8 @@ def display_image():
     st.image("ptinfo.png", use_column_width=True)
 
 if __name__ == "__main__":
+    # Initialize session state for the page if not already done
+    if "page" not in st.session_state:
+        st.session_state.page = "main"
     main()
 
