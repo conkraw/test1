@@ -89,7 +89,6 @@ def login_page(users):
         else:
             st.error("Please enter a code.")
 
-# Function to display the assessment page
 def display_assessment():
     st.markdown(f"<h3 style='font-family: \"DejaVu Sans\";'>Welcome {st.session_state.user_name}! Here is the intake form.</h3>", unsafe_allow_html=True)
 
@@ -126,33 +125,75 @@ def display_assessment():
     """
     st.markdown(title_html, unsafe_allow_html=True)
 
-    # Patient Vital Signs Table
-    col1, col3 = st.columns([1, 2])  # Define three columns
+    # HTML table structure with checkboxes and values
+    table_html = """
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 10px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            font-family: 'DejaVu Sans';
+            font-size: 18px;
+        }
+        th {
+            background-color: #f2f2f2;
+            text-align: left;
+        }
+    </style>
 
-    with col1:
-        st.checkbox('HEART RATE:', key='heart_rate_checkbox')
-        st.checkbox('RESPIRATORY RATE:', key='respiratory_rate_checkbox')
-        st.checkbox('BLOOD PRESSURE:', key='blood_pressure_checkbox')
-        st.checkbox('PULSE OXIMETRY:', key='pulseox_checkbox')
-        st.checkbox('TEMPERATURE:', key='temperature_checkbox')
-        st.checkbox('WEIGHT:', key='weight_checkbox')
-        st.markdown("</div>", unsafe_allow_html=True)
+    <table>
+        <tr>
+            <th>Abnormal</th>
+            <th>Vital Sign</th>
+            <th>Value</th>
+        </tr>
+        <tr>
+            <td><input type="checkbox" id="heart_rate_checkbox"></td>
+            <td>HEART RATE</td>
+            <td>{heart_rate}</td>
+        </tr>
+        <tr>
+            <td><input type="checkbox" id="respiratory_rate_checkbox"></td>
+            <td>RESPIRATORY RATE</td>
+            <td>{respiratory_rate}</td>
+        </tr>
+        <tr>
+            <td><input type="checkbox" id="blood_pressure_checkbox"></td>
+            <td>BLOOD PRESSURE</td>
+            <td>{blood_pressure}</td>
+        </tr>
+        <tr>
+            <td><input type="checkbox" id="pulseox_checkbox"></td>
+            <td>PULSE OXIMETRY</td>
+            <td>{pulseoximetry}</td>
+        </tr>
+        <tr>
+            <td><input type="checkbox" id="temperature_checkbox"></td>
+            <td>TEMPERATURE</td>
+            <td>{temperature}</td>
+        </tr>
+        <tr>
+            <td><input type="checkbox" id="weight_checkbox"></td>
+            <td>WEIGHT</td>
+            <td>{weight}</td>
+        </tr>
+    </table>
+    """.format(
+        heart_rate=vital_signs.get('heart_rate', 'N/A'),
+        respiratory_rate=vital_signs.get('respiratory_rate', 'N/A'),
+        blood_pressure=vital_signs.get('blood_pressure', 'N/A'),
+        pulseoximetry=vital_signs.get('pulseox', 'N/A'),
+        temperature=vital_signs.get('temperature', 'N/A'),
+        weight=vital_signs.get('weight', 'N/A')
+    )
 
-    #with col2:
-    #    st.markdown("HEART RATE:")
-    #    st.markdown("RESPIRATORY RATE:")
-    #    st.markdown("BLOOD PRESSURE:")
-    #    st.markdown("PULSE OXIMETRY:")
-    #    st.markdown("TEMPERATURE:")
-    #    st.markdown("WEIGHT:")
+    # Display the table
+    st.markdown(table_html, unsafe_allow_html=True)
 
-    with col3:
-        st.markdown(f"{vital_signs.get('heart_rate', 'N/A')}")
-        st.markdown(f"{vital_signs.get('respiratory_rate', 'N/A')}")
-        st.markdown(f"{vital_signs.get('blood_pressure', 'N/A')}")
-        st.markdown(f"{vital_signs.get('pulseox', 'N/A')}")
-        st.markdown(f"{vital_signs.get('temperature', 'N/A')}")
-        st.markdown(f"{vital_signs.get('weight', 'N/A')}")
 
 if __name__ == "__main__":
     main()
