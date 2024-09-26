@@ -127,8 +127,8 @@ def display_assessment():
             </td>
         </tr>
         <tr>
-            <td style="border: 1px solid #000; text-align: center;font-weight: bold;">VITAL SIGNS</td>
-            <td style="border: 1px solid #000; text-align: center;font-weight: bold;">VALUES</td>
+            <td style="border: 1px solid #000; text-align: center;font-weight: bold; background-color: lightblue; ">VITAL SIGNS</td>
+            <td style="border: 1px solid #000; text-align: center;font-weight: bold; background-color: lightblue; ">VALUES</td>
         </tr>
         <tr>
             <td style="border: 1px solid #000; text-align: center;font-weight: bold;">HEART RATE:</td>
