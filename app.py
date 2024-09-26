@@ -122,11 +122,12 @@ def display_assessment():
     table_html = f"""
     <table style="border-collapse: collapse; width: 100%; font-family: 'DejaVu Sans';">
         <tr>
-            <td colspan="2" style="border: 1px solid #000; text-align: center; font-weight: bold; font-size: 20px;">
+            <td colspan="3" style="border: 1px solid #000; text-align: center; font-weight: bold; font-size: 20px;">
                 VITAL SIGNS
             </td>
         </tr>
         <tr>
+            <td style="border: 1px solid #000; text-align: center;font-weight: bold; background-color: lightblue; ">VALUES</td>
             <td style="border: 1px solid #000; text-align: center;font-weight: bold; background-color: lightblue; ">VITAL SIGNS</td>
             <td style="border: 1px solid #000; text-align: center;font-weight: bold; background-color: lightblue; ">VALUES</td>
         </tr>
