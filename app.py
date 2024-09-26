@@ -110,9 +110,9 @@ def display_assessment():
             </td>
         </tr>
         <tr>
-            <td style="border: 1px solid #000; text-align: center;">Vital Sign 1</td>
-            <td style="border: 1px solid #000; text-align: center;">Vital Sign 2</td>
-            <td style="border: 1px solid #000; text-align: center;">Vital Sign 3</td>
+            <td style="border: 1px solid #000; text-align: center;"></td>
+            <td style="border: 1px solid #000; text-align: center;">VITAL SIGNS</td>
+            <td style="border: 1px solid #000; text-align: center;">VALUES</td>
         </tr>
         <tr>
             <td style="border: 1px solid #000; text-align: center;">Value 1</td>
