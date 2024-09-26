@@ -1,10 +1,16 @@
 import streamlit as st
 
-# Custom CSS to widen the dropdowns
+# Custom CSS to widen the dropdowns and increase table size
 st.markdown("""
     <style>
     .stSelectbox > div > div {
-        width: 200px;  /* Adjust width as needed */
+        width: 200px;  /* Adjust width of dropdowns */
+    }
+    .stButton, .stNumberInput, .stSelectbox {
+        font-size: 18px; /* Increase font size for better visibility */
+    }
+    .css-1y2x8r0 {
+        width: 100%;  /* Set columns to take full width */
     }
     </style>
     """, unsafe_allow_html=True)
