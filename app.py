@@ -53,7 +53,7 @@ else:
                         f"Diagnosis {i + 1}",
                         value=st.session_state.diagnoses[i],
                         key=f"diagnosis_{i}",
-                        #max_chars=20  # You can set a character limit if needed
+                        max_chars=20  # You can set a character limit if needed
                     )
 
             # Button to submit the diagnoses
@@ -102,7 +102,7 @@ else:
             for i in range(5):
                 cols = st.columns(len(st.session_state.diagnoses) + 1)
                 
-                with cols[0]:  # The first column is for row headers
+                with cols[0]:  # The first column is for historical features
                     st.session_state.historical_features[i] = st.text_input(
                         f"Feature {i + 1}", 
                         value=st.session_state.historical_features[i], 
