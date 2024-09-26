@@ -1,13 +1,13 @@
 import streamlit as st
 
-# Custom CSS to style the dropdowns and make the table wider
+# Custom CSS to style the dropdowns and set a fixed column width
 st.markdown("""
     <style>
     .stSelectbox > div > div {
-        width: 200px;  /* Adjust width of dropdowns */
+        width: 150px;  /* Fixed width for dropdowns */
     }
     .stButton, .stNumberInput, .stSelectbox {
-        font-size: 12px; /* Increase font size for better visibility */
+        font-size: 18px; /* Increase font size for better visibility */
     }
     .css-1y2x8r0 {
         width: 95%;  /* Set columns to take up most of the screen */
@@ -36,7 +36,7 @@ for row in row_headers:
     
     for diagnosis, col in zip(diagnoses, cols[1:]):  # The rest are dropdowns
         with col:
-            # Larger dropdowns for better visibility
+            # Dropdown for user selection
             selection = st.selectbox("", options=["Support", "Does not support"], key=f"{row}_{diagnosis}", 
                                       label_visibility="collapsed")
 
