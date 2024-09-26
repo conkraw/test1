@@ -121,8 +121,7 @@ def display_assessment():
     # Vital Signs Title
     title_html = """
     <h2 style="font-family: 'DejaVu Sans'; font-size: 24px; margin-bottom: 10px; color: #2c3e50;">
-        Vital Signs:
-    </h2>
+        Vital Signs:</h2>
     """
     st.markdown(title_html, unsafe_allow_html=True)
 
