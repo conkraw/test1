@@ -74,7 +74,7 @@ def login_page(users):
 
 # Function to display the assessment page
 def display_assessment():
-    st.write(f"Welcome {st.session_state.user_name}! Here is the assessment.")
+    st.write(f"Welcome {st.session_state.user_name}! Here is the intake form.")
 
     # Read and display the text from ptinfo.txt
     txt_file_path = "ptinfo.txt"
