@@ -13,7 +13,7 @@ st.title("")
 if not st.session_state.submitted:
     st.markdown("""
         ## Instructions
-        Please enter 5 diagnoses based on what you know about the case.
+        Based on the information provided in the above case, please provide 5 possible diagnoses that you would consider when prompted by your attending? Please do not provide duplicate diagnoses. 
     """)
 
     # Create text input fields for each diagnosis
@@ -29,7 +29,7 @@ if not st.session_state.submitted:
                 st.session_state.submitted = True  # Move to the assessment table
                 st.rerun()  # Rerun the app to clear the inputs and show the table
             else:
-                st.error("Based on the information provided in the above case, please provide the possible diagnoses that you would consider listing as a possible diagnosis when prompted by your attending? Please do not provide duplicate diagnoses.")
+                st.error("Please do not provide duplicate diagnoses.")
         else:
             st.error("Please enter all 5 diagnoses.")
 
