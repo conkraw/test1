@@ -1,6 +1,5 @@
 import streamlit as st
 import pandas as pd
-from docx import Document
 
 # Set page layout to wide
 st.set_page_config(layout="wide")
@@ -10,17 +9,10 @@ st.set_page_config(layout="wide")
 def load_users():
     return pd.read_csv('users.csv')
 
-# Function to read the Word document and extract text
-def read_word_text(docx_file_path):
-    doc = Document(docx_file_path)
-    full_text = []
-    
-    # Extract all paragraphs from the document
-    for para in doc.paragraphs:
-        full_text.append(para.text)
-    
-    # Join paragraphs into a single string
-    return "\n\n".join(full_text)
+# Function to read text from a TXT file
+def read_text_file(txt_file_path):
+    with open(txt_file_path, 'r') as file:
+        return file.read()
 
 # Main app function
 def main():
@@ -51,7 +43,7 @@ def welcome_page():
     
     if st.button("Next"):
         st.session_state.page = "login"  # Change to login page
-        st.rerun()  # Rerun to refresh the view
+        st.experimental_rerun()  # Rerun to refresh the view
 
 # Login page function
 def login_page(users):
@@ -65,7 +57,7 @@ def login_page(users):
                 if unique_code in users['code'].values:
                     st.session_state.user_name = users.loc[users['code'] == unique_code, 'name'].values[0]
                     st.session_state.page = "assessment"  # Change to assessment page
-                    st.rerun()  # Rerun to refresh the view
+                    st.experimental_rerun()  # Rerun to refresh the view
                 else:
                     st.error("Invalid code. Please try again.")
             except ValueError:
@@ -75,8 +67,11 @@ def login_page(users):
 
 # Function to display the assessment page
 def display_assessment():
-    docx_file_path = "ptinfo.docx"
-    document_text = read_word_text(docx_file_path)
+    st.write(f"Welcome {st.session_state.user_name}! Here is the assessment.")
+
+    # Read and display the text from ptinfo.txt
+    txt_file_path = "ptinfo.txt"
+    document_text = read_text_file(txt_file_path)
     
     if document_text:
         title_html = """
@@ -97,4 +92,5 @@ def display_assessment():
 
 if __name__ == "__main__":
     main()
+
 
