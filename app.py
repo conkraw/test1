@@ -23,13 +23,20 @@ def get_chatgpt_response(user_input):
         model="gpt-3.5-turbo",  # Adjust model as needed
         messages=[
             {"role": "user", "content": user_input},
-            {"role": "assistant", "content": croup_info}
+            {"role": "assistant", "content": "I am a virtual patient experiencing croup. Please ask me questions about my symptoms."}
         ]
     )
     return response['choices'][0]['message']['content']
 
 # Streamlit app layout
 st.title("Virtual Patient: Croup")
+
+# Instructions for the user
+st.info(
+    "You will have the opportunity to perform a history and ask for important physical examination details using a virtual patient/parent. "
+    "When you are ready, please start asking questions. You will be limited to 15 minutes. "
+    "Alternatively, you may end the session if you click end."
+)
 
 # Session state to track time and session status
 if 'start_time' not in st.session_state:
@@ -40,10 +47,7 @@ elapsed_time = (time.time() - st.session_state.start_time) / 60  # Convert to mi
 
 # Display patient information
 if elapsed_time < 15:
-    st.subheader("Patient Information:")
-    st.write(croup_info)
-
-    user_input = st.text_input("Describe the patient's symptoms:")
+    user_input = st.text_input("Ask the virtual patient a question about their symptoms:")
 
     if st.button("Submit"):
         # Call the OpenAI API
