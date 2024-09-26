@@ -138,14 +138,6 @@ def display_assessment():
         st.checkbox('WEIGHT:', key='weight_checkbox')
         st.markdown("</div>", unsafe_allow_html=True)
 
-    #with col2:
-    #    st.markdown("HEART RATE:")
-    #    st.markdown("RESPIRATORY RATE:")
-    #    st.markdown("BLOOD PRESSURE:")
-    #    st.markdown("PULSE OXIMETRY:")
-    #    st.markdown("TEMPERATURE:")
-    #    st.markdown("WEIGHT:")
-
     with col3:
         st.markdown(f"{vital_signs.get('heart_rate', 'N/A')}")
         st.markdown(f"{vital_signs.get('respiratory_rate', 'N/A')}")
