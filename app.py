@@ -135,23 +135,23 @@ def display_assessment():
             <td style="border: 1px solid #000; text-align: center;">{vital_signs.get('heart_rate', 'N/A')}</td>
         </tr>
         <tr>
-            <td style="border: 1px solid #000; text-align: center;font-weight: bold;background-color: Lavender; ">RESPIRATORY RATE:</td>
-            <td style="border: 1px solid #000; text-align: center;background-color: Lavender;">{vital_signs.get('respiratory_rate', 'N/A')}</td>
+            <td style="border: 1px solid #000; text-align: center;font-weight: bold;background-color: Gainsboro; ">RESPIRATORY RATE:</td>
+            <td style="border: 1px solid #000; text-align: center;background-color: Gainsboro;">{vital_signs.get('respiratory_rate', 'N/A')}</td>
         </tr>
         <tr>
             <td style="border: 1px solid #000; text-align: center;font-weight: bold;">BLOOD PRESSURE:</td>
             <td style="border: 1px solid #000; text-align: center;">{vital_signs.get('blood_pressure', 'N/A')}</td>
         </tr>
         <tr>
-            <td style="border: 1px solid #000; text-align: center;font-weight: bold; background-color: Lavender; ">PULSE OXIMETRY:</td>
-            <td style="border: 1px solid #000; text-align: center;background-color: Lavender;">{vital_signs.get('pulseox', 'N/A')}</td>
+            <td style="border: 1px solid #000; text-align: center;font-weight: bold; background-color: Gainsboro; ">PULSE OXIMETRY:</td>
+            <td style="border: 1px solid #000; text-align: center;background-color: Gainsboro;">{vital_signs.get('pulseox', 'N/A')}</td>
         </tr>
         <tr>
             <td style="border: 1px solid #000; text-align: center;font-weight: bold;">TEMPERATURE:</td>
             <td style="border: 1px solid #000; text-align: center;">{vital_signs.get('temperature', 'N/A')}</td>
         </tr>
         <tr>
-            <td style="border: 1px solid #000; text-align: center;font-weight: bold;background-color: Lavender;">WEIGHT:</td>
+            <td style="border: 1px solid #000; text-align: center;font-weight: bold;background-color: Gainsboro;">WEIGHT:</td>
             <td style="border: 1px solid #000; text-align: center;background-color: Gainsboro;">{vital_signs.get('weight', 'N/A')}</td>
         </tr>
     </table>
