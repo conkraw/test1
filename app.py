@@ -133,7 +133,7 @@ def display_assessment():
 
     with col1:
         # Create checkboxes and use st.markdown for the labels
-        heart_rate_checkbox = st.checkbox('', key='heart_rate_checkbox')
+        heart_rate_checkbox = st.checkbox('', key='heart_rate_checkbox', value=False)
         st.markdown(f"<b>HEART RATE:</b>&nbsp;&nbsp;{vital_signs.get('heart_rate', 'N/A')}", unsafe_allow_html=True)
 
         respiratory_rate_checkbox = st.checkbox('', key='respiratory_rate_checkbox')
