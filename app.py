@@ -127,24 +127,24 @@ def display_assessment():
     st.markdown(title_html, unsafe_allow_html=True)
 
     # Patient Vital Signs Table
-    col1, col2, col3 = st.columns([1, 2, 2])  # Define three columns
+    col1, col3 = st.columns([1, 2])  # Define three columns
 
     with col1:
-        st.checkbox('', key='heart_rate_checkbox')
-        st.checkbox('', key='respiratory_rate_checkbox')
-        st.checkbox('', key='blood_pressure_checkbox')
-        st.checkbox('', key='pulseox_checkbox')
-        st.checkbox('', key='temperature_checkbox')
-        st.checkbox('', key='weight_checkbox')
+        st.checkbox('HEART RATE:', key='heart_rate_checkbox')
+        st.checkbox('RESPIRATORY RATE:', key='respiratory_rate_checkbox')
+        st.checkbox('BLOOD PRESSURE:', key='blood_pressure_checkbox')
+        st.checkbox('PULSE OXIMETRY:', key='pulseox_checkbox')
+        st.checkbox('TEMPERATURE:', key='temperature_checkbox')
+        st.checkbox('WEIGHT:', key='weight_checkbox')
         st.markdown("</div>", unsafe_allow_html=True)
 
-    with col2:
-        st.markdown("HEART RATE:")
-        st.markdown("RESPIRATORY RATE:")
-        st.markdown("BLOOD PRESSURE:")
-        st.markdown("PULSE OXIMETRY:")
-        st.markdown("TEMPERATURE:")
-        st.markdown("WEIGHT:")
+    #with col2:
+    #    st.markdown("HEART RATE:")
+    #    st.markdown("RESPIRATORY RATE:")
+    #    st.markdown("BLOOD PRESSURE:")
+    #    st.markdown("PULSE OXIMETRY:")
+    #    st.markdown("TEMPERATURE:")
+    #    st.markdown("WEIGHT:")
 
     with col3:
         st.markdown(f"{vital_signs.get('heart_rate', 'N/A')}")
