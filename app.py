@@ -1,88 +1,106 @@
+import pandas as pd
+import firebase_admin
+from firebase_admin import credentials, firestore
 import streamlit as st
+import os
+import json
 import openai
 from docx import Document
 import time
-import requests  # Import requests to send HTTP requests
 
-# Function to read the croup document
-def read_croup_doc():
-    doc = Document("croup.docx")
-    content = []
-    for para in doc.paragraphs:
-        content.append(para.text)
-    return "\n".join(content)
+# Load Firebase credentials from Streamlit secrets
+FIREBASE_KEY_JSON = st.secrets["FIREBASE_KEY"]
 
-# Load the document content
-croup_info = read_croup_doc()
-
-# Set up OpenAI API key from Streamlit secrets
-openai.api_key = st.secrets["OPENAI_API_KEY"]
-
-# Function to get response from ChatGPT
-def get_chatgpt_response(user_input):
-    response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",
-        messages=[
-            {"role": "user", "content": user_input},
-            {"role": "assistant", "content": "Pretend to be a virtual patient with croup. Did not reveal diagnosis."}
-        ]
-    )
-    return response['choices'][0]['message']['content']
-
-# Function to upload data to Firebase
-def upload_to_firebase(question, response):
-    url = st.secrets["FIREBASE_ENDPOINT"]  # Use Firebase API endpoint from Streamlit secrets
-    data = {
-        "question": question,
-        "response": response
-    }
-    headers = {
-        "Authorization": f"Bearer {st.secrets['FIREBASE_KEY']}"  # Using Firebase key from Streamlit secrets
-    }
+if FIREBASE_KEY_JSON:
     try:
-        requests.post(url, json=data, headers=headers)
+        # Parse the JSON string into a dictionary
+        firebase_credentials = json.loads(FIREBASE_KEY_JSON)
+
+        # Initialize Firebase only if not already initialized
+        if not firebase_admin._apps:
+            cred = credentials.Certificate(firebase_credentials)
+            firebase_admin.initialize_app(cred)
+
+        # Get Firestore client
+        db = firestore.client()
+
+        # Function to read the croup document
+        def read_croup_doc():
+            doc = Document("croup.docx")
+            content = []
+            for para in doc.paragraphs:
+                content.append(para.text)
+            return "\n".join(content)
+
+        # Load the document content
+        croup_info = read_croup_doc()
+
+        # Set up OpenAI API key from Streamlit secrets
+        openai.api_key = st.secrets["OPENAI_API_KEY"]
+
+        # Function to get response from ChatGPT
+        def get_chatgpt_response(user_input):
+            response = openai.ChatCompletion.create(
+                model="gpt-3.5-turbo",
+                messages=[
+                    {"role": "user", "content": user_input},
+                    {"role": "assistant", "content": "I am a virtual patient experiencing croup. Please ask me questions about my symptoms."}
+                ]
+            )
+            return response['choices'][0]['message']['content']
+
+        # Function to upload data to Firebase
+        def upload_to_firebase(question, response):
+            entry = {'question': question, 'response': response}
+            db.collection('virtual_patient_sessions').add(entry)  # Change to your collection name
+            return "Data uploaded to Firebase."
+
+        # Streamlit app layout
+        st.title("Virtual Patient: Croup")
+
+        # Instructions for the user
+        st.info(
+            "You will have the opportunity to perform a history and ask for important physical examination details using a virtual patient/parent. "
+            "When you are ready, please start asking questions. You will be limited to 15 minutes. "
+            "Alternatively, you may end the session if you click end."
+        )
+
+        # Session state to track time and session status
+        if 'start_time' not in st.session_state:
+            st.session_state.start_time = time.time()
+
+        # Calculate elapsed time
+        elapsed_time = (time.time() - st.session_state.start_time) / 60  # Convert to minutes
+
+        # Display patient information
+        if elapsed_time < 15:
+            with st.form("question_form"):
+                user_input = st.text_input("Ask the virtual patient a question about their symptoms:")
+                submit_button = st.form_submit_button("Submit")
+
+                if submit_button and user_input:
+                    virtual_patient_response = get_chatgpt_response(user_input)
+                    st.write(f"Virtual Patient: {virtual_patient_response}")
+
+                    # Upload the question and response to Firebase
+                    result = upload_to_firebase(user_input, virtual_patient_response)
+                    st.success(result)
+
+        else:
+            st.warning("Session time is up. Please end the session.")
+            if st.button("End Session"):
+                st.session_state.start_time = None
+                st.success("Session ended. You can start a new session.")
+
+        # Option to move to a new screen
+        if st.button("Go to New Screen"):
+            st.session_state.start_time = None
+            st.write("Redirecting to a new screen...")
+
     except Exception as e:
-        st.error(f"Error uploading data: {e}")
-
-# Streamlit app layout
-st.title("Virtual Patient: Croup")
-
-# Instructions for the user
-st.info(
-    "You will have the opportunity to perform a history and ask for important physical examination details using a virtual patient/parent. "
-    "When you are ready, please start asking questions. You will be limited to 15 minutes. "
-    "Alternatively, you may end the session if you click end."
-)
-
-# Session state to track time and session status
-if 'start_time' not in st.session_state:
-    st.session_state.start_time = time.time()
-
-# Calculate elapsed time
-elapsed_time = (time.time() - st.session_state.start_time) / 60  # Convert to minutes
-
-# Display patient information
-if elapsed_time < 15:
-    with st.form("question_form"):
-        user_input = st.text_input("Ask the virtual patient a question about their symptoms:")
-        submit_button = st.form_submit_button("Submit")
-
-        if submit_button and user_input:
-            virtual_patient_response = get_chatgpt_response(user_input)
-            st.write(f"Virtual Patient: {virtual_patient_response}")
-            
-            # Upload the question and response to Firebase
-            upload_to_firebase(user_input, virtual_patient_response)
-
+        st.error(f"Error initializing Firebase: {e}")
 else:
-    st.warning("Session time is up. Please end the session.")
-    if st.button("End Session"):
-        st.session_state.start_time = None
-        st.success("Session ended. You can start a new session.")
+    st.error("FIREBASE_KEY environment variable not set.")
 
-# Option to move to a new screen
-if st.button("Go to New Screen"):
-    st.session_state.start_time = None
-    st.write("Redirecting to a new screen...")
 
 
