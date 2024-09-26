@@ -66,7 +66,7 @@ else:
                 if all(diagnosis for diagnosis in diagnoses):
                     if len(diagnoses) == len(set(diagnoses)):
                         st.session_state.current_page = "historical_features"  # Move to Historical Features page
-                        st.experimental_rerun()  # Rerun the app to refresh the page
+                        st.rerun()  # Rerun the app to refresh the page
                     else:
                         st.error("Please do not provide duplicate diagnoses.")
                 else:
