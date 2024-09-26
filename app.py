@@ -121,11 +121,13 @@ def display_assessment():
     # Vital Signs Title
     title_html = """
     <h2 style="font-family: 'DejaVu Sans'; font-size: 24px; margin-bottom: 10px; color: #2c3e50;">
-        Vital Signs: Of the following vital signs within the intake form, check the vital signs that are abnormal. 
+        Vital Signs:
     </h2>
     """
     st.markdown(title_html, unsafe_allow_html=True)
 
+    st.subheader(" Of the following vital signs within the intake form, check the vital signs that are abnormal.")
+    
     # Patient Vital Signs Table
     col1, col3 = st.columns([1, 2])  # Define three columns
 
