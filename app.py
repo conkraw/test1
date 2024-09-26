@@ -4,7 +4,7 @@ import streamlit as st
 st.markdown("""
     <style>
     .stSelectbox > div > div {
-        width: 50px;  /* Fixed width for dropdowns */
+        width: 75px;  /* Fixed width for dropdowns */
         padding: 10px;  /* Add padding to improve visibility */
     }
     .stButton, .stNumberInput, .stSelectbox {
