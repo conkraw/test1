@@ -1,12 +1,28 @@
 import streamlit as st
 import pandas as pd
+from docx import Document
 
+# Set page layout to wide
 st.set_page_config(layout="wide")
 
-# Load users from CSV
+# Cache loading of users from CSV
 @st.cache_data
 def load_users():
     return pd.read_csv('users.csv')
+
+# Function to read the Word document and extract the table
+def read_word_table(docx_file):
+    doc = Document(docx_file)
+    table_data = []
+    
+    # Assuming the table is the first one in the document
+    table = doc.tables[0]
+    
+    for row in table.rows:
+        row_data = [cell.text for cell in row.cells]
+        table_data.append(row_data)
+    
+    return table_data
 
 # Main app function
 def main():
@@ -21,13 +37,15 @@ def main():
 
     # Check which page to display
     if st.session_state.page == "assessment":
-        display_image()
+        display_assessment()
     else:
         login_page(users)
 
+# Login page function
 def login_page(users):
     st.write("Welcome! Please enter your unique code to access the assessment.")
     unique_code = st.text_input("Unique Code:")
+    
     if st.button("Next"):
         if unique_code:
             try:
@@ -43,7 +61,24 @@ def login_page(users):
         else:
             st.error("Please enter a code.")
 
-def display_image():
+# Function to display the assessment page
+def display_assessment():
+    st.write(f"Welcome {st.session_state.user_name}! Here is the assessment.")
+
+    # Upload the Word file for table extraction
+    docx_file = st.file_uploader("Upload a Word Document", type=["docx"])
+
+    if docx_file is not None:
+        # Read and display the table from Word document
+        table_data = read_word_table(docx_file)
+        
+        if table_data:
+            st.write("Table from Word Document:")
+            st.table(table_data)
+        else:
+            st.write("No table found in the document.")
+    
+    # Option to display the image (e.g., ptinfo.png)
     st.image("ptinfo.png", use_column_width=True)
 
 if __name__ == "__main__":
