@@ -69,7 +69,14 @@ def display_assessment():
     
     if document_text:
         st.write("Patient Information:")
-        st.text(document_text)  # Display the text content
+
+        # Use markdown with HTML for custom font and size
+        custom_html = f"""
+        <div style="font-family: 'Arial'; font-size: 18px;">
+            {document_text.replace('\n', '<br>')}
+        </div>
+        """
+        st.markdown(custom_html, unsafe_allow_html=True)
     else:
         st.write("No text found in the document.")
 
