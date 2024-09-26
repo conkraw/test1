@@ -131,25 +131,32 @@ def display_assessment():
     # Patient Vital Signs Table
     col1, col3 = st.columns([1, 2])  # Define two columns
 
-    with col1:
     # Display labels and checkboxes together
+        # Patient Vital Signs Table
+col1, col3 = st.columns([1, 2])  # Define two columns
+
+    with col1:
+    # Indent labels and checkboxes
+        indent_html = "&nbsp;&nbsp;&nbsp;"  # Adjust the number of &nbsp; for more or less indentation
+
         heart_rate = vital_signs.get("heart_rate", "N/A")
-        heart_rate_checkbox = st.checkbox(f"HEART RATE: {heart_rate}", key='heart_rate_checkbox')
+        heart_rate_checkbox = st.checkbox(f"{indent_html}HEART RATE: {heart_rate}", key='heart_rate_checkbox')
 
         respiratory_rate = vital_signs.get("respiratory_rate", "N/A")
-        respiratory_rate_checkbox = st.checkbox(f"RESPIRATORY RATE: {respiratory_rate}", key='respiratory_rate_checkbox')
+        respiratory_rate_checkbox = st.checkbox(f"{indent_html}RESPIRATORY RATE: {respiratory_rate}", key='respiratory_rate_checkbox')
 
         blood_pressure = vital_signs.get("blood_pressure", "N/A")
-        blood_pressure_checkbox = st.checkbox(f"BLOOD PRESSURE: {blood_pressure}", key='blood_pressure_checkbox')
+        blood_pressure_checkbox = st.checkbox(f"{indent_html}BLOOD PRESSURE: {blood_pressure}", key='blood_pressure_checkbox')
 
         pulseox = vital_signs.get("pulseox", "N/A")
-        pulseox_checkbox = st.checkbox(f"PULSE OXIMETRY: {pulseox}", key='pulseox_checkbox')
+        pulseox_checkbox = st.checkbox(f"{indent_html}PULSE OXIMETRY: {pulseox}", key='pulseox_checkbox')
 
         temperature = vital_signs.get("temperature", "N/A")
-        temperature_checkbox = st.checkbox(f"TEMPERATURE: {temperature}", key='temperature_checkbox')
+        temperature_checkbox = st.checkbox(f"{indent_html}TEMPERATURE: {temperature}", key='temperature_checkbox')
 
         weight = vital_signs.get("weight", "N/A")
-        weight_checkbox = st.checkbox(f"WEIGHT: {weight}", key='weight_checkbox')
+        weight_checkbox = st.checkbox(f"{indent_html}WEIGHT: {weight}", key='weight_checkbox')
+
 
 
 if __name__ == "__main__":
