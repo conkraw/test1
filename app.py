@@ -22,8 +22,8 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
-# Define fixed lists of diagnoses
-diagnoses = [f"Diagnosis {i+1}" for i in range(5)]  # 5 fixed diagnoses
+# Custom list of diagnoses
+diagnoses = ["Croup", "Tuberculosis", "Cystitis", "Heart Failure", "Urinary Tract Infection"]
 
 # Create a header row for diagnoses
 cols = st.columns(len(diagnoses) + 1)
@@ -43,7 +43,6 @@ for i in range(5):
             # Ensure the key is unique by using row index and diagnosis name
             st.selectbox("", options=["Support", "Does not support"], key=f"select_{i}_{diagnosis}",
                           label_visibility="collapsed")
-
 
 
 
