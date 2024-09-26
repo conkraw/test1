@@ -42,7 +42,7 @@ if FIREBASE_KEY_JSON:
         def get_chatgpt_response(user_input):
             user_input_lower = user_input.lower()  # Normalize the user input to lower case
 
-        # Check if the question is a medical question based on croup_info
+            # Check if the question is a medical question based on croup_info
             if user_input_lower in croup_info:
                 response = openai.ChatCompletion.create(
                     model="gpt-3.5-turbo",
@@ -53,16 +53,15 @@ if FIREBASE_KEY_JSON:
                 )
                 return response['choices'][0]['message']['content']
             else:
-                # Let ChatGPT provide a more natural response for non-medical inquiries
+                # Handle non-specific medical inquiries naturally
                 response = openai.ChatCompletion.create(
                     model="gpt-3.5-turbo",
                     messages=[
                         {"role": "user", "content": user_input},
-                        {"role": "assistant", "content": "Role play a parent whose child has croup and answer the question naturally."}
+                        {"role": "assistant", "content": "As a concerned parent, please answer the question naturally."}
                     ]
                 )
                 return response['choices'][0]['message']['content']
-
 
         # Function to upload data to Firebase
         def upload_to_firebase(question, response):
@@ -114,6 +113,7 @@ if FIREBASE_KEY_JSON:
         st.error(f"Error initializing Firebase: {e}")
 else:
     st.error("FIREBASE_KEY environment variable not set.")
+
 
 
 
