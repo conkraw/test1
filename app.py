@@ -48,12 +48,12 @@ if FIREBASE_KEY_JSON:
                     model="gpt-3.5-turbo",
                     messages=[
                         {"role": "user", "content": user_input},
-                        {"role": "assistant", "content": "Please respond as a parent whose child is experiencing croup. Refer to the document for medical-related questions."}
+                        {"role": "assistant", "content": "Answer the question as a parent whose child is experiencing croup. Refer to the document for medical-related inquiries."}
                     ]
                 )
                 return response['choices'][0]['message']['content']
             else:
-                return f"As a parent, I feel concerned about my child's health. How can I assist you?"
+                return "I'm here to help. What would you like to know?"
 
         # Function to upload data to Firebase
         def upload_to_firebase(question, response):
