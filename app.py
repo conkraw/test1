@@ -133,7 +133,7 @@ def display_assessment():
         # Patient Vital Signs Table
         col1, col3 = st.columns([1, 2])  # Define two columns
 
-        with col1:
+        with col3:
             # Indent labels and checkboxes
             st.markdown("<div style='margin-left: 20px;'>", unsafe_allow_html=True)  # Indent using a div
 
