@@ -147,7 +147,7 @@ def display_assessment():
             st.checkbox(f"BLOOD PRESSURE: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{blood_pressure}", key='blood_pressure_checkbox')
 
             pulseox = vital_signs.get("pulseox", "N/A")
-            st.checkbox(f"PULSE OXIMETRY: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{pulseox}", key='pulseox_checkbox')
+            st.checkbox(f"PULSE OXIMETRY: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{pulseox}", key='pulseox_checkbox')
 
             temperature = vital_signs.get("temperature", "N/A")
             st.checkbox(f"TEMPERATURE: {temperature}", key='temperature_checkbox')
