@@ -48,7 +48,7 @@ if st.session_state.submitted:
             font-size: 12px; /* Decrease font size */
         }
         .css-1y2x8r0 {
-            width: 150%; /* Adjust this value to control overall table width */
+            width: 5000%; /* Adjust this value to control overall table width */
         }
         </style>
     """, unsafe_allow_html=True)
