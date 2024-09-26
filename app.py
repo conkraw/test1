@@ -29,7 +29,7 @@ if not st.session_state.submitted:
                 st.session_state.submitted = True  # Move to the assessment table
                 st.rerun()  # Rerun the app to clear the inputs and show the table
             else:
-                st.error("Please enter unique diagnoses. Duplicate entries are not allowed.")
+                st.error("Based on the information provided in the above case, please provide the possible diagnoses that you would consider listing as a possible diagnosis when prompted by your attending? Please do not provide duplicate diagnoses.")
         else:
             st.error("Please enter all 5 diagnoses.")
 
