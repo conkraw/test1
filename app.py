@@ -152,7 +152,7 @@ def display_assessment():
         </tr>
         <tr>
             <td style="border: 1px solid #000; text-align: center;font-weight: bold;background-color: Lavender;">WEIGHT:</td>
-            <td style="border: 1px solid #000; text-align: center;background-color: Lavender;">{vital_signs.get('weight', 'N/A')}</td>
+            <td style="border: 1px solid #000; text-align: center;background-color: Gainsboro;">{vital_signs.get('weight', 'N/A')}</td>
         </tr>
     </table>
     """
