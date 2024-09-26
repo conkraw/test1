@@ -91,7 +91,7 @@ def display_assessment():
         st.write("No text found in the document.")
 
      st.markdown("""
-    <table style="border-collapse: collapse; width: 100%;">
+     <table style="border-collapse: collapse; width: 100%;">
         <tr>
             <td colspan="3" style="border: 1px solid #000; text-align: center; font-weight: bold; font-size: 20px;">
                 PATIENT VITAL SIGNS
