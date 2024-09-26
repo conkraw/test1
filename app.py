@@ -7,7 +7,7 @@ if 'submitted' not in st.session_state:
     st.session_state.submitted = False
 
 # Title of the app
-st.title("Diagnosis Input and Assessment")
+st.title("")
 
 # Input Section
 if not st.session_state.submitted:
