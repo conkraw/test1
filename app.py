@@ -38,6 +38,9 @@ else:
         # Title of the app
         st.title("")
 
+        # Set the page config to normal
+        st.set_page_config(layout="wide") 
+
         # Input Section
         if not st.session_state.submitted:
             st.markdown("""
