@@ -39,7 +39,7 @@ def display_image(base_image_name):
             break  # Exit loop if an image is found
 
     if not image_found:
-        st.write("No image file named 'image_1' found.")
+        st.write("No images are available.")
 
 # Function to check and display audio if present
 def display_audio(base_audio_name):
@@ -54,7 +54,7 @@ def display_audio(base_audio_name):
             break  # Exit loop if an audio file is found
 
     if not audio_found:
-        st.write("No audio file named 'audio_1' found.")
+        st.write("No audio is available.")
 
 # Function to check and display video if present
 def display_video(base_video_name):
@@ -69,7 +69,7 @@ def display_video(base_video_name):
             break  # Exit loop if a video file is found
 
     if not video_found:
-        st.write("No video file named 'video_1' found.")
+        st.write("No video is available.")
 
 # Main Streamlit app
 def main():
