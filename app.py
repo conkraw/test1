@@ -126,7 +126,8 @@ def display_assessment():
     st.markdown(title_html, unsafe_allow_html=True)
 
     # Adjust subheader to match font and size, and reduce spacing
-    st.markdown("<h4 style='font-family: \"DejaVu Sans\"; margin: -25px 0 0 0;'>Of the following vital signs within the intake form, check the vital signs that are abnormal.</h4>", unsafe_allow_html=True)
+    st.markdown("<h4 style='font-family: \"DejaVu Sans\"; font-size: 18px; margin: -25px 0 0 0;'>Of the following vital signs within the intake form, check the vital signs that are abnormal.</h4>", unsafe_allow_html=True)
+
 
     
     # Patient Vital Signs Table
