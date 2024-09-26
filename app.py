@@ -13,7 +13,7 @@ st.title("")
 if not st.session_state.submitted:
     st.markdown("""
         ## DIFFERENTIAL DIAGNOSIS
-        Based on the information provided in the above case, please provide 5 possible diagnoses that you would consider when prompted by your attending? Please do not provide duplicate diagnoses. 
+        Based on the information provided in the above case, please provide 5 possible diagnoses that you would consider when prompted by your attending? Please do not provide duplicate diagnoses. 
     """)
 
     # Create text input fields for each diagnosis
@@ -27,7 +27,7 @@ if not st.session_state.submitted:
         if all(diagnosis for diagnosis in diagnoses):
             if len(diagnoses) == len(set(diagnoses)):  # Check for duplicates
                 st.session_state.submitted = True  # Move to the assessment table
-                st.rerun()  # Rerun the app to clear the inputs and show the table
+                st.experimental_rerun()  # Rerun the app to clear the inputs and show the table
             else:
                 st.error("Please do not provide duplicate diagnoses.")
         else:
@@ -37,17 +37,21 @@ if not st.session_state.submitted:
 if st.session_state.submitted:
     st.markdown("""
         ### HISTORICAL FEATURES
-        Based on the history that you have collected, please provide up to 5 historical features that will influence the differential diagnosis and using the prompts provided, describe how they influence the differential diagnosis. """)
+        Based on the history that you have collected, please provide up to 5 historical features that will influence the differential diagnosis and using the prompts provided, describe how they influence the differential diagnosis.
+    """)
 
-    # Custom CSS to style the dropdowns
+    # Custom CSS to style the dropdowns and make the table wider
     st.markdown("""
         <style>
         .stSelectbox > div > div {
             width: 100%;  /* Set dropdowns to take full width */
             font-size: 12px; /* Decrease font size */
         }
+        .css-1y2x8r0 {
+            width: 150%; /* Adjust this value to control overall table width */
+        }
         </style>
-        """, unsafe_allow_html=True)
+    """, unsafe_allow_html=True)
 
     # Create a header row for diagnoses
     cols = st.columns(len(st.session_state.diagnoses) + 1)
