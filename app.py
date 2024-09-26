@@ -26,13 +26,11 @@ for diagnosis, col in zip(diagnoses, cols[1:]):
         st.write(diagnosis)
 
 # Create rows for user inputs and dropdowns
-row_headers = []
 for i in range(5):
     cols = st.columns(len(diagnoses) + 1)
     
     with cols[0]:  # The first column is for row headers
-        row_header = st.text_input(f"Row {i + 1}", key=f"row_{i}")
-        row_headers.append(row_header)
+        st.text_input("", key=f"row_{i}")  # Row header input without label
 
     for diagnosis, col in zip(diagnoses, cols[1:]):  # The rest are dropdowns
         with col:
@@ -42,6 +40,7 @@ for i in range(5):
 
 # Add a footer or any additional information if needed
 st.markdown("## Support Matrix")
+
 
 
 
