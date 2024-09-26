@@ -112,7 +112,7 @@ else:
                                       label_visibility="collapsed")
 
             # Upload Data Button
-            if st.button("Upload Data to Firebase"):
+            if st.button("Submit"):
                 # Gather all the data into a single entry
                 entry = {
                     'diagnoses': st.session_state.diagnoses,
