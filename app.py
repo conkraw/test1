@@ -90,6 +90,57 @@ def display_assessment():
     else:
         st.write("No text found in the document.")
 
+     st.markdown("""
+    <table style="border-collapse: collapse; width: 100%;">
+        <tr>
+            <td colspan="3" style="border: 1px solid #000; text-align: center; font-weight: bold; font-size: 20px;">
+                PATIENT VITAL SIGNS
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3" style="border: 1px solid #000; text-align: center;">
+                Of the following vital signs that were obtained on patient intake, check the vital signs that are abnormal.
+            </td>
+        </tr>
+        <tr>
+            <td style="border: 1px solid #000; text-align: center;">Vital Sign 1</td>
+            <td style="border: 1px solid #000; text-align: center;">Vital Sign 2</td>
+            <td style="border: 1px solid #000; text-align: center;">Vital Sign 3</td>
+        </tr>
+        <tr>
+            <td style="border: 1px solid #000; text-align: center;">Value 1</td>
+            <td style="border: 1px solid #000; text-align: center;">Value 2</td>
+            <td style="border: 1px solid #000; text-align: center;">Value 3</td>
+        </tr>
+        <tr>
+            <td style="border: 1px solid #000; text-align: center;">Value 4</td>
+            <td style="border: 1px solid #000; text-align: center;">Value 5</td>
+            <td style="border: 1px solid #000; text-align: center;">Value 6</td>
+        </tr>
+        <tr>
+            <td style="border: 1px solid #000; text-align: center;">Value 7</td>
+            <td style="border: 1px solid #000; text-align: center;">Value 8</td>
+            <td style="border: 1px solid #000; text-align: center;">Value 9</td>
+        </tr>
+        <tr>
+            <td style="border: 1px solid #000; text-align: center;">Value 10</td>
+            <td style="border: 1px solid #000; text-align: center;">Value 11</td>
+            <td style="border: 1px solid #000; text-align: center;">Value 12</td>
+        </tr>
+        <tr>
+            <td style="border: 1px solid #000; text-align: center;">Value 13</td>
+            <td style="border: 1px solid #000; text-align: center;">Value 14</td>
+            <td style="border: 1px solid #000; text-align: center;">Value 15</td>
+        </tr>
+        <tr>
+            <td style="border: 1px solid #000; text-align: center;">Value 16</td>
+            <td style="border: 1px solid #000; text-align: center;">Value 17</td>
+            <td style="border: 1px solid #000; text-align: center;">Value 18</td>
+        </tr>
+    </table>
+    """, unsafe_allow_html=True)
+
+
 if __name__ == "__main__":
     main()
 
