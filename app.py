@@ -5,6 +5,9 @@ import streamlit as st
 import os
 import json
 
+# Set the page config to normal
+st.set_page_config(layout="wide") 
+
 # Load Firebase credentials from environment variable
 FIREBASE_KEY_JSON = os.getenv('FIREBASE_KEY')
 
@@ -38,8 +41,7 @@ else:
         # Title of the app
         st.title("")
 
-        # Set the page config to normal
-        st.set_page_config(layout="wide") 
+
 
         # Input Section
         if not st.session_state.submitted:
