@@ -38,8 +38,5 @@ for i in range(5):
             st.selectbox("", options=["Support", "Does not support"], key=f"select_{i}_{diagnosis}",
                           label_visibility="collapsed")
 
-# Add a footer or any additional information if needed
-st.markdown("## Support Matrix")
-
 
 
