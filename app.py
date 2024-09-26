@@ -119,7 +119,13 @@ def display_assessment():
     vital_signs = load_vital_signs(vital_signs_file)
 
     # Patient Vital Signs Table
-    st.write("### Vital Signs:")
+    # Vital Signs Title
+    title_html = """
+    <h2 style="font-family: 'DejaVu Sans'; font-size: 24px; margin-bottom: 10px; color: #2c3e50;">
+        Vital Signs:
+    </h2>
+    """
+    st.markdown(title_html, unsafe_allow_html=True)
     col1, col2, col3 = st.columns([1, 2, 2])  # Define three columns
 
     with col1:
