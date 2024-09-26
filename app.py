@@ -1,7 +1,7 @@
 import streamlit as st
 
 # Set the page config to normal
-st.set_page_config(layout="centered")  # Use "centered" for the diagnosis page
+st.set_page_config(layout="wide")  # Use "centered" for the diagnosis page
 
 # Initialize session state for diagnoses and submission status
 if 'diagnoses' not in st.session_state:
