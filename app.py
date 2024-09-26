@@ -1,44 +1,68 @@
 import streamlit as st
-import pandas as pd
+import openai
+from docx import Document
 
-# Load users from CSV
-@st.cache_data
-def load_users():
-    return pd.read_csv('users.csv')
+# Function to read the croup document
+def read_croup_doc():
+    doc = Document("croup.docx")
+    content = []
+    for para in doc.paragraphs:
+        content.append(para.text)
+    return "\n".join(content)
 
-# Main app function
-def main():
-    st.title("Pediatric Clerkship Virtual Clinical Reasoning Assessment")
+# Load the document content
+croup_info = read_croup_doc()
 
-    # Load user data
-    users = load_users()
+# Set up OpenAI API key from Streamlit secrets
+openai.api_key = st.secrets["OPENAI_API_KEY"]
 
-    # Check if the user is logged in
-    if "user_name" in st.session_state:
-        # Display welcome message if user is logged in
-        st.write(f"Welcome, {st.session_state.user_name}!")
-    else:
-        st.write("Welcome! Please enter your unique code to access the assessment.")
+# Function to get response from ChatGPT
+def get_chatgpt_response(user_input):
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",  # Adjust model as needed
+        messages=[
+            {"role": "user", "content": user_input},
+            {"role": "assistant", "content": croup_info}
+        ]
+    )
+    return response['choices'][0]['message']['content']
 
-        # Prompt user for unique code
-        unique_code = st.text_input("Unique Code:")
+# Streamlit app layout
+st.title("Virtual Patient: Croup")
 
-        if st.button("Next"):
-            if unique_code:
-                try:
-                    unique_code = int(unique_code.strip())  # Convert input to integer
-                    if unique_code in users['code'].values:
-                        st.session_state.user_name = users.loc[users['code'] == unique_code, 'name'].values[0]
-                        # Rerun to display the welcome page
-                        st.rerun()
-                    else:
-                        st.error("Invalid code. Please try again.")
-                except ValueError:
-                    st.error("Please enter a valid code.")
-            else:
-                st.error("Please enter a code.")
+# Session state to track time and session status
+if 'start_time' not in st.session_state:
+    st.session_state.start_time = None
 
-if __name__ == "__main__":
-    main()
+# Check if the session is active
+if st.session_state.start_time is None:
+    st.session_state.start_time = st.time()
+
+# Calculate elapsed time
+elapsed_time = (st.time() - st.session_state.start_time) / 60  # Convert to minutes
+
+# Display patient information
+if elapsed_time < 15:
+    st.subheader("Patient Information:")
+    st.write(croup_info)
+
+    user_input = st.text_input("Describe the patient's symptoms:")
+
+    if st.button("Submit"):
+        # Call the OpenAI API
+        if user_input:
+            virtual_patient_response = get_chatgpt_response(user_input)
+            st.write(f"Virtual Patient: {virtual_patient_response}")
+else:
+    st.warning("Session time is up. Please end the session.")
+    if st.button("End Session"):
+        st.session_state.start_time = None
+        st.success("Session ended. You can start a new session.")
+
+# Option to move to a new screen
+if st.button("Go to New Screen"):
+    st.session_state.start_time = None
+    st.write("Redirecting to a new screen...")
+
 
 
