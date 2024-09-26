@@ -130,13 +130,21 @@ def display_assessment():
     col1, col3 = st.columns([1, 2])  # Define three columns
 
     with col1:
-        st.checkbox('HEART RATE:', key='heart_rate_checkbox')
-        st.checkbox('RESPIRATORY RATE:', key='respiratory_rate_checkbox')
-        st.checkbox('BLOOD PRESSURE:', key='blood_pressure_checkbox')
-        st.checkbox('PULSE OXIMETRY:', key='pulseox_checkbox')
-        st.checkbox('TEMPERATURE:', key='temperature_checkbox')
-        st.checkbox('WEIGHT:', key='weight_checkbox')
-        st.markdown("</div>", unsafe_allow_html=True)
+    # Create checkboxes with corresponding vital signs displayed
+    heart_rate_checkbox = st.checkbox(f'HEART RATE: {vital_signs.get("heart_rate", "N/A")}', key='heart_rate_checkbox')
+    respiratory_rate_checkbox = st.checkbox(f'RESPIRATORY RATE: {vital_signs.get("respiratory_rate", "N/A")}', key='respiratory_rate_checkbox')
+    blood_pressure_checkbox = st.checkbox(f'BLOOD PRESSURE: {vital_signs.get("blood_pressure", "N/A")}', key='blood_pressure_checkbox')
+    pulseox_checkbox = st.checkbox(f'PULSE OXIMETRY: {vital_signs.get("pulseox", "N/A")}', key='pulseox_checkbox')
+    temperature_checkbox = st.checkbox(f'TEMPERATURE: {vital_signs.get("temperature", "N/A")}', key='temperature_checkbox')
+    weight_checkbox = st.checkbox(f'WEIGHT: {vital_signs.get("weight", "N/A")}', key='weight_checkbox')
+    
+    #    st.checkbox('HEART RATE:', key='heart_rate_checkbox')
+    #    st.checkbox('RESPIRATORY RATE:', key='respiratory_rate_checkbox')
+    #    st.checkbox('BLOOD PRESSURE:', key='blood_pressure_checkbox')
+    #    st.checkbox('PULSE OXIMETRY:', key='pulseox_checkbox')
+    #    st.checkbox('TEMPERATURE:', key='temperature_checkbox')
+    #    st.checkbox('WEIGHT:', key='weight_checkbox')
+    #    st.markdown("</div>", unsafe_allow_html=True)
 
     #with col2:
     #    st.markdown("HEART RATE:")
@@ -146,13 +154,13 @@ def display_assessment():
     #    st.markdown("TEMPERATURE:")
     #    st.markdown("WEIGHT:")
 
-    with col3:
-        st.markdown(f"{vital_signs.get('heart_rate', 'N/A')}")
-        st.markdown(f"{vital_signs.get('respiratory_rate', 'N/A')}")
-        st.markdown(f"{vital_signs.get('blood_pressure', 'N/A')}")
-        st.markdown(f"{vital_signs.get('pulseox', 'N/A')}")
-        st.markdown(f"{vital_signs.get('temperature', 'N/A')}")
-        st.markdown(f"{vital_signs.get('weight', 'N/A')}")
+    #with col3:
+    #    st.markdown(f"{vital_signs.get('heart_rate', 'N/A')}")
+    #    st.markdown(f"{vital_signs.get('respiratory_rate', 'N/A')}")
+    #    st.markdown(f"{vital_signs.get('blood_pressure', 'N/A')}")
+    #    st.markdown(f"{vital_signs.get('pulseox', 'N/A')}")
+    #    st.markdown(f"{vital_signs.get('temperature', 'N/A')}")
+    #    st.markdown(f"{vital_signs.get('weight', 'N/A')}")
 
 if __name__ == "__main__":
     main()
