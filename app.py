@@ -23,7 +23,7 @@ def get_chatgpt_response(user_input):
         model="gpt-3.5-turbo",
         messages=[
             {"role": "user", "content": user_input},
-            {"role": "assistant", "content": "I am a virtual patient experiencing croup. Please ask me questions about my symptoms."}
+            {"role": "assistant", "content": "Pretend to be a virtual patient with croup."}
         ]
     )
     return response['choices'][0]['message']['content']
