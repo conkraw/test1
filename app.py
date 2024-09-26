@@ -41,7 +41,7 @@ for i in range(5):
     for diagnosis, col in zip(diagnoses, cols[1:]):  # The rest are dropdowns
         with col:
             # Ensure the key is unique by using row index and diagnosis name
-            st.selectbox("", options=["Support", "Does not support"], key=f"select_{i}_{diagnosis}",
+            st.selectbox("", options=["Support", "Not Supported"], key=f"select_{i}_{diagnosis}",
                           label_visibility="collapsed")
 
 
