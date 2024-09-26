@@ -1,66 +1,46 @@
-import streamlit as st
 import os
+import streamlit as st
 
-# Load physical examination text from a file
-def load_phys_exam_data(file_path):
-    try:
-        with open(file_path, 'r') as file:
-            return file.read()
-    except FileNotFoundError:
-        st.error(f"File not found: {file_path}. Please check the file path.")
-        return ""
+# Function to load physical examination components from a text file
+def load_phys_exam_components(file_path):
+    with open(file_path, 'r') as file:
+        return file.readlines()
 
-# Function to display selected examination component text
-def display_selected_component(selected_component):
-    if selected_component:
-        # Assuming the text for each component is organized in a specific way in the text file
-        # Here we're loading all text and finding the section for the selected component
-        text = load_phys_exam_data("phys_exam.txt")
-        
-        if text:
-            # Extract and display the relevant section
-            component_texts = text.split('\n\n')  # Assuming sections are separated by double newlines
-            for component_text in component_texts:
-                if selected_component.lower() in component_text.lower():
-                    st.markdown(f"### {selected_component}\n")
-                    st.markdown(component_text)
-                    break
-        else:
-            st.write("No text available for the selected component.")
+# Load physical examination components
+phys_exam_components = load_phys_exam_components('phys_exam.txt')
 
-# Function to check and display an image if present
-def display_image(image_path):
-    if os.path.exists(image_path):
-        st.image(image_path, caption="Image interpretation required.", use_column_width=True)
-    else:
-        st.write("No image available.")
+# Information prompt
+st.header("Physical Examination Components")
+st.write("Please select and review the physical examination components to help develop your differential diagnosis. Please note that any image provided requires interpretation.")
 
-# Main Streamlit app
-def main():
-    st.title("Physical Examination Components")
+# Options for physical examination components
+options = [
+    "General Appearances", "Eyes", "Ears, Neck, Nose, Throat",
+    "Lymph Nodes", "Cardiovascular", "Lungs", "Abdomen",
+    "Skin", "Extremities", "Musculoskeletal", "Neurological",
+    "Psychiatry", "Genitourinary", "Image"
+]
 
-    st.markdown("""
-    Please select and review the physical examination components to help develop your differential diagnosis.
-    Please note that any image provided requires interpretation.
-    """)
+# User selection
+selected_option = st.selectbox("Select a component:", options)
 
-    # List of examination components
-    components = [
-        "General Appearances", "Eyes", "Ears, Neck, Nose, Throat", "Lymph Nodes",
-        "Cardiovascular", "Lungs", "Abdomen", "Skin", "Extremities",
-        "Musculoskeletal", "Neurological", "Psychiatry", "Genitourinary", "Image"
-    ]
+# Display selected component description
+if selected_option in phys_exam_components:
+    index = options.index(selected_option)
+    st.write(phys_exam_components[index])  # Display corresponding description
 
-    # User selection
-    selected_component = st.selectbox("Select a physical examination component:", components)
+# Check for image files named 'image_1' with any common extension
+image_extensions = ['.png', '.jpg', '.jpeg', '.gif', '.bmp', '.tiff']
+base_image_name = 'image_1'
+image_found = False
 
-    if st.button("Review"):
-        display_selected_component(selected_component)
+for ext in image_extensions:
+    image_file = f"{base_image_name}{ext}"
+    if os.path.isfile(image_file):
+        st.image(image_file)
+        image_found = True
+        break  # Exit loop if an image is found
 
-        # Check for image file
-        if selected_component == "Image":
-            display_image("image_1.png")  # Replace with the actual image file path
-
-if __name__ == '__main__':
-    main()
+if not image_found:
+    st.write("No image file named 'image_1' found.")
 
