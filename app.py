@@ -2,6 +2,7 @@ import streamlit as st
 import openai
 from docx import Document
 import time
+import requests  # Import requests to send HTTP requests
 
 # Function to read the croup document
 def read_croup_doc():
@@ -23,13 +24,28 @@ def get_chatgpt_response(user_input):
         model="gpt-3.5-turbo",
         messages=[
             {"role": "user", "content": user_input},
-            {"role": "assistant", "content": "Pretend to be a virtual patient with croup."}
+            {"role": "assistant", "content": "Pretend to be a virtual patient with croup. Did not reveal diagnosis."}
         ]
     )
     return response['choices'][0]['message']['content']
 
+# Function to upload data to Firebase
+def upload_to_firebase(question, response):
+    url = st.secrets["FIREBASE_ENDPOINT"]  # Use Firebase API endpoint from Streamlit secrets
+    data = {
+        "question": question,
+        "response": response
+    }
+    headers = {
+        "Authorization": f"Bearer {st.secrets['FIREBASE_KEY']}"  # Using Firebase key from Streamlit secrets
+    }
+    try:
+        requests.post(url, json=data, headers=headers)
+    except Exception as e:
+        st.error(f"Error uploading data: {e}")
+
 # Streamlit app layout
-st.title("Virtual Patient: Case #1")
+st.title("Virtual Patient: Croup")
 
 # Instructions for the user
 st.info(
@@ -54,6 +70,9 @@ if elapsed_time < 15:
         if submit_button and user_input:
             virtual_patient_response = get_chatgpt_response(user_input)
             st.write(f"Virtual Patient: {virtual_patient_response}")
+            
+            # Upload the question and response to Firebase
+            upload_to_firebase(user_input, virtual_patient_response)
 
 else:
     st.warning("Session time is up. Please end the session.")
@@ -65,6 +84,5 @@ else:
 if st.button("Go to New Screen"):
     st.session_state.start_time = None
     st.write("Redirecting to a new screen...")
-
 
 
