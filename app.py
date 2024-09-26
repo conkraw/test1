@@ -120,7 +120,7 @@ else:
                     'assessments': {diagnosis: st.session_state[f"select_{i}_{diagnosis}"] for i, diagnosis in enumerate(st.session_state.diagnoses)}
                 }
                 # Debugging: Check what will be uploaded
-                st.write("Entry data being uploaded:", entry)
+                #st.write("Entry data being uploaded:", entry)
                 # Upload to Firebase
                 result = upload_to_firebase(entry)
                 st.success(result)
