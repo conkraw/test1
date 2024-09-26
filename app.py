@@ -61,7 +61,7 @@ if FIREBASE_KEY_JSON:
             db.collection('virtual_patient_sessions').add(entry)  # Change to your collection name
 
         # Streamlit app layout
-        st.title("Virtual Patient: Croup")
+        st.title("Virtual Patient: Case #1")
 
         # Instructions for the user
         st.info(
