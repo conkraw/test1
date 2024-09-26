@@ -11,7 +11,7 @@ st.markdown("""
     <style>
     .stSelectbox > div > div {
         width: 100%;  /* Set dropdowns to take full width */
-        font-size: 14px; /* Decrease font size */
+        font-size: 12px; /* Decrease font size */
     }
     .css-1y2x8r0 {
         width: 100%;  /* Set columns to take up most of the screen */
@@ -44,8 +44,6 @@ for i in range(5):
             st.selectbox("", options=["Support", "Does not support"], key=f"select_{i}_{diagnosis}",
                           label_visibility="collapsed")
 
-# Add a footer or any additional information if needed
-st.markdown("## Support Matrix")
 
 
 
