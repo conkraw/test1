@@ -58,7 +58,7 @@ else:
                         f"Diagnosis {i + 1}",
                         value=st.session_state.diagnoses[i],
                         key=f"diagnosis_{i}",
-                        max_chars=20  # You can set a character limit if needed
+                        #max_chars=20  # You can set a character limit if needed
                     )
 
             # Button to submit the diagnoses
