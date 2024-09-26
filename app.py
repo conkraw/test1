@@ -4,7 +4,7 @@ import streamlit as st
 st.set_page_config(layout="wide")
 
 def main():
-    st.title("Physical Examination Selection")
+    st.title("Focused Physical Examination Selection")
 
     # Smaller font for prompts
     st.markdown("<h5>Please select the parts of physical examination required, in order to exclude some unlikely, but important hypotheses:</h5>", unsafe_allow_html=True)
