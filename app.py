@@ -17,7 +17,7 @@ st.markdown("""
         width: 100%;  /* Set columns to take up most of the screen */
     }
     .css-1x8g58p {
-        max-width: 100%; /* Ensure the main container is wide */
+        max-width: 2000%; /* Ensure the main container is wide */
     }
     </style>
     """, unsafe_allow_html=True)
