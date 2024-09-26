@@ -92,7 +92,9 @@ def login_page(users):
 # Function to display the assessment page
 def display_assessment():
     st.markdown(f"<h3 style='font-family: \"DejaVu Sans\";'>Welcome {st.session_state.user_name}! Here is the intake form.</h3>", unsafe_allow_html=True)
-
+    st.subheader("")
+    st.subheader("")
+    
     # Read and display the text from ptinfo.txt
     txt_file_path = "ptinfo.txt"
     document_text = read_text_file(txt_file_path)
