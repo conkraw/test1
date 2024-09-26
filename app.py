@@ -116,32 +116,32 @@ def display_assessment():
         </tr>
         <tr>
             <td style="border: 1px solid #000; text-align: center;">Value 1</td>
-            <td style="border: 1px solid #000; text-align: center;">Value 2</td>
+            <td style="border: 1px solid #000; text-align: center;">BLOOD PRESSURE:</td>
             <td style="border: 1px solid #000; text-align: center;">Value 3</td>
         </tr>
         <tr>
             <td style="border: 1px solid #000; text-align: center;">Value 4</td>
-            <td style="border: 1px solid #000; text-align: center;">Value 5</td>
+            <td style="border: 1px solid #000; text-align: center;">PULSE:</td>
             <td style="border: 1px solid #000; text-align: center;">Value 6</td>
         </tr>
         <tr>
             <td style="border: 1px solid #000; text-align: center;">Value 7</td>
-            <td style="border: 1px solid #000; text-align: center;">Value 8</td>
+            <td style="border: 1px solid #000; text-align: center;">RESPIRATORY RATE:</td>
             <td style="border: 1px solid #000; text-align: center;">Value 9</td>
         </tr>
         <tr>
             <td style="border: 1px solid #000; text-align: center;">Value 10</td>
-            <td style="border: 1px solid #000; text-align: center;">Value 11</td>
+            <td style="border: 1px solid #000; text-align: center;">PULSE OXIMETRY:</td>
             <td style="border: 1px solid #000; text-align: center;">Value 12</td>
         </tr>
         <tr>
             <td style="border: 1px solid #000; text-align: center;">Value 13</td>
-            <td style="border: 1px solid #000; text-align: center;">Value 14</td>
+            <td style="border: 1px solid #000; text-align: center;">TEMPERATURE:</td>
             <td style="border: 1px solid #000; text-align: center;">Value 15</td>
         </tr>
         <tr>
             <td style="border: 1px solid #000; text-align: center;">Value 16</td>
-            <td style="border: 1px solid #000; text-align: center;">Value 17</td>
+            <td style="border: 1px solid #000; text-align: center;">WEIGHT:</td>
             <td style="border: 1px solid #000; text-align: center;">Value 18</td>
         </tr>
     </table>
