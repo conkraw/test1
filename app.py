@@ -23,7 +23,7 @@ for row in row_headers:
     
     for diagnosis, col in zip(diagnoses, cols[1:]):  # The rest are dropdowns
         with col:
-            st.selectbox(f"{row} - {diagnosis}", options=["Support", "Does not support"], key=f"{row}_{diagnosis}")
+            st.selectbox("", options=["Support", "Does not support"], key=f"{row}_{diagnosis}")
 
 # Add a footer or any additional information if needed
 st.markdown("## Support Matrix")
