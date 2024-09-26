@@ -30,19 +30,23 @@ else:
             db.collection('your_collection_name').add(entry)  # Change 'your_collection_name' to your collection name
             return "Data uploaded to Firebase."
 
-        # Initialize session state for diagnoses and historical features
+        # Initialize session state for diagnoses and features
         if 'diagnoses' not in st.session_state:
             st.session_state.diagnoses = [""] * 5  # Initialize with empty strings for 5 diagnoses
         if 'historical_features' not in st.session_state:
             st.session_state.historical_features = [""] * 5  # Initialize for historical features
-        if 'submitted' not in st.session_state:
-            st.session_state.submitted = False
+        if 'physical_examination_features' not in st.session_state:
+            st.session_state.physical_examination_features = [""] * 5  # Initialize for physical examination features
+        if 'submitted_historical' not in st.session_state:
+            st.session_state.submitted_historical = False
+        if 'submitted_physical' not in st.session_state:
+            st.session_state.submitted_physical = False
 
         # Title of the app
-        st.title("")
+        st.title("Differential Diagnosis App")
 
-        # Input Section
-        if not st.session_state.submitted:
+        # Input Section for Diagnoses
+        if not st.session_state.submitted_historical:
             st.markdown("""
                 ## DIFFERENTIAL DIAGNOSIS
                 Based on the information provided in the above case, please provide 5 possible diagnoses that you would consider when prompted by your attending? Please do not provide duplicate diagnoses.
@@ -63,65 +67,52 @@ else:
                 diagnoses = [d.strip() for d in st.session_state.diagnoses]  # Strip whitespace
                 if all(diagnosis for diagnosis in diagnoses):
                     if len(diagnoses) == len(set(diagnoses)):  # Check for duplicates
-                        st.session_state.submitted = True  # Move to the assessment table
-                        st.rerun()  # Rerun the app to clear the inputs and show the table
+                        st.session_state.submitted_historical = True  # Move to historical features
+                        st.success("Diagnoses submitted! You can now fill in the Historical Features.")
                     else:
                         st.error("Please do not provide duplicate diagnoses.")
                 else:
                     st.error("Please enter all 5 diagnoses.")
 
-        # Assessment Table Section
-        if st.session_state.submitted:
+        # Historical Features Section
+        if st.session_state.submitted_historical and not st.session_state.submitted_physical:
             st.markdown("""
                 ### HISTORICAL FEATURES
-                Based on the history that you have collected, please provide up to 5 historical features that will influence the differential diagnosis and using the prompts provided, describe how they influence the differential diagnosis.
+                Based on the history that you have collected, please provide up to 5 historical features that will influence the differential diagnosis.
             """)
 
-            # Create a wider appearance using columns
-            st.markdown("""
-                <style>
-                .header-cell {
-                    text-align: center;
-                }
-                .stSelectbox > div > div {
-                    width: 100%;  /* Set dropdowns to take full width */
-                    font-size: 12px; /* Decrease font size */
-                }
-                </style>
-            """, unsafe_allow_html=True)
-
-            # Create a header row for diagnoses, including "Historical Features"
+            # Create a header row for diagnoses
             cols = st.columns(len(st.session_state.diagnoses) + 1)
             with cols[0]:  # First column for "Historical Features"
-                st.markdown("<div class='header-cell'>Historical Features</div>", unsafe_allow_html=True)
+                st.markdown("<div style='text-align: center;'>Historical Features</div>", unsafe_allow_html=True)
 
             for diagnosis, col in zip(st.session_state.diagnoses, cols[1:]):
                 with col:
-                    st.markdown(f"<div class='header-cell'>{diagnosis}</div>", unsafe_allow_html=True)
+                    st.markdown(f"<div style='text-align: center;'>{diagnosis}</div>", unsafe_allow_html=True)
 
             # Create rows for user inputs and dropdowns
             for i in range(5):
                 cols = st.columns(len(st.session_state.diagnoses) + 1)
 
                 with cols[0]:  # The first column is for row headers
-                    st.session_state.historical_features[i] = st.text_input("", key=f"row_{i}", label_visibility="collapsed")
+                    st.session_state.historical_features[i] = st.text_input("", key=f"hx_row_{i}", label_visibility="collapsed")
 
                 for diagnosis, col in zip(st.session_state.diagnoses, cols[1:]):  # The rest are dropdowns
                     with col:
                         st.selectbox(
                             "",
                             options=["", "Supports", "Does not support"],  # Added blank option
-                            key=f"select_{i}_{diagnosis}",
+                            key=f"select_{i}_{diagnosis}_hx",
                             label_visibility="collapsed"
                         )
 
             # Upload Data Button
-            if st.button("Submit"):
+            if st.button("Submit Historical Features"):
                 # Gather all the data into a single entry
                 assessments = {}
                 for i in range(5):
                     for diagnosis in st.session_state.diagnoses:
-                        assessment = st.session_state[f"select_{i}_{diagnosis}"]
+                        assessment = st.session_state[f"select_{i}_{diagnosis}_hx"]
                         if diagnosis not in assessments:
                             assessments[diagnosis] = []
                         assessments[diagnosis].append({
@@ -135,11 +126,67 @@ else:
                     'hx_assessments': assessments
                 }
 
-                # Debugging: Check what will be uploaded
-                #st.write("Entry Saved:", entry)
+                # Upload to Firebase
+                result = upload_to_firebase(entry)
+                st.success(result)
+                st.session_state.submitted_physical = True  # Allow moving to physical examination features
+
+        # Physical Examination Features Section
+        if st.session_state.submitted_physical:
+            st.markdown("""
+                ### PHYSICAL EXAMINATION FEATURES
+                Based on the physical examination, please provide up to 5 features that will influence the differential diagnosis.
+            """)
+
+            # Create a header row for diagnoses
+            cols = st.columns(len(st.session_state.diagnoses) + 1)
+            with cols[0]:  # First column for "Physical Examination Features"
+                st.markdown("<div style='text-align: center;'>Physical Examination Features</div>", unsafe_allow_html=True)
+
+            for diagnosis, col in zip(st.session_state.diagnoses, cols[1:]):
+                with col:
+                    st.markdown(f"<div style='text-align: center;'>{diagnosis}</div>", unsafe_allow_html=True)
+
+            # Create rows for user inputs and dropdowns for physical examination features
+            for i in range(5):
+                cols = st.columns(len(st.session_state.diagnoses) + 1)
+
+                with cols[0]:  # The first column is for row headers
+                    st.session_state.physical_examination_features[i] = st.text_input("", key=f"pe_row_{i}", label_visibility="collapsed")
+
+                for diagnosis, col in zip(st.session_state.diagnoses, cols[1:]):  # The rest are dropdowns
+                    with col:
+                        st.selectbox(
+                            "",
+                            options=["", "Supports", "Does not support"],  # Added blank option
+                            key=f"select_{i}_{diagnosis}_pe",
+                            label_visibility="collapsed"
+                        )
+
+            # Upload Data Button
+            if st.button("Submit Physical Examination Features"):
+                # Gather all the data into a single entry
+                assessments = {}
+                for i in range(5):
+                    for diagnosis in st.session_state.diagnoses:
+                        assessment = st.session_state[f"select_{i}_{diagnosis}_pe"]
+                        if diagnosis not in assessments:
+                            assessments[diagnosis] = []
+                        assessments[diagnosis].append({
+                            'physical_examination_feature': st.session_state.physical_examination_features[i],
+                            'assessment': assessment
+                        })
+
+                entry = {
+                    'diagnoses': st.session_state.diagnoses,
+                    'physical_examination_features': st.session_state.physical_examination_features,
+                    'pe_assessments': assessments
+                }
+
                 # Upload to Firebase
                 result = upload_to_firebase(entry)
                 st.success(result)
 
     except Exception as e:
         st.error(f"Error initializing Firebase: {e}")
+
