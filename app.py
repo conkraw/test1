@@ -41,29 +41,19 @@ if FIREBASE_KEY_JSON:
         # Function to get response from ChatGPT
         def get_chatgpt_response(user_input):
             user_input_lower = user_input.lower()  # Normalize the user input to lower case
-            
-            # Define common greetings and empathetic responses
-            greetings = ["how are you", "how is your child", "how do you feel"]
-            empathetic_responses = ["i am sorry to hear that", "that must be tough", "i understand your concern"]
-            
-            if any(greet in user_input_lower for greet in greetings):
-                return "I'm feeling a bit distressed; my child is having difficulty breathing."
 
-            if any(empathetic in user_input_lower for empathetic in empathetic_responses):
-                return "Thank you for your concern. It's been really stressful for me."
-
-            # Check if the question is in the croup_info
+            # Check if the question is a medical question based on croup_info
             if user_input_lower in croup_info:
                 response = openai.ChatCompletion.create(
                     model="gpt-3.5-turbo",
                     messages=[
                         {"role": "user", "content": user_input},
-                        {"role": "assistant", "content": "You are a parent whose child is experiencing croup. Answer the history questions as a parent would. You will be asked physical examination questions, please provide the findings as a doctor would."}
+                        {"role": "assistant", "content": "Please respond as a parent whose child is experiencing croup. Refer to the document for medical-related questions."}
                     ]
                 )
                 return response['choices'][0]['message']['content']
             else:
-                return "I don't know."
+                return f"As a parent, I feel concerned about my child's health. How can I assist you?"
 
         # Function to upload data to Firebase
         def upload_to_firebase(question, response):
