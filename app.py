@@ -23,7 +23,7 @@ if not st.session_state.show_table:
     # Button to submit the diagnoses
     if st.button("Submit Diagnoses"):
         # Check if all diagnoses have been entered
-        if all(st.session_state.diagnoses):
+        if all(diagnosis.strip() for diagnosis in st.session_state.diagnoses):  # Use strip to check for non-empty strings
             st.success("Thank you for your input!")
             st.session_state.show_table = True
         else:
@@ -61,5 +61,6 @@ if st.session_state.show_table:
                 # Ensure the key is unique by using row index and diagnosis name
                 st.selectbox("", options=["Support", "Does not support"], key=f"select_{i}_{diagnosis}",
                               label_visibility="collapsed")
+
 
 
