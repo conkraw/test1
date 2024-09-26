@@ -10,19 +10,17 @@ st.set_page_config(layout="wide")
 def load_users():
     return pd.read_csv('users.csv')
 
-# Function to read the Word document and extract the table
-def read_word_table(docx_file_path):
+# Function to read the Word document and extract text
+def read_word_text(docx_file_path):
     doc = Document(docx_file_path)
-    table_data = []
+    full_text = []
     
-    # Assuming the table is the first one in the document
-    table = doc.tables[0]
+    # Extract all paragraphs from the document
+    for para in doc.paragraphs:
+        full_text.append(para.text)
     
-    for row in table.rows:
-        row_data = [cell.text for cell in row.cells]
-        table_data.append(row_data)
-    
-    return table_data
+    # Join paragraphs into a single string
+    return "\n\n".join(full_text)
 
 # Main app function
 def main():
@@ -65,15 +63,15 @@ def login_page(users):
 def display_assessment():
     st.write(f"Welcome {st.session_state.user_name}! Here is the assessment.")
 
-    # Read and display the table from ptinfo.docx
+    # Read and display the text from ptinfo.docx
     docx_file_path = "ptinfo.docx"
-    table_data = read_word_table(docx_file_path)
+    document_text = read_word_text(docx_file_path)
     
-    if table_data:
-        st.write("Table from Word Document:")
-        st.table(table_data)
+    if document_text:
+        st.write("Patient Information:")
+        st.text(document_text)  # Display the text content
     else:
-        st.write("No table found in the document.")
+        st.write("No text found in the document.")
 
 if __name__ == "__main__":
     main()
