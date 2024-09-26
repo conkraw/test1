@@ -104,12 +104,7 @@ else:
 
                 with cols[0]:  # The first column is for row headers
                     st.text_input("", key=f"row_{i}", label_visibility="collapsed")  # Row header input without label
-                #with cols[0]:  # The first column is for historical features
-                #    st.session_state.historical_features[i] = st.text_input(
-                #        f"Feature {i + 1}", 
-                #        value=st.session_state.historical_features[i], 
-                #        key=f"feature_{i}"
-                    )
+
 
                 for diagnosis, col in zip(st.session_state.diagnoses, cols[1:]):  # The rest are dropdowns
                     with col:
