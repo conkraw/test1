@@ -1,7 +1,7 @@
 import streamlit as st
 
-# Set the page config to normal (it will be set at the start)
-st.set_page_config(layout="wide")  # You can use "centered" for the diagnosis page
+# Set the page config to normal
+st.set_page_config(layout="wide")  # Use "centered" for the diagnosis page
 
 # Initialize session state for diagnoses and submission status
 if 'diagnoses' not in st.session_state:
@@ -19,20 +19,14 @@ if not st.session_state.submitted:
         Based on the information provided in the above case, please provide 5 possible diagnoses that you would consider when prompted by your attending? Please do not provide duplicate diagnoses.
     """)
 
-    # Custom CSS to style the text inputs
-    st.markdown("""
-        <style>
-        input {
-            font-size: 12px;  /* Decrease font size of text inputs */
-            padding: 1px;     /* Decrease padding for a smaller input */
-            width: 5px;     /* Set a fixed width for inputs */
-        }
-        </style>
-    """, unsafe_allow_html=True)
-
-    # Create text input fields for each diagnosis
+    # Create text input fields for each diagnosis with specified width
     for i in range(5):
-        st.session_state.diagnoses[i] = st.text_input(f"Diagnosis {i + 1}", value=st.session_state.diagnoses[i], key=f"diagnosis_{i}")
+        st.session_state.diagnoses[i] = st.text_input(
+            f"Diagnosis {i + 1}",
+            value=st.session_state.diagnoses[i],
+            key=f"diagnosis_{i}",
+            max_chars=30  # You can set a character limit if needed
+        )
 
     # Button to submit the diagnoses
     if st.button("Submit Diagnoses"):
@@ -41,7 +35,7 @@ if not st.session_state.submitted:
         if all(diagnosis for diagnosis in diagnoses):
             if len(diagnoses) == len(set(diagnoses)):  # Check for duplicates
                 st.session_state.submitted = True  # Move to the assessment table
-                st.rerun()  # Rerun the app to clear the inputs and show the table
+                st.experimental_rerun()  # Rerun the app to clear the inputs and show the table
             else:
                 st.error("Please do not provide duplicate diagnoses.")
         else:
@@ -59,7 +53,7 @@ if st.session_state.submitted:
         <style>
         .stSelectbox > div > div {
             width: 100%;  /* Set dropdowns to take full width */
-            font-size: 14px; /* Decrease font size */
+            font-size: 12px; /* Decrease font size */
         }
         </style>
     """, unsafe_allow_html=True)
