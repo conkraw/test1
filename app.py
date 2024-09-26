@@ -131,27 +131,27 @@ def display_assessment():
             <td style="border: 1px solid #000; text-align: center;font-weight: bold;">VALUES</td>
         </tr>
         <tr>
-            <td style="border: 1px solid #000; text-align: center;">HEART RATE:</td>
+            <td style="border: 1px solid #000; text-align: center;font-weight: bold;">HEART RATE:</td>
             <td style="border: 1px solid #000; text-align: center;">{vital_signs.get('heart_rate', 'N/A')}</td>
         </tr>
         <tr>
-            <td style="border: 1px solid #000; text-align: center;">RESPIRATORY RATE:</td>
+            <td style="border: 1px solid #000; text-align: center;font-weight: bold;">RESPIRATORY RATE:</td>
             <td style="border: 1px solid #000; text-align: center;">{vital_signs.get('respiratory_rate', 'N/A')}</td>
         </tr>
         <tr>
-            <td style="border: 1px solid #000; text-align: center;">BLOOD PRESSURE:</td>
+            <td style="border: 1px solid #000; text-align: center;font-weight: bold;">BLOOD PRESSURE:</td>
             <td style="border: 1px solid #000; text-align: center;">{vital_signs.get('blood_pressure', 'N/A')}</td>
         </tr>
         <tr>
-            <td style="border: 1px solid #000; text-align: center;">PULSE OXIMETRY:</td>
+            <td style="border: 1px solid #000; text-align: center;font-weight: bold;">PULSE OXIMETRY:</td>
             <td style="border: 1px solid #000; text-align: center;">{vital_signs.get('pulseox', 'N/A')}</td>
         </tr>
         <tr>
-            <td style="border: 1px solid #000; text-align: center;">TEMPERATURE:</td>
+            <td style="border: 1px solid #000; text-align: center;font-weight: bold;">TEMPERATURE:</td>
             <td style="border: 1px solid #000; text-align: center;">{vital_signs.get('temperature', 'N/A')}</td>
         </tr>
         <tr>
-            <td style="border: 1px solid #000; text-align: center;">WEIGHT:</td>
+            <td style="border: 1px solid #000; text-align: center;font-weight: bold;">WEIGHT:</td>
             <td style="border: 1px solid #000; text-align: center;">{vital_signs.get('weight', 'N/A')}</td>
         </tr>
     </table>
