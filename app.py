@@ -42,10 +42,15 @@ if FIREBASE_KEY_JSON:
         def get_chatgpt_response(user_input):
             user_input_lower = user_input.lower()  # Normalize the user input to lower case
             
-            # Define common greetings and responses
+            # Define common greetings and empathetic responses
             greetings = ["how are you", "how is your child", "how do you feel"]
+            empathetic_responses = ["i am sorry to hear that", "that must be tough", "i understand your concern"]
+            
             if any(greet in user_input_lower for greet in greetings):
-                return "I'm feeling a bit distressed; my child is sick."
+                return "I'm feeling a bit distressed; my child is having difficulty breathing."
+
+            if any(empathetic in user_input_lower for empathetic in empathetic_responses):
+                return "Thank you for your concern. It's been really stressful for me."
 
             # Check if the question is in the croup_info
             if user_input_lower in croup_info:
