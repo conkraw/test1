@@ -136,7 +136,7 @@ def display_assessment():
         </tr>
         <tr>
             <td style="border: 1px solid #000; text-align: center;font-weight: bold;background-color: lightgray; ">RESPIRATORY RATE:</td>
-            <td style="border: 1px solid #000; text-align: center;">{vital_signs.get('respiratory_rate', 'N/A')}</td>
+            <td style="border: 1px solid #000; text-align: center;background-color: lightgray;">{vital_signs.get('respiratory_rate', 'N/A')}</td>
         </tr>
         <tr>
             <td style="border: 1px solid #000; text-align: center;font-weight: bold;">BLOOD PRESSURE:</td>
@@ -144,7 +144,7 @@ def display_assessment():
         </tr>
         <tr>
             <td style="border: 1px solid #000; text-align: center;font-weight: bold; background-color: lightgray; ">PULSE OXIMETRY:</td>
-            <td style="border: 1px solid #000; text-align: center;">{vital_signs.get('pulseox', 'N/A')}</td>
+            <td style="border: 1px solid #000; text-align: center;background-color: lightgray;">{vital_signs.get('pulseox', 'N/A')}</td>
         </tr>
         <tr>
             <td style="border: 1px solid #000; text-align: center;font-weight: bold;">TEMPERATURE:</td>
@@ -152,7 +152,7 @@ def display_assessment():
         </tr>
         <tr>
             <td style="border: 1px solid #000; text-align: center;font-weight: bold;background-color: lightgray;">WEIGHT:</td>
-            <td style="border: 1px solid #000; text-align: center;">{vital_signs.get('weight', 'N/A')}</td>
+            <td style="border: 1px solid #000; text-align: center;background-color: lightgray;">{vital_signs.get('weight', 'N/A')}</td>
         </tr>
     </table>
     """
