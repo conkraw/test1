@@ -44,7 +44,7 @@ def login_page(users):
             st.error("Please enter a code.")
 
 def display_image():
-    st.subheader("Instructions")
+    st.subheader("")
     st.image("ptinfo.png", use_column_width=True)
 
 if __name__ == "__main__":
