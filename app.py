@@ -1,7 +1,7 @@
 import streamlit as st
 
 # Set the page config to normal
-st.set_page_config(layout="wide")  # Use "centered" for the diagnosis page
+st.set_page_config(layout="centered")  # Use "centered" for the diagnosis page
 
 # Initialize session state for diagnoses and submission status
 if 'diagnoses' not in st.session_state:
@@ -28,7 +28,7 @@ if not st.session_state.submitted:
                 f"Diagnosis {i + 1}",
                 value=st.session_state.diagnoses[i],
                 key=f"diagnosis_{i}",
-                #max_chars=20  # You can set a character limit if needed
+                max_chars=20  # You can set a character limit if needed
             )
 
     # Button to submit the diagnoses
@@ -61,8 +61,11 @@ if st.session_state.submitted:
         </style>
     """, unsafe_allow_html=True)
 
-    # Create a header row for diagnoses
+    # Create a header row for diagnoses, including "Historical Features"
     cols = st.columns(len(st.session_state.diagnoses) + 1)
+    with cols[0]:  # First column for "Historical Features"
+        st.write("Historical Features")
+    
     for diagnosis, col in zip(st.session_state.diagnoses, cols[1:]):
         with col:
             st.write(diagnosis)
