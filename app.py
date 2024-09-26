@@ -35,7 +35,9 @@ if not st.session_state.submitted:
 
 # Assessment Table Section
 if st.session_state.submitted:
-    st.markdown("### HISTORICAL FEATURES")
+    st.markdown("""
+        ### HISTORICAL FEATURES
+        Based on the history that you have collected, please provide up to 5 historical features that will influence the differential diagnosis and using the prompts provided, describe how they influence the differential diagnosis. """)
 
     # Custom CSS to style the dropdowns
     st.markdown("""
