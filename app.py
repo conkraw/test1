@@ -1,6 +1,7 @@
 import streamlit as st
 import openai
 from docx import Document
+import time  # Import the time module
 
 # Function to read the croup document
 def read_croup_doc():
@@ -32,14 +33,10 @@ st.title("Virtual Patient: Croup")
 
 # Session state to track time and session status
 if 'start_time' not in st.session_state:
-    st.session_state.start_time = None
-
-# Check if the session is active
-if st.session_state.start_time is None:
-    st.session_state.start_time = st.time()
+    st.session_state.start_time = time.time()  # Use time.time() for current timestamp
 
 # Calculate elapsed time
-elapsed_time = (st.time() - st.session_state.start_time) / 60  # Convert to minutes
+elapsed_time = (time.time() - st.session_state.start_time) / 60  # Convert to minutes
 
 # Display patient information
 if elapsed_time < 15:
