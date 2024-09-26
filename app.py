@@ -30,21 +30,35 @@ else:
             db.collection('your_collection_name').add(entry)  # Change 'your_collection_name' to your collection name
             return "Data uploaded to Firebase."
 
-        # Initialize session state for diagnoses and historical features
+        # Initialize session state for diagnoses and features
         if 'diagnoses' not in st.session_state:
             st.session_state.diagnoses = [""] * 5  # Initialize with empty strings for 5 diagnoses
         if 'historical_features' not in st.session_state:
             st.session_state.historical_features = [""] * 5  # Initialize for historical features
         if 'physical_examination_features' not in st.session_state:
             st.session_state.physical_examination_features = [""] * 5  # Initialize for physical examination features
-        if 'submitted' not in st.session_state:
-            st.session_state.submitted = False
+        if 'submitted_historical' not in st.session_state:
+            st.session_state.submitted_historical = False
+        if 'submitted_physical' not in st.session_state:
+            st.session_state.submitted_physical = False
 
         # Title of the app
-        st.title("")
+        st.title("Differential Diagnosis App")
 
-        # Input Section
-        if not st.session_state.submitted:
+        # Page state
+        if 'current_page' not in st.session_state:
+            st.session_state.current_page = "Enter Diagnoses"
+
+        # Navigation buttons
+        if st.button("Enter Diagnoses"):
+            st.session_state.current_page = "Enter Diagnoses"
+        if st.button("Historical Features") and st.session_state.submitted_historical:
+            st.session_state.current_page = "Historical Features"
+        if st.button("Physical Examination Features") and st.session_state.submitted_physical:
+            st.session_state.current_page = "Physical Examination Features"
+
+        # Enter Diagnoses Page
+        if st.session_state.current_page == "Enter Diagnoses":
             st.markdown("""
                 ## DIFFERENTIAL DIAGNOSIS
                 Based on the information provided in the above case, please provide 5 possible diagnoses that you would consider when prompted by your attending? Please do not provide duplicate diagnoses.
@@ -65,19 +79,19 @@ else:
                 diagnoses = [d.strip() for d in st.session_state.diagnoses]  # Strip whitespace
                 if all(diagnosis for diagnosis in diagnoses):
                     if len(diagnoses) == len(set(diagnoses)):  # Check for duplicates
-                        st.session_state.submitted = True  # Move to the assessment table
-                        st.rerun()  # Rerun the app to clear the inputs and show the table
+                        st.session_state.submitted_historical = True  # Allow moving to historical features
+                        st.session_state.submitted_physical = False  # Reset physical examination submission
+                        st.success("Diagnoses submitted! You can now fill in the Historical Features.")
                     else:
                         st.error("Please do not provide duplicate diagnoses.")
                 else:
                     st.error("Please enter all 5 diagnoses.")
 
-        # Assessment Table Section
-        if st.session_state.submitted:
-            # Historical Features Section
+        # Historical Features Page
+        elif st.session_state.current_page == "Historical Features" and st.session_state.submitted_historical:
             st.markdown("""
                 ### HISTORICAL FEATURES
-                Based on the history that you have collected, please provide up to 5 historical features that will influence the differential diagnosis and using the prompts provided, describe how they influence the differential diagnosis.
+                Based on the history that you have collected, please provide up to 5 historical features that will influence the differential diagnosis.
             """)
 
             # Create a wider appearance using columns
@@ -93,7 +107,7 @@ else:
                 </style>
             """, unsafe_allow_html=True)
 
-            # Create a header row for diagnoses, including "Historical Features"
+            # Create a header row for diagnoses
             cols = st.columns(len(st.session_state.diagnoses) + 1)
             with cols[0]:  # First column for "Historical Features"
                 st.markdown("<div class='header-cell'>Historical Features</div>", unsafe_allow_html=True)
@@ -118,13 +132,39 @@ else:
                             label_visibility="collapsed"
                         )
 
-            # Physical Examination Features Section
+            # Upload Data Button
+            if st.button("Submit Historical Features"):
+                # Gather all the data into a single entry
+                assessments = {}
+                for i in range(5):
+                    for diagnosis in st.session_state.diagnoses:
+                        assessment = st.session_state[f"select_{i}_{diagnosis}_historical"]
+                        if diagnosis not in assessments:
+                            assessments[diagnosis] = []
+                        assessments[diagnosis].append({
+                            'historical_feature': st.session_state.historical_features[i],
+                            'assessment': assessment
+                        })
+
+                entry = {
+                    'diagnoses': st.session_state.diagnoses,
+                    'historical_features': st.session_state.historical_features,
+                    'hx_assessments': assessments
+                }
+
+                # Upload to Firebase
+                result = upload_to_firebase(entry)
+                st.success(result)
+                st.session_state.submitted_physical = True  # Allow moving to physical examination features
+
+        # Physical Examination Features Page
+        elif st.session_state.current_page == "Physical Examination Features" and st.session_state.submitted_physical:
             st.markdown("""
                 ### PHYSICAL EXAMINATION FEATURES
-                Based on the physical examination, please provide up to 5 features that will influence the differential diagnosis and describe how they influence the differential diagnosis.
+                Based on the physical examination, please provide up to 5 features that will influence the differential diagnosis.
             """)
 
-            # Create a header row for diagnoses, including "Physical Examination Features"
+            # Create a header row for diagnoses
             cols = st.columns(len(st.session_state.diagnoses) + 1)
             with cols[0]:  # First column for "Physical Examination Features"
                 st.markdown("<div class='header-cell'>Physical Examination Features</div>", unsafe_allow_html=True)
@@ -150,33 +190,23 @@ else:
                         )
 
             # Upload Data Button
-            if st.button("Submit"):
+            if st.button("Submit Physical Examination Features"):
                 # Gather all the data into a single entry
                 assessments = {}
                 for i in range(5):
                     for diagnosis in st.session_state.diagnoses:
-                        historical_assessment = st.session_state[f"select_{i}_{diagnosis}_historical"]
-                        physical_assessment = st.session_state[f"select_{i}_{diagnosis}_physical"]
-                        
-                        # Historical Features
+                        assessment = st.session_state[f"select_{i}_{diagnosis}_physical"]
                         if diagnosis not in assessments:
                             assessments[diagnosis] = []
                         assessments[diagnosis].append({
-                            'historical_feature': st.session_state.historical_features[i],
-                            'assessment': historical_assessment
-                        })
-                        
-                        # Physical Examination Features
-                        assessments[diagnosis].append({
                             'physical_examination_feature': st.session_state.physical_examination_features[i],
-                            'assessment': physical_assessment
+                            'assessment': assessment
                         })
 
                 entry = {
                     'diagnoses': st.session_state.diagnoses,
-                    'historical_features': st.session_state.historical_features,
                     'physical_examination_features': st.session_state.physical_examination_features,
-                    'hx_assessments': assessments
+                    'pe_assessments': assessments
                 }
 
                 # Upload to Firebase
@@ -185,3 +215,4 @@ else:
 
     except Exception as e:
         st.error(f"Error initializing Firebase: {e}")
+
