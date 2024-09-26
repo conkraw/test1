@@ -83,7 +83,7 @@ def display_assessment():
     document_text = read_word_text(docx_file_path)
     
     if document_text:
-        st.markdown("Patient Information:")
+        #st.markdown("Patient Information:")
 
         # Use markdown with HTML for custom font and size
         custom_html = f"""
@@ -91,6 +91,7 @@ def display_assessment():
             {document_text.replace('\n', '<br>')}
         </div>
         """
+        st.markdown("Patient Information:")
         st.markdown(custom_html, unsafe_allow_html=True)
     else:
         st.write("No text found in the document.")
