@@ -108,7 +108,7 @@ else:
 
                 for diagnosis, col in zip(st.session_state.diagnoses, cols[1:]):  # The rest are dropdowns
                     with col:
-                        st.selectbox("", options=["Supports", "Does not support"], key=f"select_{i}_{diagnosis}",
+                        st.selectbox("", options=["","Supports", "Does not support"], key=f"select_{i}_{diagnosis}",
                                       label_visibility="collapsed")
 
             # Upload Data Button
