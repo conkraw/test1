@@ -1,31 +1,30 @@
 import streamlit as st
 
+# Sidebar for user inputs
 with st.sidebar:
-    NX = st.number_input("Number columns", 1, 10, 4, 1)
-    NY = st.number_input("Number rows", 1, 10, 3, 1)
+    num_columns = st.number_input("Number of Diagnoses (Columns)", 1, 10, 5, 1)
+    num_rows = st.number_input("Number of Row Headers", 1, 10, 3, 1)
 
-## Define list of parameters 
-x_list = [*"abcdefghij"][:NX]
-y_list = [*"xyzmnpqrst"][:NY]
+# Define list of diagnoses and row headers
+diagnoses = [f"Diagnosis {i+1}" for i in range(num_columns)]
+row_headers = [f"Row {i+1}" for i in range(num_rows)]
 
-## Write the first row of number inputs
-cols = st.columns(len(x_list) + 1)
-for x, col in zip(x_list, cols[1:]):
+# Create a header row for diagnoses
+cols = st.columns(len(diagnoses) + 1)
+for diagnosis, col in zip(diagnoses, cols[1:]):
     with col:
-        st.number_input(f"${x}$", 0.0, 1.0, 0.5, 0.1, key=x)
+        st.write(diagnosis)
 
-
-
-## For each new row, start with a number input and 
-## write the the corresponding product
-for y in y_list:
-    cols = st.columns(len(x_list) + 1)
-    with cols[0]:  # The first column is an input field
-        st.number_input(f"${y}$", 0.0, 1.0, 0.5, 0.1, key=y)
+# Create rows for user inputs and dropdowns
+for row in row_headers:
+    cols = st.columns(len(diagnoses) + 1)
+    with cols[0]:  # The first column is for row headers
+        st.write(row)
     
-for x, col in zip(x_list, cols[1:]):  # The rest of the columns are for results
+    for diagnosis, col in zip(diagnoses, cols[1:]):  # The rest are dropdowns
         with col:
-            xval = st.session_state[x]
-            yval = st.session_state[y]
-            st.metric(f"$({x},{y})$", f"({xval:.1f},{yval:.1f})")
+            st.selectbox(f"{row} - {diagnosis}", options=["Support", "Does not support"], key=f"{row}_{diagnosis}")
 
+# Add a footer or any additional information if needed
+st.markdown("## Support Matrix")
+st.write("This matrix shows whether each diagnosis is supported or not based on the provided row headers.")
