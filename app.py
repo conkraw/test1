@@ -92,7 +92,6 @@ def login_page(users):
 # Function to display the assessment page
 def display_assessment():
     st.markdown(f"<h3 style='font-family: \"DejaVu Sans\";'>Welcome {st.session_state.user_name}! Here is the intake form.</h3>", unsafe_allow_html=True)
-    st.subheader("")
 
     # Read and display the text from ptinfo.txt
     txt_file_path = "ptinfo.txt"
@@ -121,15 +120,16 @@ def display_assessment():
 
     # Vital Signs Title
     title_html = """
-    <h2 style="font-family: 'DejaVu Sans'; font-size: 24px; margin-bottom: 10px; color: #2c3e50;">
+    <h2 style="font-family: 'DejaVu Sans'; font-size: 24px; margin-bottom: 5px; color: #2c3e50;">
         Vital Signs:</h2>
     """
     st.markdown(title_html, unsafe_allow_html=True)
 
-    st.subheader(" Of the following vital signs within the intake form, check the vital signs that are abnormal.")
+    # Adjust subheader to match font and size, and reduce spacing
+    st.markdown("<h4 style='font-family: \"DejaVu Sans\"; margin-top: 0;'>Of the following vital signs within the intake form, check the vital signs that are abnormal.</h4>", unsafe_allow_html=True)
     
     # Patient Vital Signs Table
-    col1, col3 = st.columns([1, 2])  # Define three columns
+    col1, col3 = st.columns([1, 2])  # Define two columns
 
     with col1:
         heart_rate_checkbox = st.checkbox(f'HEART RATE:&nbsp;&nbsp;{vital_signs.get("heart_rate", "N/A")}', key='heart_rate_checkbox')
@@ -139,13 +139,6 @@ def display_assessment():
         temperature_checkbox = st.checkbox(f'TEMPERATURE:&nbsp;&nbsp;{vital_signs.get("temperature", "N/A")}', key='temperature_checkbox')
         weight_checkbox = st.checkbox(f'WEIGHT:&nbsp;&nbsp;{vital_signs.get("weight", "N/A")}', key='weight_checkbox')
 
-    #with col2:
-    #    st.markdown("HEART RATE:")
-    #    st.markdown("RESPIRATORY RATE:")
-    #    st.markdown("BLOOD PRESSURE:")
-    #    st.markdown("PULSE OXIMETRY:")
-    #    st.markdown("TEMPERATURE:")
-    #    st.markdown("WEIGHT:")
-
 if __name__ == "__main__":
     main()
+
