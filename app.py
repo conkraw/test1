@@ -1,44 +1,29 @@
 import streamlit as st
 import pandas as pd
 
-def main():
-    st.title("Diagnosis Support Matrix")
+## Initialize parameter inputs
+x_list = {"Parameter": [*"abcd"]}
+x_list["Values"] = [0.5] * len(x_list["Parameter"])
 
-    # Input for 5 diagnoses
-    st.info("Please enter exactly 5 diagnoses:")
-    diagnoses = [st.text_input(f"Diagnosis {i+1}", "") for i in range(5)]
+y_list = {"Parameter": [*"xyz"]}
+y_list["Values"] = [0.5] * len(y_list["Parameter"])
 
-    # Filter out any empty inputs
-    diagnoses = [d for d in diagnoses if d.strip()]
+## Display input space
+cols = st.columns(2)
+with cols[0]:
+    "## Rows"
+    x_data = st.data_editor(x_list, use_container_width=True, num_rows='dynamic')
 
-    # Ensure exactly 5 diagnoses
-    if len(diagnoses) != 5:
-        st.warning("Please make sure to enter exactly 5 diagnoses.")
-        return
+with cols[1]:
+    "## Columns"
+    y_data = st.data_editor(y_list, use_container_width=True, num_rows='dynamic')
 
-    # Input for row headers (you can modify this as needed)
-    row_count = st.number_input("Number of Row Headers", min_value=1, value=3, step=1)
+## Combine
+x_times_y = [ [f"({x}, {y})" for x in x_data["Values"]] for y in y_data["Values"] ]
 
-    row_headers = [st.text_input(f"Row Header {i+1}", "") for i in range(row_count)]
-    row_headers = [r for r in row_headers if r.strip()]
+## Display result
+df = pd.DataFrame(x_times_y, columns=x_data["Parameter"])
+df.index = y_data["Parameter"]
 
-    # Create a DataFrame with dropdowns
-    if row_headers:
-        # Initialize the support matrix
-        support_matrix = pd.DataFrame(index=row_headers, columns=diagnoses)
-
-        # Fill the DataFrame with dropdowns
-        for row in row_headers:
-            for diagnosis in diagnoses:
-                support_matrix.at[row, diagnosis] = st.selectbox(
-                    f"{row} - {diagnosis}",
-                    options=["Support", "Does not support"],
-                    key=f"{row}_{diagnosis}"
-                )
-
-        # Display the resulting DataFrame
-        st.subheader("Support Matrix")
-        st.dataframe(support_matrix)
-
-if __name__ == "__main__":
-    main()
+"## Product"
+st.dataframe(df, use_container_width=True)
