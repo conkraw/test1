@@ -5,7 +5,7 @@ st.markdown("""
     <style>
     .stSelectbox > div > div {
         width: 50px;  /* Fixed width for dropdowns */
-        padding: 1px;  /* Add padding to improve visibility */
+        padding: 10px;  /* Add padding to improve visibility */
     }
     .stButton, .stNumberInput, .stSelectbox {
         font-size: 18px; /* Increase font size for better visibility */
