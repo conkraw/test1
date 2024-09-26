@@ -14,7 +14,7 @@ for x, col in zip(x_list, cols[1:]):
     with col:
         st.number_input(f"${x}$", 0.0, 1.0, 0.5, 0.1, key=x)
 
-"****"
+
 
 ## For each new row, start with a number input and 
 ## write the the corresponding product
@@ -28,4 +28,4 @@ for x, col in zip(x_list, cols[1:]):  # The rest of the columns are for results
             xval = st.session_state[x]
             yval = st.session_state[y]
             st.metric(f"$({x},{y})$", f"({xval:.1f},{yval:.1f})")
-    "****"
+
