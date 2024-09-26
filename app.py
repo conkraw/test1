@@ -22,7 +22,7 @@ def main():
         # Button to start assessment
         if st.button("Start Assessment"):
             st.session_state.page = "assessment"  # Set the current page to assessment
-            st.experimental_rerun()  # Rerun to update the displayed page
+            st.rerun()  # Rerun to update the displayed page
 
         # Display different pages based on session state
         if st.session_state.get("page") == "assessment":
