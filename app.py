@@ -31,22 +31,20 @@ else:
             return "Data uploaded to Firebase."
 
         # Initialize session state
+        if 'current_page' not in st.session_state:
+            st.session_state.current_page = "diagnoses"
         if 'diagnoses' not in st.session_state:
             st.session_state.diagnoses = [""] * 5
         if 'historical_features' not in st.session_state:
             st.session_state.historical_features = [""] * 5
         if 'physical_examination_features' not in st.session_state:
             st.session_state.physical_examination_features = [""] * 5
-        if 'submitted_historical' not in st.session_state:
-            st.session_state.submitted_historical = False
-        if 'submitted_physical' not in st.session_state:
-            st.session_state.submitted_physical = False
 
         # Title of the app
         st.title("Differential Diagnosis App")
 
-        # Diagnoses Input Section
-        if not st.session_state.submitted_historical:
+        # Diagnoses Page
+        if st.session_state.current_page == "diagnoses":
             st.markdown("""
                 ## DIFFERENTIAL DIAGNOSIS
                 Please provide 5 possible diagnoses you would consider. Do not provide duplicates.
@@ -67,15 +65,15 @@ else:
                 diagnoses = [d.strip() for d in st.session_state.diagnoses]
                 if all(diagnosis for diagnosis in diagnoses):
                     if len(diagnoses) == len(set(diagnoses)):
-                        st.session_state.submitted_historical = True
-                        st.success("Diagnoses submitted! Fill in the Historical Features.")
+                        st.session_state.current_page = "historical_features"  # Move to Historical Features page
+                        st.experimental_rerun()  # Rerun the app to refresh the page
                     else:
                         st.error("Please do not provide duplicate diagnoses.")
                 else:
                     st.error("Please enter all 5 diagnoses.")
 
-        # Historical Features Section
-        if st.session_state.submitted_historical and not st.session_state.submitted_physical:
+        # Historical Features Page
+        elif st.session_state.current_page == "historical_features":
             st.markdown("""
                 ### HISTORICAL FEATURES
                 Please provide up to 5 historical features that influence the differential diagnosis.
@@ -123,10 +121,13 @@ else:
 
                 result = upload_to_firebase(entry)
                 st.success(result)
-                st.session_state.submitted_physical = True  # Move to physical examination
 
-        # Physical Examination Features Section
-        if st.session_state.submitted_physical:
+                # Move to Physical Examination Features page
+                st.session_state.current_page = "physical_examination_features"
+                st.rerun()  # Rerun the app to refresh the page
+
+        # Physical Examination Features Page
+        elif st.session_state.current_page == "physical_examination_features":
             st.markdown("""
                 ### PHYSICAL EXAMINATION FEATURES
                 Please provide up to 5 features based on the physical examination.
