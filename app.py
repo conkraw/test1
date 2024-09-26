@@ -8,7 +8,7 @@ st.set_page_config(layout="wide")
 @st.cache_data
 def load_users():
     return pd.read_csv('users.csv')
- 
+
 # Function to read text from a TXT file
 def read_text_file(txt_file_path):
     try:
@@ -36,7 +36,7 @@ def load_vital_signs(vital_signs_file):
         st.error(f"File not found: {vital_signs_file}. Please check the file path.")
     except Exception as e:
         st.error(f"An error occurred: {e}")
-    
+
     return vital_signs
 
 # Main app function
@@ -64,7 +64,7 @@ def welcome_page():
     st.markdown("<p style='font-family: \"DejaVu Sans\";'>This assessment is designed to evaluate your clinical reasoning skills.</p>", unsafe_allow_html=True)
     st.markdown("<h4 style='font-family: \"DejaVu Sans\";'>Instructions:</h4>", unsafe_allow_html=True)
     st.markdown("<p style='font-family: \"DejaVu Sans\";'>1. Please enter your unique code on the next page.<br>2. Follow the prompts to complete the assessment.</p>", unsafe_allow_html=True)
-    
+
     if st.button("Next"):
         st.session_state.page = "login"  # Change to login page
         st.rerun()  # Rerun to refresh the view
@@ -73,7 +73,7 @@ def welcome_page():
 def login_page(users):
     st.markdown("<p style='font-family: \"DejaVu Sans\";'>Please enter your unique code to access the assessment.</p>", unsafe_allow_html=True)
     unique_code = st.text_input("Unique Code:")
-    
+
     if st.button("Submit"):
         if unique_code:
             try:
@@ -96,7 +96,7 @@ def display_assessment():
     # Read and display the text from ptinfo.txt
     txt_file_path = "ptinfo.txt"
     document_text = read_text_file(txt_file_path)
-    
+
     if document_text:
         title_html = """
         <h2 style="font-family: 'DejaVu Sans'; font-size: 24px; margin-bottom: 10px; color: #2c3e50;">
@@ -118,46 +118,44 @@ def display_assessment():
     vital_signs_file = "vital_signs.txt"
     vital_signs = load_vital_signs(vital_signs_file)
 
-    # Vital Signs Title
-    title_html = """
-    <h2 style="font-family: 'DejaVu Sans'; font-size: 24px; margin-bottom: 0; color: #2c3e50;">
-        Vital Signs:</h2>
-    """
-    st.markdown(title_html, unsafe_allow_html=True)
+    # Check if vital_signs is not empty before creating checkboxes
+    if vital_signs:
+        # Vital Signs Title
+        title_html = """
+        <h2 style="font-family: 'DejaVu Sans'; font-size: 24px; margin-bottom: 0; color: #2c3e50;">
+            Vital Signs:</h2>
+        """
+        st.markdown(title_html, unsafe_allow_html=True)
 
-    # Adjust subheader to match font and size, and reduce spacing
-    st.markdown("<h4 style='font-family: \"DejaVu Sans\"; font-size: 18px; margin: -20px 0 0 0;'>&nbsp;Of the following vital signs within the intake form, check the vital signs that are abnormal.</h4>", unsafe_allow_html=True)
+        # Adjust subheader to match font and size, and reduce spacing
+        st.markdown("<h4 style='font-family: \"DejaVu Sans\"; font-size: 18px; margin: -20px 0 0 0;'>&nbsp;Of the following vital signs within the intake form, check the vital signs that are abnormal.</h4>", unsafe_allow_html=True)
 
-    # Patient Vital Signs Table
-    col1, col3 = st.columns([1, 2])  # Define two columns
-
-    # Display labels and checkboxes together
         # Patient Vital Signs Table
-col1, col3 = st.columns([1, 2])  # Define two columns
+        col1, col3 = st.columns([1, 2])  # Define two columns
 
-with col1:
-    # Indent labels and checkboxes
-    indent_html = "&nbsp;&nbsp;&nbsp;"  # Adjust the number of &nbsp; for more or less indentation
+        with col1:
+            # Indent labels and checkboxes
+            indent_html = "&nbsp;&nbsp;&nbsp;"  # Adjust the number of &nbsp; for more or less indentation
 
-    heart_rate = vital_signs.get("heart_rate", "N/A")
-    heart_rate_checkbox = st.checkbox(f"{indent_html}HEART RATE: {heart_rate}", key='heart_rate_checkbox')
+            heart_rate = vital_signs.get("heart_rate", "N/A")
+            st.checkbox(f"{indent_html}HEART RATE: {heart_rate}", key='heart_rate_checkbox')
 
-    respiratory_rate = vital_signs.get("respiratory_rate", "N/A")
-    respiratory_rate_checkbox = st.checkbox(f"{indent_html}RESPIRATORY RATE: {respiratory_rate}", key='respiratory_rate_checkbox')
+            respiratory_rate = vital_signs.get("respiratory_rate", "N/A")
+            st.checkbox(f"{indent_html}RESPIRATORY RATE: {respiratory_rate}", key='respiratory_rate_checkbox')
 
-    blood_pressure = vital_signs.get("blood_pressure", "N/A")
-    blood_pressure_checkbox = st.checkbox(f"{indent_html}BLOOD PRESSURE: {blood_pressure}", key='blood_pressure_checkbox')
+            blood_pressure = vital_signs.get("blood_pressure", "N/A")
+            st.checkbox(f"{indent_html}BLOOD PRESSURE: {blood_pressure}", key='blood_pressure_checkbox')
 
-    pulseox = vital_signs.get("pulseox", "N/A")
-    pulseox_checkbox = st.checkbox(f"{indent_html}PULSE OXIMETRY: {pulseox}", key='pulseox_checkbox')
+            pulseox = vital_signs.get("pulseox", "N/A")
+            st.checkbox(f"{indent_html}PULSE OXIMETRY: {pulseox}", key='pulseox_checkbox')
 
-    temperature = vital_signs.get("temperature", "N/A")
-    temperature_checkbox = st.checkbox(f"{indent_html}TEMPERATURE: {temperature}", key='temperature_checkbox')
+            temperature = vital_signs.get("temperature", "N/A")
+            st.checkbox(f"{indent_html}TEMPERATURE: {temperature}", key='temperature_checkbox')
 
-    weight = vital_signs.get("weight", "N/A")
-    weight_checkbox = st.checkbox(f"{indent_html}WEIGHT: {weight}", key='weight_checkbox')
-
-
+            weight = vital_signs.get("weight", "N/A")
+            st.checkbox(f"{indent_html}WEIGHT: {weight}", key='weight_checkbox')
+    else:
+        st.error("No vital signs data available.")
 
 if __name__ == "__main__":
     main()
