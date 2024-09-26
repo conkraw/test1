@@ -49,7 +49,7 @@ def main():
     # Initialize session state for page if not already done
     if "page" not in st.session_state:
         st.session_state.page = "welcome"  # Start on the welcome page
-
+ 
     # Check which page to display
     if st.session_state.page == "assessment":
         display_assessment()
