@@ -133,9 +133,9 @@ def display_assessment():
         heart_rate_checkbox = st.checkbox(f'HEART RATE:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{vital_signs.get("heart_rate", "N/A")}', key='heart_rate_checkbox')
         respiratory_rate_checkbox = st.checkbox(f'RESPIRATORY RATE:&nbsp;&nbsp;&nbsp;&nbsp;{vital_signs.get("respiratory_rate", "N/A")}', key='respiratory_rate_checkbox')
         blood_pressure_checkbox = st.checkbox(f'BLOOD PRESSURE:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{vital_signs.get("blood_pressure", "N/A")}', key='blood_pressure_checkbox')
-        pulseox_checkbox = st.checkbox(f'PULSE OXIMETRY:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{vital_signs.get("pulseox", "N/A")}', key='pulseox_checkbox')
-        temperature_checkbox = st.checkbox(f'TEMPERATURE:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{vital_signs.get("temperature", "N/A")}', key='temperature_checkbox')
-        weight_checkbox = st.checkbox(f'WEIGHT:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{vital_signs.get("weight", "N/A")}', key='weight_checkbox')
+        pulseox_checkbox = st.checkbox(f'PULSE OXIMETRY:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{vital_signs.get("pulseox", "N/A")}', key='pulseox_checkbox')
+        temperature_checkbox = st.checkbox(f'TEMPERATURE:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{vital_signs.get("temperature", "N/A")}', key='temperature_checkbox')
+        weight_checkbox = st.checkbox(f'WEIGHT:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{vital_signs.get("weight", "N/A")}', key='weight_checkbox')
 
     #    st.checkbox('HEART RATE:', key='heart_rate_checkbox')
     #    st.checkbox('RESPIRATORY RATE:', key='respiratory_rate_checkbox')
