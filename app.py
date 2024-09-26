@@ -52,7 +52,7 @@ def welcome_page():
     
     if st.button("Start Assessment"):
         st.session_state.page = "login"  # Change to login page
-        st.rerun()  # Rerun to refresh the view
+        st.experimental_rerun()  # Rerun to refresh the view
 
 # Login page function
 def login_page(users):
@@ -66,7 +66,7 @@ def login_page(users):
                 if unique_code in users['code'].values:
                     st.session_state.user_name = users.loc[users['code'] == unique_code, 'name'].values[0]
                     st.session_state.page = "assessment"  # Change to assessment page
-                    st.rerun()  # Rerun to refresh the view
+                    st.experimental_rerun()  # Rerun to refresh the view
                 else:
                     st.error("Invalid code. Please try again.")
             except ValueError:
@@ -83,20 +83,24 @@ def display_assessment():
     document_text = read_word_text(docx_file_path)
     
     if document_text:
-        #st.markdown("Patient Information:")
+        # Custom HTML for "Patient Information" title
+        title_html = """
+        <h2 style="font-family: 'DejaVu Sans'; font-size: 24px; margin-bottom: 10px;">
+            Patient Information:
+        </h2>
+        """
+        st.markdown(title_html, unsafe_allow_html=True)
 
-        # Use markdown with HTML for custom font and size
+        # Use markdown with HTML for custom font and size for document text
         custom_html = f"""
         <div style="font-family: 'DejaVu Sans'; font-size: 18px;">
             {document_text.replace('\n', '<br>')}
         </div>
         """
-        st.markdown("Patient Information:")
         st.markdown(custom_html, unsafe_allow_html=True)
     else:
         st.write("No text found in the document.")
 
 if __name__ == "__main__":
     main()
-
 
