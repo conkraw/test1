@@ -16,18 +16,18 @@ def display_selected_component(selected_component):
         text = load_phys_exam_data("phys_exam.txt")
         
         if text:
-            # Extract and display the relevant section
-            component_texts = text.split('\n\n')  # Assuming sections are separated by double newlines
-            found = False
-            
-            for component_text in component_texts:
-                if selected_component.lower() in component_text.lower():
-                    st.markdown(f"### {selected_component}\n")
-                    st.markdown(component_text)  # Display the full text for the matched component
-                    found = True
-                    break
-            
-            if not found:
+            # Create a dictionary from the text file
+            component_dict = {}
+            for line in text.split('\n'):
+                if ':' in line:  # Only consider lines with a colon
+                    key, value = line.split(':', 1)
+                    component_dict[key.strip()] = value.strip()
+
+            # Display the selected component's text
+            if selected_component in component_dict:
+                st.markdown(f"### {selected_component}\n")
+                st.markdown(component_dict[selected_component])
+            else:
                 st.write("No text available for the selected component.")
         else:
             st.write("No text available for the selected component.")
