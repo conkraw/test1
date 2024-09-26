@@ -1,6 +1,8 @@
 import streamlit as st
 import pandas as pd
 from docx import Document
+from pdf2image import convert_from_path
+import os
 
 st.set_page_config(layout="wide")
 
@@ -9,13 +11,27 @@ st.set_page_config(layout="wide")
 def load_users():
     return pd.read_csv('users.csv')
 
-# Function to read Word document
-def read_word_file(file_path):
-    doc = Document(file_path)
-    content = []
-    for para in doc.paragraphs:
-        content.append(para.text)
-    return "\n".join(content)
+# Function to convert DOCX to PDF and then to images
+def docx_to_images(docx_path):
+    # Convert DOCX to PDF
+    pdf_path = docx_path.replace(".docx", ".pdf")
+    document = Document(docx_path)
+    document.save(pdf_path)
+
+    # Convert PDF to images
+    images = convert_from_path(pdf_path)
+    
+    # Save images to a temporary directory
+    image_paths = []
+    for i, image in enumerate(images):
+        image_path = f"temp_image_{i}.png"
+        image.save(image_path, "PNG")
+        image_paths.append(image_path)
+
+    # Clean up the PDF file
+    os.remove(pdf_path)
+
+    return image_paths
 
 # Main app function
 def main():
@@ -39,7 +55,7 @@ def main():
         # Add a button to start the assessment
         if st.button("Start Assessment"):
             st.session_state.show_assessment = True  # Set a flag to show the assessment page
-            st.rerun()  # Rerun the app to show the new content
+            st.experimental_rerun()  # Rerun the app to show the new content
 
     else:
         st.write("Welcome! Please enter your unique code to access the assessment.")
@@ -54,7 +70,7 @@ def main():
                     if unique_code in users['code'].values:
                         st.session_state.user_name = users.loc[users['code'] == unique_code, 'name'].values[0]
                         # Rerun to display the welcome page and instructions
-                        st.rerun()
+                        st.experimental_rerun()
                     else:
                         st.error("Invalid code. Please try again.")
                 except ValueError:
@@ -65,11 +81,16 @@ def main():
     # Display the assessment page if the flag is set
     if "show_assessment" in st.session_state and st.session_state.show_assessment:
         st.subheader("Assessment Document")
-        # Read and display content from the Word document
-        content = read_word_file("ptinfo.docx")
-        st.text_area("Document Content", content, height=400)
+        # Convert the DOCX file to images and display them
+        image_paths = docx_to_images("ptinfo.docx")
+        
+        for image_path in image_paths:
+            st.image(image_path)
+
+        # Clean up image files after displaying
+        for image_path in image_paths:
+            os.remove(image_path)
 
 if __name__ == "__main__":
     main()
-
 
