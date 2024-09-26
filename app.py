@@ -132,7 +132,7 @@ def display_assessment():
     with col1:
         st.markdown("**VITAL SIGNS**")
         #st.markdown("<div style='display: flex; flex-direction: column; align-items: center;'>", unsafe_allow_html=True)
-        st.checkbox('HEART RATE:', key='heart_rate_checkbox')
+        st.checkbox('HEART RATE:f"{vital_signs.get('heart_rate', 'N/A')}', key='heart_rate_checkbox')
         st.checkbox('RESPIRATORY RATE:', key='respiratory_rate_checkbox')
         st.checkbox('BLOOD PRESSURE:', key='blood_pressure_checkbox')
         st.checkbox('PULSE OXIMETRY:', key='pulseox_checkbox')
