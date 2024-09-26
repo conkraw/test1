@@ -38,7 +38,7 @@ def main():
                     if unique_code in users['code'].values:
                         st.session_state.user_name = users.loc[users['code'] == unique_code, 'name'].values[0]
                         st.session_state.page = "main"  # Reset to main page
-                        st.experimental_rerun()
+                        st.rerun()
                     else:
                         st.error("Invalid code. Please try again.")
                 except ValueError:
