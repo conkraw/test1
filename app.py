@@ -97,6 +97,8 @@ def display_assessment():
     else:
         st.write("No text found in the document.")
 
+    st.subheader("")
+
     # Patient Vital Signs Table
     st.markdown("""
     <table style="border-collapse: collapse; width: 100%;">
