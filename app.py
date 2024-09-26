@@ -18,14 +18,9 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
-# Sidebar for user inputs
-with st.sidebar:
-    num_columns = st.number_input("Number of Diagnoses (Columns)", 1, 10, 5, 1)
-    num_rows = st.number_input("Number of Row Headers", 1, 10, 3, 1)
-
-# Define list of diagnoses and row headers
-diagnoses = [f"Diagnosis {i+1}" for i in range(num_columns)]
-row_headers = [f"Row {i+1}" for i in range(num_rows)]
+# Define fixed lists of diagnoses and row headers
+diagnoses = [f"Diagnosis {i+1}" for i in range(5)]  # 5 fixed diagnoses
+row_headers = [f"Row {i+1}" for i in range(5)]  # 5 fixed rows
 
 # Create a header row for diagnoses
 cols = st.columns(len(diagnoses) + 1)
@@ -47,5 +42,4 @@ for row in row_headers:
 
 # Add a footer or any additional information if needed
 st.markdown("## Support Matrix")
-
 
