@@ -43,25 +43,25 @@ if FIREBASE_KEY_JSON:
             user_input_lower = user_input.lower()  # Normalize the user input to lower case
 
         # Check if the question is a medical question based on croup_info
-        if user_input_lower in croup_info:
-            response = openai.ChatCompletion.create(
-                model="gpt-3.5-turbo",
-                messages=[
-                    {"role": "user", "content": user_input},
-                    {"role": "assistant", "content": "Role play a parent whose child is experiencing croup. Answer medical inquiries based on the croup document."}
-                ]
-            )
-            return response['choices'][0]['message']['content']
-        else:
-            # Let ChatGPT provide a more natural response for non-medical inquiries
-            response = openai.ChatCompletion.create(
-                model="gpt-3.5-turbo",
-                messages=[
-                    {"role": "user", "content": user_input},
-                    {"role": "assistant", "content": "Role play a parent whose child has croup and answer the question naturally."}
-                ]
-            )
-            return response['choices'][0]['message']['content']
+            if user_input_lower in croup_info:
+                response = openai.ChatCompletion.create(
+                    model="gpt-3.5-turbo",
+                    messages=[
+                        {"role": "user", "content": user_input},
+                        {"role": "assistant", "content": "Role play a parent whose child is experiencing croup. Answer medical inquiries based on the croup document."}
+                    ]
+                )
+                return response['choices'][0]['message']['content']
+            else:
+                # Let ChatGPT provide a more natural response for non-medical inquiries
+                response = openai.ChatCompletion.create(
+                    model="gpt-3.5-turbo",
+                    messages=[
+                        {"role": "user", "content": user_input},
+                        {"role": "assistant", "content": "Role play a parent whose child has croup and answer the question naturally."}
+                    ]
+                )
+                return response['choices'][0]['message']['content']
 
 
         # Function to upload data to Firebase
