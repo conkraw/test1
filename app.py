@@ -16,26 +16,18 @@ def display_selected_component(selected_component):
         text = load_phys_exam_data("phys_exam.txt")
         
         if text:
-            # Create a dictionary from the text file
-            component_dict = {}
-            for line in text.split('\n'):
-                if ':' in line:  # Only consider lines with a colon
-                    key, value = line.split(':', 1)
-                    component_dict[key.strip()] = value.strip()
-
-            # Display the selected component's text
-            if selected_component in component_dict:
-                st.markdown(f"### {selected_component}\n")
-                st.markdown(component_dict[selected_component])
-            else:
-                st.write("No text available for the selected component.")
+            component_texts = text.split('\n\n')  # Assuming sections are separated by double newlines
+            for component_text in component_texts:
+                if selected_component.lower() in component_text.lower():
+                    st.markdown(f"### {selected_component}\n")
+                    st.markdown(component_text)
+                    break
         else:
             st.write("No text available for the selected component.")
 
 # Function to check and display an image if present
 def display_image(base_image_name):
-    image_extensions = ['.png', '.jpg', '.jpeg', '.gif', '.bmp', '.tiff', 
-                        '.PNG', '.JPG', '.JPEG', '.GIF', '.BMP', '.TIFF']
+    image_extensions = ['.png', '.jpg', '.jpeg', '.gif', '.bmp', '.tiff', '.PNG', '.JPG', '.JPEG', '.GIF', '.BMP', '.TIFF']
     image_found = False
 
     for ext in image_extensions:
@@ -47,6 +39,36 @@ def display_image(base_image_name):
 
     if not image_found:
         st.write("No image file named 'image_1' found.")
+
+# Function to check and display audio if present
+def display_audio(base_audio_name):
+    audio_extensions = ['.mp3', '.wav', '.ogg', '.flac', '.MP3', '.WAV', '.OGG', '.FLAC']
+    audio_found = False
+
+    for ext in audio_extensions:
+        audio_path = f"{base_audio_name}{ext}"
+        if os.path.isfile(audio_path):
+            st.audio(audio_path)
+            audio_found = True
+            break  # Exit loop if an audio file is found
+
+    if not audio_found:
+        st.write("No audio file named 'audio_1' found.")
+
+# Function to check and display video if present
+def display_video(base_video_name):
+    video_extensions = ['.mp4', '.mov', '.avi', '.mkv', '.MP4', '.MOV', '.AVI', '.MKV']
+    video_found = False
+
+    for ext in video_extensions:
+        video_path = f"{base_video_name}{ext}"
+        if os.path.isfile(video_path):
+            st.video(video_path)
+            video_found = True
+            break  # Exit loop if a video file is found
+
+    if not video_found:
+        st.write("No video file named 'video_1' found.")
 
 # Main Streamlit app
 def main():
@@ -61,18 +83,22 @@ def main():
     components = [
         "General Appearance", "Eyes", "Ears, Neck, Nose, Throat", "Lymph Nodes",
         "Cardiovascular", "Lungs", "Abdomen", "Skin", "Extremities",
-        "Musculoskeletal", "Neurological", "Psychiatry", "Genitourinary", "Image"
+        "Musculoskeletal", "Neurological", "Psychiatry", "Genitourinary", "Image", "Audio", "Video"
     ]
 
     # User selection
     selected_component = st.selectbox("Select a physical examination component:", components)
 
-    # Automatically display the selected component without an additional button
+    # Display selected component text
     display_selected_component(selected_component)
 
-    # Check for image file
+    # Check for media files based on selected component
     if selected_component == "Image":
-        display_image("image_1")  # Change the base name if needed
+        display_image("image_1")  # Check for various formats of image_1
+    elif selected_component == "Audio":
+        display_audio("audio_1")  # Check for various formats of audio_1
+    elif selected_component == "Video":
+        display_video("video_1")  # Check for various formats of video_1
 
 if __name__ == '__main__':
     main()
