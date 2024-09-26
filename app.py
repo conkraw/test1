@@ -31,17 +31,32 @@ def main():
 
     # Initialize session state for page if not already done
     if "page" not in st.session_state:
-        st.session_state.page = "login"  # Start on the login page
+        st.session_state.page = "welcome"  # Start on the welcome page
 
     # Check which page to display
     if st.session_state.page == "assessment":
         display_assessment()
+    elif st.session_state.page == "welcome":
+        welcome_page()
     else:
         login_page(users)
 
+# Welcome page function
+def welcome_page():
+    st.write("Welcome to the Pediatric Clerkship Assessment!")
+    st.write("This assessment is designed to evaluate your clinical reasoning skills.")
+    st.write("### Instructions:")
+    st.write("1. Click 'Start Assessment' when you are ready.")
+    st.write("2. Enter your unique code on the next page.")
+    st.write("3. Follow the prompts to complete the assessment.")
+    
+    if st.button("Start Assessment"):
+        st.session_state.page = "login"  # Change to login page
+        st.experimental_rerun()  # Rerun to refresh the view
+
 # Login page function
 def login_page(users):
-    st.write("Welcome! Please enter your unique code to access the assessment.")
+    st.write("Please enter your unique code to access the assessment.")
     unique_code = st.text_input("Unique Code:")
     
     if st.button("Next"):
@@ -51,7 +66,7 @@ def login_page(users):
                 if unique_code in users['code'].values:
                     st.session_state.user_name = users.loc[users['code'] == unique_code, 'name'].values[0]
                     st.session_state.page = "assessment"  # Change to assessment page
-                    st.rerun()  # Rerun to refresh the view
+                    st.experimental_rerun()  # Rerun to refresh the view
                 else:
                     st.error("Invalid code. Please try again.")
             except ValueError:
