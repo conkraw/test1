@@ -53,6 +53,16 @@ if FIREBASE_KEY_JSON:
                 )
                 return response['choices'][0]['message']['content']
             else:
+                # Handle unknown medical inquiries as follows 
+                response = openai.ChatCompletion.create(
+                    model="gpt-3.5-turbo",
+                    messages=[
+                        {"role": "user", "content": user_input},
+                        {"role": "assistant", "content": "If you are asked a medical inquiry that you can not answer from the croup document, please state you do not know naturally."}
+                    ]
+                )
+                return response['choices'][0]['message']['content']    
+            else:
                 # Handle non-specific medical inquiries naturally
                 response = openai.ChatCompletion.create(
                     model="gpt-3.5-turbo",
