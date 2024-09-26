@@ -46,27 +46,26 @@ def welcome_page():
     st.write("Welcome to the Pediatric Clerkship Assessment!")
     st.write("This assessment is designed to evaluate your clinical reasoning skills.")
     st.write("### Instructions:")
-    st.write("1. Click 'Start Assessment' when you are ready.")
-    st.write("2. Enter your unique code on the next page.")
-    st.write("3. Follow the prompts to complete the assessment.")
+    st.write("1. Please enter your unique code on the next page.")
+    st.write("2. Follow the prompts to complete the assessment.")
     
-    if st.button("Start Assessment"):
+    if st.button("Next"):
         st.session_state.page = "login"  # Change to login page
-        st.rerun()  # Rerun to refresh the view
+        st.experimental_rerun()  # Rerun to refresh the view
 
 # Login page function
 def login_page(users):
     st.write("Please enter your unique code to access the assessment.")
     unique_code = st.text_input("Unique Code:")
     
-    if st.button("Next"):
+    if st.button("Submit"):
         if unique_code:
             try:
                 unique_code = int(unique_code.strip())
                 if unique_code in users['code'].values:
                     st.session_state.user_name = users.loc[users['code'] == unique_code, 'name'].values[0]
                     st.session_state.page = "assessment"  # Change to assessment page
-                    st.rerun()  # Rerun to refresh the view
+                    st.experimental_rerun()  # Rerun to refresh the view
                 else:
                     st.error("Invalid code. Please try again.")
             except ValueError:
@@ -103,4 +102,3 @@ def display_assessment():
 
 if __name__ == "__main__":
     main()
-
