@@ -107,6 +107,7 @@ else:
                         unique_code = int(unique_code.strip())
                         if unique_code in users['code'].values:
                             st.session_state.user_name = users.loc[users['code'] == unique_code, 'name'].values[0]
+                            st.session_state.unique_code = unique_code  # Store unique code in session state
                             st.session_state.page = "assessment"  # Change to assessment page
                             st.rerun()  # Rerun to refresh the view
                         else:
@@ -188,7 +189,7 @@ else:
                 # Button to upload data to Firebase
                 if st.button("Submit Assessment"):
                     entry = {
-                        'unique_code': unique_code,
+                        'unique_code': st.session_state.unique_code,  # Use the stored unique code
                         'heart_rate': heart_rate_checkbox,
                         'respiratory_rate': respiratory_rate_checkbox,
                         'blood_pressure': blood_pressure_checkbox,
