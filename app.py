@@ -1,49 +1,34 @@
 import streamlit as st
 
 # Instructions at the top
-st.markdown("""
-    ## Instructions
-    Please enter 5 diagnoses in the columns below. For each diagnosis, provide your assessment by selecting either "Support" or "Does not support" from the dropdown menu next to each row.
-""")
+st.title("Diagnosis Support Table")
+st.write("Please enter the diagnoses and select support options.")
 
-# Custom CSS to style the dropdowns and increase visibility
-st.markdown("""
-    <style>
-    .stSelectbox > div > div {
-        width: 100%;  /* Set dropdowns to take full width */
-        font-size: 10px; /* Decrease font size */
-    }
-    .css-1y2x8r0 {
-        width: 100%;  /* Set columns to take up most of the screen */
-    }
-    .css-1x8g58p {
-        max-width: 2000%; /* Ensure the main container is wide */
-    }
-    </style>
-    """, unsafe_allow_html=True)
+# Input for diagnoses
+diagnoses = []
+for i in range(5):  # Assuming 5 diagnoses
+    diagnosis = st.text_input(f"Diagnosis {i + 1}", key=f"diagnosis_{i}")
+    diagnoses.append(diagnosis)
 
-# Define fixed lists of diagnoses
-diagnoses = [f"Diagnosis {i+1}" for i in range(5)]  # 5 fixed diagnoses
+# Create the table
+cols = st.columns(len(diagnoses) + 1)  # Extra column for row headers
 
-# Create a header row for diagnoses
-cols = st.columns(len(diagnoses) + 1)
-for diagnosis, col in zip(diagnoses, cols[1:]):
-    with col:
-        st.write(diagnosis)
+# Center the headers using markdown
+for diagnosis in diagnoses:
+    st.markdown(f"<h4 style='text-align: center;'>{diagnosis}</h4>", unsafe_allow_html=True)
 
-# Create rows for user inputs and dropdowns
-for i in range(5):
+# Row inputs and dropdowns
+for i in range(5):  # Assuming 5 row headers
     cols = st.columns(len(diagnoses) + 1)
-    
-    with cols[0]:  # The first column is for row headers
-        st.text_input("", key=f"row_{i}", label_visibility="collapsed")  # Row header input without label
-
-    for diagnosis, col in zip(diagnoses, cols[1:]):  # The rest are dropdowns
+    with cols[0]:
+        row_header = st.text_input("", key=f"row_{i}")  # No label for row input
+    for diagnosis, col in zip(diagnoses, cols[1:]):
         with col:
-            # Ensure the key is unique by using row index and diagnosis name
-            st.selectbox("", options=["Supports", "Not Supported"], key=f"select_{i}_{diagnosis}",
+            st.selectbox("", options=["Support", "No Support"], key=f"select_{i}_{diagnosis}",
                           label_visibility="collapsed")
 
+# Set the table width to full
+st.markdown("<style>div[data-testid='stVerticalBlock'] { width: 100%; }</style>", unsafe_allow_html=True)
 
 
 
