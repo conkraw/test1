@@ -15,13 +15,13 @@ def main():
             "Cardiovascular", "Lungs", "Skin", "Abdomen", "Extremities",
             "Musculoskeletal", "Neurological", "Psychiatry", "Genitourinary"
         ]
-        selected_exams1 = st.multiselect("Select options:", options1)
+        selected_exams1 = st.multiselect("Select options:", options1, key="exam_selection_1")
 
     # Second prompt
     with col2:
         st.markdown("### Please select examinations necessary to confirm the most likely hypothesis and to discriminate between others.")
         # Checkbox options
-        selected_exams2 = st.multiselect("Select options:", options1)
+        selected_exams2 = st.multiselect("Select options:", options1, key="exam_selection_2")
 
     # Display selected options
     if selected_exams1 or selected_exams2:
