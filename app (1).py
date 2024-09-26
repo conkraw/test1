@@ -8,7 +8,7 @@ st.set_page_config(layout="wide")
 @st.cache_data
 def load_users():
     return pd.read_csv('users.csv')
-
+ 
 # Function to read text from a TXT file
 def read_text_file(txt_file_path):
     try:
