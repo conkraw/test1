@@ -130,7 +130,7 @@ def display_assessment():
     col1, col3 = st.columns([1, 2])  # Define three columns
 
     with col1:
-        heart_rate_checkbox = st.checkbox(f'HEART RATE:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{vital_signs.get("heart_rate", "N/A")}', key='heart_rate_checkbox')
+        heart_rate_checkbox = st.checkbox(f'HEART RATE:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{vital_signs.get("heart_rate", "N/A")}', key='heart_rate_checkbox')
         respiratory_rate_checkbox = st.checkbox(f'RESPIRATORY RATE:&nbsp;&nbsp;{vital_signs.get("respiratory_rate", "N/A")}', key='respiratory_rate_checkbox')
         blood_pressure_checkbox = st.checkbox(f'BLOOD PRESSURE:&nbsp;&nbsp;{vital_signs.get("blood_pressure", "N/A")}', key='blood_pressure_checkbox')
         pulseox_checkbox = st.checkbox(f'PULSE OXIMETRY:&nbsp;&nbsp;{vital_signs.get("pulseox", "N/A")}', key='pulseox_checkbox')
