@@ -5,7 +5,7 @@ import pandas as pd
 st.set_page_config(layout="wide")
 
 # Cache loading of users from CSV
-@st.cache_data
+@st.cache_data(persist=True)
 def load_users():
     return pd.read_csv('users.csv')
 
@@ -125,75 +125,14 @@ def display_assessment():
     """
     st.markdown(title_html, unsafe_allow_html=True)
 
-    # HTML table structure with checkboxes and values
-    table_html = """
-    <style>
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 10px;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            font-family: 'DejaVu Sans';
-            font-size: 18px;
-        }
-        th {
-            background-color: #f2f2f2;
-            text-align: left;
-        }
-    </style>
+    # Display the table with Streamlit checkboxes
+    st.markdown("<h4 style='font-family: \"DejaVu Sans\";'>Vital Signs:</h4>", unsafe_allow_html=True)
+    
+    for key in ['heart_rate', 'respiratory_rate', 'blood_pressure', 'pulseox', 'temperature', 'weight']:
+        value = vital_signs.get(key, 'N/A')
+        st.checkbox(f"{key.replace('_', ' ').capitalize()} Abnormal")
+        st.write(f"Value: {value}")
 
-    <table>
-        <tr>
-            <th>Abnormal</th>
-            <th>Vital Sign</th>
-            <th>Value</th>
-        </tr>
-        <tr>
-            <td><input type="checkbox" id="heart_rate_checkbox"></td>
-            <td>HEART RATE</td>
-            <td>{heart_rate}</td>
-        </tr>
-        <tr>
-            <td><input type="checkbox" id="respiratory_rate_checkbox"></td>
-            <td>RESPIRATORY RATE</td>
-            <td>{respiratory_rate}</td>
-        </tr>
-        <tr>
-            <td><input type="checkbox" id="blood_pressure_checkbox"></td>
-            <td>BLOOD PRESSURE</td>
-            <td>{blood_pressure}</td>
-        </tr>
-        <tr>
-            <td><input type="checkbox" id="pulseox_checkbox"></td>
-            <td>PULSE OXIMETRY</td>
-            <td>{pulseoximetry}</td>
-        </tr>
-        <tr>
-            <td><input type="checkbox" id="temperature_checkbox"></td>
-            <td>TEMPERATURE</td>
-            <td>{temperature}</td>
-        </tr>
-        <tr>
-            <td><input type="checkbox" id="weight_checkbox"></td>
-            <td>WEIGHT</td>
-            <td>{weight}</td>
-        </tr>
-    </table>
-    """.format(
-        heart_rate=vital_signs.get('heart_rate', 'N/A'),
-        respiratory_rate=vital_signs.get('respiratory_rate', 'N/A'),
-        blood_pressure=vital_signs.get('blood_pressure', 'N/A'),
-        pulseoximetry=vital_signs.get('pulseox', 'N/A'),
-        temperature=vital_signs.get('temperature', 'N/A'),
-        weight=vital_signs.get('weight', 'N/A')
-    )
-
-    # Display the table
-    st.markdown(table_html, unsafe_allow_html=True)
-
-
+# Run the main function
 if __name__ == "__main__":
     main()
