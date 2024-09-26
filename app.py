@@ -134,12 +134,25 @@ def display_assessment():
     col1, col3 = st.columns([1, 2])  # Define two columns
 
     with col1:
-        heart_rate_checkbox = st.checkbox(f'<b>HEART RATE:</b>&nbsp;&nbsp;{vital_signs.get("heart_rate", "N/A")}', key='heart_rate_checkbox', unsafe_allow_html=True)
-        respiratory_rate_checkbox = st.checkbox(f'<b>RESPIRATORY RATE:</b>&nbsp;&nbsp;{vital_signs.get("respiratory_rate", "N/A")}', key='respiratory_rate_checkbox', unsafe_allow_html=True)
-        blood_pressure_checkbox = st.checkbox(f'<b>BLOOD PRESSURE:</b>&nbsp;&nbsp;{vital_signs.get("blood_pressure", "N/A")}', key='blood_pressure_checkbox', unsafe_allow_html=True)
-        pulseox_checkbox = st.checkbox(f'<b>PULSE OXIMETRY:</b>&nbsp;&nbsp;{vital_signs.get("pulseox", "N/A")}', key='pulseox_checkbox', unsafe_allow_html=True)
-        temperature_checkbox = st.checkbox(f'<b>TEMPERATURE:</b>&nbsp;&nbsp;{vital_signs.get("temperature", "N/A")}', key='temperature_checkbox', unsafe_allow_html=True)
-        weight_checkbox = st.checkbox(f'<b>WEIGHT:</b>&nbsp;&nbsp;{vital_signs.get("weight", "N/A")}', key='weight_checkbox', unsafe_allow_html=True)
+    # Create a checkbox and use st.markdown for the label
+        heart_rate_checkbox = st.checkbox('', key='heart_rate_checkbox')
+        st.markdown(f"<b>HEART RATE:</b>&nbsp;&nbsp;{vital_signs.get('heart_rate', 'N/A')}", unsafe_allow_html=True)
+    
+        respiratory_rate_checkbox = st.checkbox('', key='respiratory_rate_checkbox')
+        st.markdown(f"<b>RESPIRATORY RATE:</b>&nbsp;&nbsp;{vital_signs.get('respiratory_rate', 'N/A')}", unsafe_allow_html=True)
+
+        blood_pressure_checkbox = st.checkbox('', key='blood_pressure_checkbox')
+        st.markdown(f"<b>BLOOD PRESSURE:</b>&nbsp;&nbsp;{vital_signs.get('blood_pressure', 'N/A')}", unsafe_allow_html=True)
+
+        pulseox_checkbox = st.checkbox('', key='pulseox_checkbox')
+        st.markdown(f"<b>PULSE OXIMETRY:</b>&nbsp;&nbsp;{vital_signs.get('pulseox', 'N/A')}", unsafe_allow_html=True)
+
+        temperature_checkbox = st.checkbox('', key='temperature_checkbox')
+        st.markdown(f"<b>TEMPERATURE:</b>&nbsp;&nbsp;{vital_signs.get('temperature', 'N/A')}", unsafe_allow_html=True)
+
+        weight_checkbox = st.checkbox('', key='weight_checkbox')
+        st.markdown(f"<b>WEIGHT:</b>&nbsp;&nbsp;{vital_signs.get('weight', 'N/A')}", unsafe_allow_html=True)
+
 
 
 if __name__ == "__main__":
