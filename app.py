@@ -12,10 +12,10 @@ st.markdown("""
         font-size: 5px; /* Increase font size for better visibility */
     }
     .css-1y2x8r0 {
-        width: 95%;  /* Set columns to take up most of the screen */
+        width: 100%;  /* Set columns to take up most of the screen */
     }
     .css-1x8g58p {
-        max-width: 95%; /* Ensure the main container is wide */
+        max-width: 100%; /* Ensure the main container is wide */
     }
     </style>
     """, unsafe_allow_html=True)
