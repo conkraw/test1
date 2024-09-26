@@ -1,8 +1,6 @@
-import pandas as pd
 import firebase_admin
 from firebase_admin import credentials, firestore
 import streamlit as st
-import os
 import json
 import openai
 from docx import Document
@@ -53,22 +51,12 @@ if FIREBASE_KEY_JSON:
                 )
                 return response['choices'][0]['message']['content']
             else:
-                # Handle unknown medical inquiries as follows 
+                # Handle unknown medical inquiries naturally
                 response = openai.ChatCompletion.create(
                     model="gpt-3.5-turbo",
                     messages=[
                         {"role": "user", "content": user_input},
-                        {"role": "assistant", "content": "If you are asked a medical inquiry that you can not answer from the croup document, please state you do not know naturally."}
-                    ]
-                )
-                return response['choices'][0]['message']['content']    
-            else:
-                # Handle non-specific medical inquiries naturally
-                response = openai.ChatCompletion.create(
-                    model="gpt-3.5-turbo",
-                    messages=[
-                        {"role": "user", "content": user_input},
-                        {"role": "assistant", "content": "As a concerned parent, please answer the question naturally."}
+                        {"role": "assistant", "content": "If you cannot answer the medical inquiry from the croup document, please respond naturally as a concerned parent."}
                     ]
                 )
                 return response['choices'][0]['message']['content']
@@ -123,7 +111,6 @@ if FIREBASE_KEY_JSON:
         st.error(f"Error initializing Firebase: {e}")
 else:
     st.error("FIREBASE_KEY environment variable not set.")
-
 
 
 
