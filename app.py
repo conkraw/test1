@@ -131,27 +131,27 @@ def display_assessment():
             <td style="border: 1px solid #000; text-align: center;">VALUES</td>
         </tr>
         <tr>
-            <td style="border: 1px solid #000; text-align: center;">Heart Rate</td>
+            <td style="border: 1px solid #000; text-align: center;">HEART RATE:</td>
             <td style="border: 1px solid #000; text-align: center;">{vital_signs.get('heart_rate', 'N/A')}</td>
         </tr>
         <tr>
-            <td style="border: 1px solid #000; text-align: center;">Respiratory Rate</td>
+            <td style="border: 1px solid #000; text-align: center;">RESPIRATORY RATE:</td>
             <td style="border: 1px solid #000; text-align: center;">{vital_signs.get('respiratory_rate', 'N/A')}</td>
         </tr>
         <tr>
-            <td style="border: 1px solid #000; text-align: center;">Blood Pressure</td>
+            <td style="border: 1px solid #000; text-align: center;">BLOOD PRESSURE:</td>
             <td style="border: 1px solid #000; text-align: center;">{vital_signs.get('blood_pressure', 'N/A')}</td>
         </tr>
         <tr>
-            <td style="border: 1px solid #000; text-align: center;">Pulse Oximetry</td>
+            <td style="border: 1px solid #000; text-align: center;">PULSE OXIMETRY:</td>
             <td style="border: 1px solid #000; text-align: center;">{vital_signs.get('pulseox', 'N/A')}</td>
         </tr>
         <tr>
-            <td style="border: 1px solid #000; text-align: center;">Temperature</td>
+            <td style="border: 1px solid #000; text-align: center;">TEMPERATURE:</td>
             <td style="border: 1px solid #000; text-align: center;">{vital_signs.get('temperature', 'N/A')}</td>
         </tr>
         <tr>
-            <td style="border: 1px solid #000; text-align: center;">Weight</td>
+            <td style="border: 1px solid #000; text-align: center;">WEIGHT:</td>
             <td style="border: 1px solid #000; text-align: center;">{vital_signs.get('weight', 'N/A')}</td>
         </tr>
     </table>
