@@ -1,7 +1,7 @@
 import streamlit as st
 import openai
 from docx import Document
-import time  # Import the time module
+import time
 
 # Function to read the croup document
 def read_croup_doc():
@@ -20,7 +20,7 @@ openai.api_key = st.secrets["OPENAI_API_KEY"]
 # Function to get response from ChatGPT
 def get_chatgpt_response(user_input):
     response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",  # Adjust model as needed
+        model="gpt-3.5-turbo",
         messages=[
             {"role": "user", "content": user_input},
             {"role": "assistant", "content": "I am a virtual patient experiencing croup. Please ask me questions about my symptoms."}
@@ -40,20 +40,21 @@ st.info(
 
 # Session state to track time and session status
 if 'start_time' not in st.session_state:
-    st.session_state.start_time = time.time()  # Use time.time() for current timestamp
+    st.session_state.start_time = time.time()
 
 # Calculate elapsed time
 elapsed_time = (time.time() - st.session_state.start_time) / 60  # Convert to minutes
 
 # Display patient information
 if elapsed_time < 15:
-    user_input = st.text_input("Ask the virtual patient a question about their symptoms:")
+    with st.form("question_form"):
+        user_input = st.text_input("Ask the virtual patient a question about their symptoms:")
+        submit_button = st.form_submit_button("Submit")
 
-    if st.button("Submit"):
-        # Call the OpenAI API
-        if user_input:
+        if submit_button and user_input:
             virtual_patient_response = get_chatgpt_response(user_input)
             st.write(f"Virtual Patient: {virtual_patient_response}")
+
 else:
     st.warning("Session time is up. Please end the session.")
     if st.button("End Session"):
