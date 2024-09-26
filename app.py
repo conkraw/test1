@@ -42,11 +42,10 @@ def main():
 
 # Welcome page function
 def welcome_page():
-    st.write("Welcome to the Pediatric Clerkship Assessment!")
-    st.write("This assessment is designed to evaluate your clinical reasoning skills.")
-    st.write("### Instructions:")
-    st.write("1. Please enter your unique code on the next page.")
-    st.write("2. Follow the prompts to complete the assessment.")
+    st.markdown("<h3 style='font-family: \"DejaVu Sans\";'>Welcome to the Pediatric Clerkship Assessment!</h3>", unsafe_allow_html=True)
+    st.markdown("<p style='font-family: \"DejaVu Sans\";'>This assessment is designed to evaluate your clinical reasoning skills.</p>", unsafe_allow_html=True)
+    st.markdown("<h4 style='font-family: \"DejaVu Sans\";'>Instructions:</h4>", unsafe_allow_html=True)
+    st.markdown("<p style='font-family: \"DejaVu Sans\";'>1. Please enter your unique code on the next page.<br>2. Follow the prompts to complete the assessment.</p>", unsafe_allow_html=True)
     
     if st.button("Next"):
         st.session_state.page = "login"  # Change to login page
@@ -54,7 +53,7 @@ def welcome_page():
 
 # Login page function
 def login_page(users):
-    st.write("Please enter your unique code to access the assessment.")
+    st.markdown("<p style='font-family: \"DejaVu Sans\";'>Please enter your unique code to access the assessment.</p>", unsafe_allow_html=True)
     unique_code = st.text_input("Unique Code:")
     
     if st.button("Submit"):
@@ -74,7 +73,7 @@ def login_page(users):
 
 # Function to display the assessment page
 def display_assessment():
-    st.write(f"Welcome {st.session_state.user_name}! Here is the intake form.")
+    st.markdown(f"<h3 style='font-family: \"DejaVu Sans\";'>Welcome {st.session_state.user_name}! Here is the intake form.</h3>", unsafe_allow_html=True)
 
     # Read and display the text from ptinfo.txt
     txt_file_path = "ptinfo.txt"
@@ -97,11 +96,9 @@ def display_assessment():
     else:
         st.write("No text found in the document.")
 
-    st.subheader("")
-
     # Patient Vital Signs Table
     st.markdown("""
-    <table style="border-collapse: collapse; width: 100%;">
+    <table style="border-collapse: collapse; width: 100%; font-family: 'DejaVu Sans';">
         <tr>
             <td colspan="3" style="border: 1px solid #000; text-align: center; font-weight: bold; font-size: 20px;">
                 PATIENT VITAL SIGNS
