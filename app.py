@@ -17,16 +17,14 @@ def main():
         "Musculoskeletal", "Neurological", "Psychiatry", "Genitourinary"
     ]
     
-    # Layout for the first prompt
-    col1, col2 = st.columns(2)
-    
-    with col1:
-        selected_exams1 = st.multiselect("Select options:", options1, key="exclude_exams")
+    # First prompt with multiselect
+    selected_exams1 = st.multiselect("Select options:", options1, key="exclude_exams")
 
+    # Second prompt
     st.markdown("<h5>Please select examinations necessary to confirm the most likely hypothesis and to discriminate between others:</h5>", unsafe_allow_html=True)
-
-    with col2:
-        selected_exams2 = st.multiselect("Select options:", options1, key="confirm_exams")
+    
+    # Second multiselect
+    selected_exams2 = st.multiselect("Select options:", options1, key="confirm_exams")
 
     if st.button("Submit"):
         st.success(f"Examinations selected to exclude hypotheses: {selected_exams1}")
