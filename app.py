@@ -29,7 +29,7 @@ def get_chatgpt_response(user_input):
     return response['choices'][0]['message']['content']
 
 # Streamlit app layout
-st.title("Virtual Patient: Croup")
+st.title("Virtual Patient: Case #1")
 
 # Instructions for the user
 st.info(
