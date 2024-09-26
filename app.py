@@ -1,6 +1,6 @@
 import streamlit as st
 
-# Initialize session state for diagnoses and table visibility
+# Initialize session state for diagnoses and submission status
 if 'diagnoses' not in st.session_state:
     st.session_state.diagnoses = [""] * 5  # Initialize with empty strings for 5 diagnoses
 if 'submitted' not in st.session_state:
@@ -26,8 +26,8 @@ if not st.session_state.submitted:
         diagnoses = [d.strip() for d in st.session_state.diagnoses]  # Strip whitespace
         if all(diagnosis for diagnosis in diagnoses):
             if len(diagnoses) == len(set(diagnoses)):  # Check for duplicates
-                st.success("Thank you for your input!")
                 st.session_state.submitted = True  # Move to the assessment table
+                st.rerun()  # Rerun the app to clear the inputs and show the table
             else:
                 st.error("Please enter unique diagnoses. Duplicate entries are not allowed.")
         else:
