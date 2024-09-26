@@ -167,7 +167,7 @@ else:
 
                     # Checkboxes for vital signs
                     heart_rate = vital_signs.get("heart_rate", "N/A")
-                    heart_rate_checkbox = st.checkbox(f"HEART RATE: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{heart_rate}", key='heart_rate_checkbox')
+                    heart_rate_checkbox = st.checkbox(f"HEART RATE: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{heart_rate}", key='heart_rate_checkbox')
 
                     respiratory_rate = vital_signs.get("respiratory_rate", "N/A")
                     respiratory_rate_checkbox = st.checkbox(f"RESPIRATORY RATE: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{respiratory_rate}", key='respiratory_rate_checkbox')
