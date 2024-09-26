@@ -1,29 +1,31 @@
 import streamlit as st
-import pandas as pd
 
-## Initialize parameter inputs
-x_list = {"Parameter": [*"abcd"]}
-x_list["Values"] = [0.5] * len(x_list["Parameter"])
+with st.sidebar:
+    NX = st.number_input("Number columns", 1, 10, 4, 1)
+    NY = st.number_input("Number rows", 1, 10, 3, 1)
 
-y_list = {"Parameter": [*"xyz"]}
-y_list["Values"] = [0.5] * len(y_list["Parameter"])
+## Define list of parameters 
+x_list = [*"abcdefghij"][:NX]
+y_list = [*"xyzmnpqrst"][:NY]
 
-## Display input space
-cols = st.columns(2)
-with cols[0]:
-    "## Rows"
-    x_data = st.data_editor(x_list, use_container_width=True, num_rows='dynamic')
+## Write the first row of number inputs
+cols = st.columns(len(x_list) + 1)
+for x, col in zip(x_list, cols[1:]):
+    with col:
+        st.number_input(f"${x}$", 0.0, 1.0, 0.5, 0.1, key=x)
 
-with cols[1]:
-    "## Columns"
-    y_data = st.data_editor(y_list, use_container_width=True, num_rows='dynamic')
+"****"
 
-## Combine
-x_times_y = [ [f"({x}, {y})" for x in x_data["Values"]] for y in y_data["Values"] ]
-
-## Display result
-df = pd.DataFrame(x_times_y, columns=x_data["Parameter"])
-df.index = y_data["Parameter"]
-
-"## Product"
-st.dataframe(df, use_container_width=True)
+## For each new row, start with a number input and 
+## write the the corresponding product
+for y in y_list:
+    cols = st.columns(len(x_list) + 1)
+    with cols[0]:  # The first column is an input field
+        st.number_input(f"${y}$", 0.0, 1.0, 0.5, 0.1, key=y)
+    
+for x, col in zip(x_list, cols[1:]):  # The rest of the columns are for results
+        with col:
+            xval = st.session_state[x]
+            yval = st.session_state[y]
+            st.metric(f"$({x},{y})$", f"({xval:.1f},{yval:.1f})")
+    "****"
