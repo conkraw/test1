@@ -18,11 +18,17 @@ def display_selected_component(selected_component):
         if text:
             # Extract and display the relevant section
             component_texts = text.split('\n\n')  # Assuming sections are separated by double newlines
+            found = False
+            
             for component_text in component_texts:
                 if selected_component.lower() in component_text.lower():
                     st.markdown(f"### {selected_component}\n")
-                    st.markdown(component_text)
+                    st.markdown(component_text)  # Display the full text for the matched component
+                    found = True
                     break
+            
+            if not found:
+                st.write("No text available for the selected component.")
         else:
             st.write("No text available for the selected component.")
 
