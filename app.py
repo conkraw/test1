@@ -132,7 +132,7 @@ def display_assessment():
     # Create columns
 col1, col2 = st.columns(2)
 
-with col1:
+if vital_signs:
     # Create checkboxes with corresponding vital signs displayed
     heart_rate_checkbox = st.checkbox(f'HEART RATE: {vital_signs.get("heart_rate", "N/A")}', key='heart_rate_checkbox')
     respiratory_rate_checkbox = st.checkbox(f'RESPIRATORY RATE: {vital_signs.get("respiratory_rate", "N/A")}', key='respiratory_rate_checkbox')
@@ -140,7 +140,8 @@ with col1:
     pulseox_checkbox = st.checkbox(f'PULSE OXIMETRY: {vital_signs.get("pulseox", "N/A")}', key='pulseox_checkbox')
     temperature_checkbox = st.checkbox(f'TEMPERATURE: {vital_signs.get("temperature", "N/A")}', key='temperature_checkbox')
     weight_checkbox = st.checkbox(f'WEIGHT: {vital_signs.get("weight", "N/A")}', key='weight_checkbox')
-
+else:
+    st.error("Vital signs data is not available.")
 
 if __name__ == "__main__":
     main()
