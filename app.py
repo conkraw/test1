@@ -29,8 +29,8 @@ def load_vital_signs(vital_signs_file):
             for line in file:
                 parts = line.strip().split(',')
                 if len(parts) == 2:
-                    key = parts[0].strip()  # Get type
-                    value = parts[1].strip()  # Get vital sign
+                    key = parts[0].strip()  # Get type (e.g., heart_rate)
+                    value = parts[1].strip()  # Get vital sign description
                     vital_signs[key] = value
     except FileNotFoundError:
         st.error(f"File not found: {vital_signs_file}. Please check the file path.")
@@ -119,7 +119,7 @@ def display_assessment():
     vital_signs = load_vital_signs(vital_signs_file)
 
     # Patient Vital Signs Table
-    table_html = """
+    table_html = f"""
     <table style="border-collapse: collapse; width: 100%; font-family: 'DejaVu Sans';">
         <tr>
             <td colspan="3" style="border: 1px solid #000; text-align: center; font-weight: bold; font-size: 20px;">
@@ -133,27 +133,27 @@ def display_assessment():
         </tr>
         <tr>
             <td style="border: 1px solid #000; text-align: center;">Heart Rate</td>
-            <td style="border: 1px solid #000; text-align: center;">{vital_signs.get('heart_rate', 'Value 3')}</td>
+            <td style="border: 1px solid #000; text-align: center;">{vital_signs.get('heart_rate', 'N/A')}</td>
         </tr>
         <tr>
             <td style="border: 1px solid #000; text-align: center;">Respiratory Rate</td>
-            <td style="border: 1px solid #000; text-align: center;">{vital_signs.get('respiratory_rate', 'Value 6')}</td>
+            <td style="border: 1px solid #000; text-align: center;">{vital_signs.get('respiratory_rate', 'N/A')}</td>
         </tr>
         <tr>
             <td style="border: 1px solid #000; text-align: center;">Blood Pressure</td>
-            <td style="border: 1px solid #000; text-align: center;">{vital_signs.get('blood_pressure', 'Value 9')}</td>
+            <td style="border: 1px solid #000; text-align: center;">{vital_signs.get('blood_pressure', 'N/A')}</td>
         </tr>
         <tr>
             <td style="border: 1px solid #000; text-align: center;">Pulse Oximetry</td>
-            <td style="border: 1px solid #000; text-align: center;">{vital_signs.get('pulseox', 'Value 12')}</td>
+            <td style="border: 1px solid #000; text-align: center;">{vital_signs.get('pulseox', 'N/A')}</td>
         </tr>
         <tr>
             <td style="border: 1px solid #000; text-align: center;">Temperature</td>
-            <td style="border: 1px solid #000; text-align: center;">{vital_signs.get('temperature', 'Value 15')}</td>
+            <td style="border: 1px solid #000; text-align: center;">{vital_signs.get('temperature', 'N/A')}</td>
         </tr>
         <tr>
             <td style="border: 1px solid #000; text-align: center;">Weight</td>
-            <td style="border: 1px solid #000; text-align: center;">{vital_signs.get('weight', 'Value 18')}</td>
+            <td style="border: 1px solid #000; text-align: center;">{vital_signs.get('weight', 'N/A')}</td>
         </tr>
     </table>
     """
