@@ -131,7 +131,6 @@ def display_assessment():
         weight_checkbox = st.checkbox('WEIGHT')
 
     with col2:
-        st.markdown("**VITAL SIGNS**")
         st.markdown("HEART RATE:")
         st.markdown("RESPIRATORY RATE:")
         st.markdown("BLOOD PRESSURE:")
