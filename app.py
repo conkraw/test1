@@ -128,16 +128,14 @@ def display_assessment():
     # Adjust subheader to match font and size, and reduce spacing
     st.markdown("<h4 style='font-family: \"DejaVu Sans\"; font-size: 18px; margin: -20px 0 0 0;'>&nbsp;Of the following vital signs within the intake form, check the vital signs that are abnormal.</h4>", unsafe_allow_html=True)
 
-
-    
     # Patient Vital Signs Table
     col1, col3 = st.columns([1, 2])  # Define two columns
 
     with col1:
-    # Create a checkbox and use st.markdown for the label
+        # Create checkboxes and use st.markdown for the labels
         heart_rate_checkbox = st.checkbox('', key='heart_rate_checkbox')
         st.markdown(f"<b>HEART RATE:</b>&nbsp;&nbsp;{vital_signs.get('heart_rate', 'N/A')}", unsafe_allow_html=True)
-    
+
         respiratory_rate_checkbox = st.checkbox('', key='respiratory_rate_checkbox')
         st.markdown(f"<b>RESPIRATORY RATE:</b>&nbsp;&nbsp;{vital_signs.get('respiratory_rate', 'N/A')}", unsafe_allow_html=True)
 
@@ -152,8 +150,6 @@ def display_assessment():
 
         weight_checkbox = st.checkbox('', key='weight_checkbox')
         st.markdown(f"<b>WEIGHT:</b>&nbsp;&nbsp;{vital_signs.get('weight', 'N/A')}", unsafe_allow_html=True)
-
-
 
 if __name__ == "__main__":
     main()
