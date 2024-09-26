@@ -90,6 +90,7 @@ def login_page(users):
             st.error("Please enter a code.")
 
 # Function to display the assessment page
+# Function to display the assessment page
 def display_assessment():
     st.markdown(f"<h3 style='font-family: \"DejaVu Sans\";'>Welcome {st.session_state.user_name}! Here is the intake form.</h3>", unsafe_allow_html=True)
 
@@ -126,29 +127,26 @@ def display_assessment():
     """
     st.markdown(title_html, unsafe_allow_html=True)
 
-    # Patient Vital Signs Table
-    col1, col2 = st.columns([1, 2])  # Define three columns
+    # Create a list to hold vital sign data
+    vital_signs_data = []
+    
+    # Define the vital signs with descriptions
+    descriptions = ["Heart Rate", "Respiratory Rate", "Blood Pressure", "Pulse Oximetry", "Temperature", "Weight"]
 
-    with col1:
-        st.markdown("**VITAL SIGNS**")
-        #st.markdown("<div style='display: flex; flex-direction: column; align-items: center;'>", unsafe_allow_html=True)
-        st.checkbox('HEART RATE:f"{vital_signs.get('heart_rate', 'N/A')}', key='heart_rate_checkbox')
-        st.checkbox('RESPIRATORY RATE:', key='respiratory_rate_checkbox')
-        st.checkbox('BLOOD PRESSURE:', key='blood_pressure_checkbox')
-        st.checkbox('PULSE OXIMETRY:', key='pulseox_checkbox')
-        st.checkbox('TEMPERATURE:', key='temperature_checkbox')
-        st.checkbox('WEIGHT:', key='weight_checkbox')
-        st.markdown("</div>", unsafe_allow_html=True)
+    # Create a row for each vital sign
+    for description in descriptions:
+        check_key = f"{description.lower().replace(' ', '_')}_checkbox"
+        value = vital_signs.get(description.lower().replace(' ', '_'), 'N/A')
+        # Properly format the checkbox with a description and value
+        vital_signs_data.append([st.checkbox('', key=check_key), description, value])
 
-    with col2:
-        st.markdown("**VALUES**")
-        #st.markdown("<div style='display: flex; flex-direction: column; align-items: center;'>", unsafe_allow_html=True)
-        st.markdown(f"{vital_signs.get('heart_rate', 'N/A')}")
-        st.markdown(f"{vital_signs.get('respiratory_rate', 'N/A')}")
-        st.markdown(f"{vital_signs.get('blood_pressure', 'N/A')}")
-        st.markdown(f"{vital_signs.get('pulseox', 'N/A')}")
-        st.markdown(f"{vital_signs.get('temperature', 'N/A')}")
-        st.markdown(f"{vital_signs.get('weight', 'N/A')}")
+    # Create a DataFrame and display it as a table
+    vital_signs_df = pd.DataFrame(vital_signs_data, columns=['Checkbox', 'Vital Sign', 'Value'])
+    st.table(vital_signs_df.style.set_table_attributes('style="border-collapse: collapse; width: 100%;"').set_properties(**{'border': '1px solid black'}))
+
+if __name__ == "__main__":
+    main()
+
 
 if __name__ == "__main__":
     main()
