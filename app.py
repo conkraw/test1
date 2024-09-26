@@ -8,7 +8,7 @@ st.markdown("""
         padding: 2px;  /* Add padding to improve visibility */
     }
     .stButton, .stNumberInput, .stSelectbox {
-        font-size: 18px; /* Increase font size for better visibility */
+        font-size: 5px; /* Increase font size for better visibility */
     }
     .css-1y2x8r0 {
         width: 95%;  /* Set columns to take up most of the screen */
