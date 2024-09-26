@@ -13,7 +13,7 @@ st.title("")
 if not st.session_state.submitted:
     st.markdown("""
         ## DIFFERENTIAL DIAGNOSIS
-        Based on the information provided in the above case, please provide 5 possible diagnoses that you would consider when prompted by your attending? Please do not provide duplicate diagnoses. 
+        Based on the information provided in the above case, please provide 5 possible diagnoses that you would consider when prompted by your attending? Please do not provide duplicate diagnoses.
     """)
 
     # Create text input fields for each diagnosis
@@ -47,8 +47,12 @@ if st.session_state.submitted:
             width: 100%;  /* Set dropdowns to take full width */
             font-size: 12px; /* Decrease font size */
         }
-        .css-1y2x8r0 {
-            width: 5000%; /* Adjust this value to control overall table width */
+        .stColumns > div {
+            flex: 1; /* Allow columns to take equal space */
+            min-width: 150px; /* Set minimum width for better spacing */
+        }
+        .css-1x8g58p {
+            max-width: none; /* Remove any max-width restrictions */
         }
         </style>
     """, unsafe_allow_html=True)
