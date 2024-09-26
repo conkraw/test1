@@ -44,7 +44,7 @@ if FIREBASE_KEY_JSON:
                 model="gpt-3.5-turbo",
                 messages=[
                     {"role": "user", "content": user_input},
-                    {"role": "assistant", "content": "You are a parent whose child is experiencing croup. Answer the questions as a parent would. Do not tell the doctor that your child has croup."}
+                    {"role": "assistant", "content": "You are a parent whose child is experiencing croup. Answer the history questions as a parent would. You will be asked physical examination questions, please provide the findings. Do not tell the doctor that your child has croup."}
                 ]
             )
             return response['choices'][0]['message']['content']
