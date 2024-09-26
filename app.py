@@ -28,7 +28,7 @@ def display_selected_component(selected_component):
 
 # Function to check and display an image if present
 def display_image(base_image_name):
-    image_extensions = ['.png', '.jpg', '.jpeg', '.gif', '.bmp', '.tiff']
+    image_extensions = ['.png', '.jpg', '.jpeg', '.gif', '.bmp', '.tiff','.PNG','.JPG','.JPEG','.GIF','.BMP','.TIFF']
     image_found = False
 
     for ext in image_extensions:
