@@ -6,11 +6,15 @@ if 'diagnoses' not in st.session_state:
 if 'show_table' not in st.session_state:
     st.session_state.show_table = False
 
+# Sidebar for navigation
+st.sidebar.title("Navigation")
+page = st.sidebar.radio("Select a page:", ("Input Diagnoses", "Assessment Table"))
+
 # Title of the app
 st.title("Diagnosis Input and Assessment")
 
 # Input Section
-if not st.session_state.show_table:
+if page == "Input Diagnoses":
     st.markdown("""
         ## Instructions
         Please enter 5 diagnoses based on what you know about the case.
@@ -34,7 +38,7 @@ if not st.session_state.show_table:
             st.error("Please enter all 5 diagnoses.")
 
 # Assessment Table Section
-if st.session_state.show_table:
+if page == "Assessment Table" and st.session_state.show_table:
     st.markdown("### Assessment Table")
 
     # Custom CSS to style the dropdowns
@@ -65,6 +69,5 @@ if st.session_state.show_table:
                 # Ensure the key is unique by using row index and diagnosis name
                 st.selectbox("", options=["Support", "Does not support"], key=f"select_{i}_{diagnosis}",
                               label_visibility="collapsed")
-
 
 
