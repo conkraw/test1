@@ -132,6 +132,7 @@ def display_assessment():
             <td style="border: 1px solid #000; text-align: center;font-weight: bold; background-color: lightblue; ">VALUES</td>
         </tr>
         <tr>
+            <td style="border: 1px solid #000; text-align: center;font-weight: bold;"></td>
             <td style="border: 1px solid #000; text-align: center;font-weight: bold;">HEART RATE:</td>
             <td style="border: 1px solid #000; text-align: center;">{vital_signs.get('heart_rate', 'N/A')}</td>
         </tr>
