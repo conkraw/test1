@@ -135,25 +135,27 @@ def display_assessment():
 
         with col1:
             # Indent labels and checkboxes
-            indent_html = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"  # Adjust the number of &nbsp; for more or less indentation
+            st.markdown("<div style='margin-left: 20px;'>", unsafe_allow_html=True)  # Indent using a div
 
             heart_rate = vital_signs.get("heart_rate", "N/A")
-            st.checkbox(f"{indent_html}HEART RATE: {heart_rate}", key='heart_rate_checkbox')
+            st.checkbox(f"HEART RATE: {heart_rate}", key='heart_rate_checkbox')
 
             respiratory_rate = vital_signs.get("respiratory_rate", "N/A")
-            st.checkbox(f"{indent_html}RESPIRATORY RATE: {respiratory_rate}", key='respiratory_rate_checkbox')
+            st.checkbox(f"RESPIRATORY RATE: {respiratory_rate}", key='respiratory_rate_checkbox')
 
             blood_pressure = vital_signs.get("blood_pressure", "N/A")
-            st.checkbox(f"{indent_html}BLOOD PRESSURE: {blood_pressure}", key='blood_pressure_checkbox')
+            st.checkbox(f"BLOOD PRESSURE: {blood_pressure}", key='blood_pressure_checkbox')
 
             pulseox = vital_signs.get("pulseox", "N/A")
-            st.checkbox(f"{indent_html}PULSE OXIMETRY: {pulseox}", key='pulseox_checkbox')
+            st.checkbox(f"PULSE OXIMETRY: {pulseox}", key='pulseox_checkbox')
 
             temperature = vital_signs.get("temperature", "N/A")
-            st.checkbox(f"{indent_html}TEMPERATURE: {temperature}", key='temperature_checkbox')
+            st.checkbox(f"TEMPERATURE: {temperature}", key='temperature_checkbox')
 
             weight = vital_signs.get("weight", "N/A")
-            st.checkbox(f"{indent_html}WEIGHT: {weight}", key='weight_checkbox')
+            st.checkbox(f"WEIGHT: {weight}", key='weight_checkbox')
+
+            st.markdown("</div>", unsafe_allow_html=True)  # Close the div
     else:
         st.error("No vital signs data available.")
 
