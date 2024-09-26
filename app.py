@@ -75,22 +75,21 @@ def login_page(users):
 
 # Function to display the assessment page
 def display_assessment():
-    # Read and display the text from ptinfo.docx
+    st.write(f"Welcome {st.session_state.user_name}! Here is the assessment.")
+
     docx_file_path = "ptinfo.docx"
     document_text = read_word_text(docx_file_path)
     
     if document_text:
-        # Custom HTML for "Patient Information" title
         title_html = """
-        <h2 style="font-family: 'DejaVu Sans'; font-size: 24px; margin-bottom: 10px;">
+        <h2 style="font-family: 'DejaVu Sans'; font-size: 24px; margin-bottom: 10px; color: #2c3e50;">
             Patient Information:
         </h2>
         """
         st.markdown(title_html, unsafe_allow_html=True)
 
-        # Use markdown with HTML for custom font and size for document text
         custom_html = f"""
-        <div style="font-family: 'DejaVu Sans'; font-size: 18px;">
+        <div style="font-family: 'DejaVu Sans'; font-size: 18px; line-height: 1.5; color: #34495e; background-color: #ecf0f1; padding: 15px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
             {document_text.replace('\n', '<br>')}
         </div>
         """
