@@ -135,7 +135,7 @@ def display_assessment():
 
         with col1:
             # Indent labels and checkboxes
-            indent_html = "&nbsp;&nbsp;&nbsp;"  # Adjust the number of &nbsp; for more or less indentation
+            indent_html = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"  # Adjust the number of &nbsp; for more or less indentation
 
             heart_rate = vital_signs.get("heart_rate", "N/A")
             st.checkbox(f"{indent_html}HEART RATE: {heart_rate}", key='heart_rate_checkbox')
