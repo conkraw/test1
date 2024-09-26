@@ -138,7 +138,7 @@ def display_assessment():
             st.markdown("<div style='margin-left: 20px;'>", unsafe_allow_html=True)  # Indent using a div
 
             heart_rate = vital_signs.get("heart_rate", "N/A")
-            st.checkbox(f"HEART RATE: {heart_rate}", key='heart_rate_checkbox')
+            st.checkbox(f"HEART RATE: &nbsp;&nbsp;&nbsp;{heart_rate}", key='heart_rate_checkbox')
 
             respiratory_rate = vital_signs.get("respiratory_rate", "N/A")
             st.checkbox(f"RESPIRATORY RATE: {respiratory_rate}", key='respiratory_rate_checkbox')
