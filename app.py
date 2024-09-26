@@ -3,18 +3,14 @@ import streamlit as st
 # Initialize session state for diagnoses and table visibility
 if 'diagnoses' not in st.session_state:
     st.session_state.diagnoses = [""] * 5  # Initialize with empty strings for 5 diagnoses
-if 'show_table' not in st.session_state:
-    st.session_state.show_table = False
-
-# Sidebar for navigation
-st.sidebar.title("Navigation")
-page = st.sidebar.radio("Select a page:", ("Input Diagnoses", "Assessment Table"))
+if 'submitted' not in st.session_state:
+    st.session_state.submitted = False
 
 # Title of the app
 st.title("Diagnosis Input and Assessment")
 
 # Input Section
-if page == "Input Diagnoses":
+if not st.session_state.submitted:
     st.markdown("""
         ## Instructions
         Please enter 5 diagnoses based on what you know about the case.
@@ -31,14 +27,14 @@ if page == "Input Diagnoses":
         if all(diagnosis for diagnosis in diagnoses):
             if len(diagnoses) == len(set(diagnoses)):  # Check for duplicates
                 st.success("Thank you for your input!")
-                st.session_state.show_table = True
+                st.session_state.submitted = True  # Move to the assessment table
             else:
                 st.error("Please enter unique diagnoses. Duplicate entries are not allowed.")
         else:
             st.error("Please enter all 5 diagnoses.")
 
 # Assessment Table Section
-if page == "Assessment Table" and st.session_state.show_table:
+if st.session_state.submitted:
     st.markdown("### Assessment Table")
 
     # Custom CSS to style the dropdowns
@@ -69,5 +65,4 @@ if page == "Assessment Table" and st.session_state.show_table:
                 # Ensure the key is unique by using row index and diagnosis name
                 st.selectbox("", options=["Support", "Does not support"], key=f"select_{i}_{diagnosis}",
                               label_visibility="collapsed")
-
 
