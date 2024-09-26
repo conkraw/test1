@@ -39,7 +39,7 @@ def main():
         # Add a button to start the assessment
         if st.button("Start Assessment"):
             st.session_state.show_assessment = True  # Set a flag to show the assessment page
-            st.experimental_rerun()  # Rerun the app to show the new content
+            st.rerun()  # Rerun the app to show the new content
 
     else:
         st.write("Welcome! Please enter your unique code to access the assessment.")
@@ -54,7 +54,7 @@ def main():
                     if unique_code in users['code'].values:
                         st.session_state.user_name = users.loc[users['code'] == unique_code, 'name'].values[0]
                         # Rerun to display the welcome page and instructions
-                        st.experimental_rerun()
+                        st.rerun()
                     else:
                         st.error("Invalid code. Please try again.")
                 except ValueError:
