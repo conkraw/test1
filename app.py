@@ -132,7 +132,7 @@ else:
                 entry = {
                     'diagnoses': st.session_state.diagnoses,
                     'historical_features': st.session_state.historical_features,
-                    'assessments': assessments
+                    'hx_assessments': assessments
                 }
 
                 # Debugging: Check what will be uploaded
