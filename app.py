@@ -10,7 +10,7 @@ st.markdown("""
         font-size: 18px; /* Increase font size for better visibility */
     }
     .css-1y2x8r0 {
-        width: 95%;  /* Set columns to take up most of the screen */
+        width: 115%;  /* Set columns to take up most of the screen */
     }
     .css-1x8g58p {
         max-width: 95%; /* Ensure the main container is wide */
