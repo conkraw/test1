@@ -40,6 +40,5 @@ for row in row_headers:
             selection = st.selectbox("", options=["Support", "Does not support"], key=f"{row}_{diagnosis}", 
                                       label_visibility="collapsed")
 
-# Add a footer or any additional information if needed
-st.markdown("## Support Matrix")
+
 
