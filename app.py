@@ -41,7 +41,7 @@ else:
             st.session_state.physical_examination_features = [""] * 5
 
         # Title of the app
-        st.title("Differential Diagnosis App")
+        st.title("")
 
         # Diagnoses Page
         if st.session_state.current_page == "diagnoses":
