@@ -1,5 +1,8 @@
 import streamlit as st
 
+# Set the page layout to wide
+st.set_page_config(layout="wide")
+
 # Initialize session state for diagnoses and submission status
 if 'diagnoses' not in st.session_state:
     st.session_state.diagnoses = [""] * 5  # Initialize with empty strings for 5 diagnoses
@@ -47,13 +50,6 @@ if st.session_state.submitted:
             width: 100%;  /* Set dropdowns to take full width */
             font-size: 12px; /* Decrease font size */
         }
-        .css-1x8g58p {
-            max-width: none; /* Remove any max-width restrictions */
-        }
-        .stColumns > div {
-            width: 200px; /* Set a fixed width for columns */
-            min-width: 200px; /* Minimum width for columns */
-        }
         </style>
     """, unsafe_allow_html=True)
 
@@ -75,4 +71,5 @@ if st.session_state.submitted:
                 # Ensure the key is unique by using row index and diagnosis name
                 st.selectbox("", options=["Supports", "Does not support"], key=f"select_{i}_{diagnosis}",
                               label_visibility="collapsed")
+
 
