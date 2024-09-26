@@ -11,8 +11,15 @@ def load_users():
 
 # Function to read text from a TXT file
 def read_text_file(txt_file_path):
-    with open(txt_file_path, 'r') as file:
-        return file.read()
+    try:
+        with open(txt_file_path, 'r') as file:
+            return file.read()
+    except FileNotFoundError:
+        st.error(f"File not found: {txt_file_path}. Please check the file path.")
+        return ""
+    except Exception as e:
+        st.error(f"An error occurred: {e}")
+        return ""
 
 # Main app function
 def main():
@@ -43,7 +50,7 @@ def welcome_page():
     
     if st.button("Next"):
         st.session_state.page = "login"  # Change to login page
-        st.rerun()  # Rerun to refresh the view
+        st.experimental_rerun()  # Rerun to refresh the view
 
 # Login page function
 def login_page(users):
@@ -57,7 +64,7 @@ def login_page(users):
                 if unique_code in users['code'].values:
                     st.session_state.user_name = users.loc[users['code'] == unique_code, 'name'].values[0]
                     st.session_state.page = "assessment"  # Change to assessment page
-                    st.rerun()  # Rerun to refresh the view
+                    st.experimental_rerun()  # Rerun to refresh the view
                 else:
                     st.error("Invalid code. Please try again.")
             except ValueError:
@@ -90,8 +97,9 @@ def display_assessment():
     else:
         st.write("No text found in the document.")
 
-     st.markdown("""
-     <table style="border-collapse: collapse; width: 100%;">
+    # Patient Vital Signs Table
+    st.markdown("""
+    <table style="border-collapse: collapse; width: 100%;">
         <tr>
             <td colspan="3" style="border: 1px solid #000; text-align: center; font-weight: bold; font-size: 20px;">
                 PATIENT VITAL SIGNS
@@ -139,7 +147,6 @@ def display_assessment():
         </tr>
     </table>
     """, unsafe_allow_html=True)
-
 
 if __name__ == "__main__":
     main()
