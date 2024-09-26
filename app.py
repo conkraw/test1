@@ -123,12 +123,12 @@ def display_assessment():
     col1, col2, col3 = st.columns([1, 2, 2])  # Define three columns
 
     with col1:
-        heart_rate_checkbox = st.checkbox(' ')
-        respiratory_rate_checkbox = st.checkbox(' ')
-        blood_pressure_checkbox = st.checkbox(' ')
-        pulseox_checkbox = st.checkbox(' ')
-        temperature_checkbox = st.checkbox(' ')
-        weight_checkbox = st.checkbox(' ')
+        heart_rate_checkbox = st.checkbox('', key='heart_rate_checkbox')
+        respiratory_rate_checkbox = st.checkbox('', key='respiratory_rate_checkbox')
+        blood_pressure_checkbox = st.checkbox('', key='blood_pressure_checkbox')
+        pulseox_checkbox = st.checkbox('', key='pulseox_checkbox')
+        temperature_checkbox = st.checkbox('', key='temperature_checkbox')
+        weight_checkbox = st.checkbox('', key='weight_checkbox')
 
     with col2:
         st.markdown("HEART RATE:")
