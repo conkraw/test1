@@ -53,7 +53,7 @@ if FIREBASE_KEY_JSON:
                 )
                 return response['choices'][0]['message']['content']
             else:
-                return "I'm here to help. What would you like to know?"
+                return "I'm just a concerned parent. What would you like to ask about my child?"
 
         # Function to upload data to Firebase
         def upload_to_firebase(question, response):
