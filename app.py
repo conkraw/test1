@@ -119,7 +119,7 @@ def display_assessment():
     vital_signs = load_vital_signs(vital_signs_file)
 
     # Patient Vital Signs Table
-    st.write("### VITAL SIGNS")
+    st.write("### Vital Signs:")
     col1, col2, col3 = st.columns([1, 2, 2])  # Define three columns
 
     with col1:
