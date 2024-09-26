@@ -27,7 +27,7 @@ if not st.session_state.submitted:
         if all(diagnosis for diagnosis in diagnoses):
             if len(diagnoses) == len(set(diagnoses)):  # Check for duplicates
                 st.session_state.submitted = True  # Move to the assessment table
-                st.experimental_rerun()  # Rerun the app to clear the inputs and show the table
+                st.rerun()  # Rerun the app to clear the inputs and show the table
             else:
                 st.error("Please do not provide duplicate diagnoses.")
         else:
