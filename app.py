@@ -125,9 +125,6 @@ def display_assessment():
             <td colspan="2" style="border: 1px solid #000; text-align: center; font-weight: bold; font-size: 20px;">
                 VITAL SIGNS
             </td>
-            <td style="border: 1px solid #000; text-align: center; font-weight: bold; font-size: 20px;">
-                VALUES
-            </td>
         </tr>
         <tr>
             <td style="border: 1px solid #000; text-align: center;">Heart Rate</td>
