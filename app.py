@@ -144,29 +144,34 @@ else:
                     )
 
                     if st.button("Change Diagnosis"):
-                        change_index = st.session_state.diagnoses.index(diagnosis_to_change)
-                        st.session_state.diagnoses[change_index] = new_diagnosis
+                        if new_diagnosis in st.session_state.diagnoses:
+                            st.error("This diagnosis is already in your list! Please choose a different one.")
+                        else:
+                            change_index = st.session_state.diagnoses.index(diagnosis_to_change)
+                            st.session_state.diagnoses[change_index] = new_diagnosis
 
                 # Create columns for each diagnosis input
-                cols = st.columns(len(st.session_state.diagnoses) + 1)
+                unique_diagnoses = list(set(st.session_state.diagnoses))  # Ensure unique diagnoses
+                cols = st.columns(len(unique_diagnoses) + 1)
                 with cols[0]:
                     st.markdown("Laboratory Features")
 
-                for diagnosis, col in zip(st.session_state.diagnoses, cols[1:]):
+                for diagnosis, col in zip(unique_diagnoses, cols[1:]):
                     with col:
                         st.markdown(diagnosis)
 
                 for i in range(5):
-                    cols = st.columns(len(st.session_state.diagnoses) + 1)
+                    cols = st.columns(len(unique_diagnoses) + 1)
                     with cols[0]:
                         st.session_state.laboratory_features[i] = st.text_input("", key=f"lab_row_{i}", label_visibility="collapsed")
 
-                    for diagnosis, col in zip(st.session_state.diagnoses, cols[1:]):
+                    for diagnosis in unique_diagnoses:
+                        key = f"select_{i}_{diagnosis}_lab"
                         with col:
                             st.selectbox(
                                 "",
                                 options=["", "Supports", "Does not support"],
-                                key=f"select_{i}_{diagnosis}_lab",
+                                key=key,
                                 label_visibility="collapsed"
                             )
 
@@ -174,7 +179,7 @@ else:
                 if st.button("Submit Laboratory Features"):
                     assessments = {}
                     for i in range(5):
-                        for diagnosis in st.session_state.diagnoses:
+                        for diagnosis in unique_diagnoses:
                             assessment = st.session_state[f"select_{i}_{diagnosis}_lab"]
                             if diagnosis not in assessments:
                                 assessments[diagnosis] = []
@@ -185,7 +190,7 @@ else:
 
                     # Prepare the entry for Firebase
                     entry = {
-                        'updated_diagnoses': st.session_state.diagnoses,
+                        'updated_diagnoses': unique_diagnoses,
                         'laboratory_features': st.session_state.laboratory_features,
                         'lab_assessments': assessments
                     }
@@ -195,4 +200,5 @@ else:
 
     except Exception as e:
         st.error(f"Error initializing Firebase: {e}")
+
 
