@@ -41,8 +41,6 @@ else:
             st.session_state.current_page = "diagnoses"
         if 'diagnoses' not in st.session_state:
             st.session_state.diagnoses = [""] * 5
-        if 'prioritized_diagnoses' not in st.session_state:
-            st.session_state.prioritized_diagnoses = []
 
         # Title of the app
         st.title("Differential Diagnosis Tool")
@@ -86,24 +84,18 @@ else:
         elif st.session_state.current_page == "prioritize":
             st.markdown("""
                 ## PRIORITIZE YOUR DIAGNOSES
-                Please prioritize your diagnoses by selecting their order.
+                Please rank your diagnoses from 1 to 5.
             """)
 
-            prioritized_diagnoses = []
-            for i in range(5):
-                selected_diagnosis = st.selectbox(
-                    f"Select Diagnosis {i + 1}",
-                    options=st.session_state.prioritized_diagnoses,
-                    index=0 if i == 0 else None,
-                    key=f"priority_{i}"
-                )
-                prioritized_diagnoses.append(selected_diagnosis)
-                # Remove selected diagnosis from options to avoid duplicates
-                st.session_state.prioritized_diagnoses.remove(selected_diagnosis)
+            rankings = {}
+            for diagnosis in st.session_state.prioritized_diagnoses:
+                rank = st.selectbox(f"Rank for {diagnosis}", options=range(1, 6), key=diagnosis)
+                rankings[diagnosis] = rank
 
-            if st.button("Submit Prioritization"):
+            # Button to submit rankings
+            if st.button("Submit Rankings"):
                 entry = {
-                    'prioritized_diagnoses': prioritized_diagnoses
+                    'ranked_diagnoses': sorted(rankings.items(), key=lambda x: x[1])  # Sort by rank
                 }
                 result = upload_to_firebase(entry)
                 st.success(result)
@@ -111,7 +103,6 @@ else:
                 # Reset for the next round
                 st.session_state.current_page = "diagnoses"
                 st.session_state.diagnoses = [""] * 5  # Reset for the next round
-                st.session_state.prioritized_diagnoses = []
                 st.rerun()  # Rerun to refresh the app
 
     except Exception as e:
