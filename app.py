@@ -44,8 +44,6 @@ else:
             st.session_state.current_page = "diagnoses"
         if 'diagnoses' not in st.session_state:
             st.session_state.diagnoses = [""] * 5
-        if 'laboratory_features' not in st.session_state:
-            st.session_state.laboratory_features = [""] * 5
 
         # Load diagnoses from file after Firebase initialization
         dx_options = read_diagnoses_from_file()
@@ -64,9 +62,8 @@ else:
             # Create a search input for diagnoses
             for i in range(5):
                 current_diagnosis = st.session_state.diagnoses[i]
-                if current_diagnosis not in dx_options:
-                    current_diagnosis = ""  # Default to blank if not found
 
+                # Search input for diagnosis
                 search_input = st.text_input(
                     f"Diagnosis {i + 1}",
                     value=current_diagnosis,
@@ -74,19 +71,14 @@ else:
                 )
 
                 # Filter options based on the search input
-                if search_input:
-                    filtered_options = [dx for dx in dx_options if search_input.lower() in dx.lower()]
-                else:
-                    filtered_options = []
+                filtered_options = [dx for dx in dx_options if search_input.lower() in dx.lower()] if search_input else []
 
                 # Display filtered options
                 if filtered_options:
                     st.write("**Suggestions:**")
                     for option in filtered_options[:5]:  # Show a maximum of 5 options
                         if st.button(option, key=f"select_{i}_{option}"):
-                            st.session_state.diagnoses[i] = option
-                            # Clear the search input when an option is selected
-                            st.session_state[f"diagnosis_search_{i}"] = option
+                            st.session_state.diagnoses[i] = option  # Update the diagnosis directly
 
                 # Automatically update the diagnosis if it matches
                 if search_input in dx_options:
@@ -184,4 +176,5 @@ else:
 
     except Exception as e:
         st.error(f"Error initializing Firebase: {e}")
+
 
