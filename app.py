@@ -110,6 +110,7 @@ else:
             with st.sidebar:
                 st.subheader("Reorder Diagnoses")
 
+                # Update reorder options based on current diagnoses
                 selected_diagnosis = st.selectbox(
                     "Select a diagnosis to move",
                     options=st.session_state.diagnoses,
@@ -193,5 +194,4 @@ else:
 
     except Exception as e:
         st.error(f"Error initializing Firebase: {e}")
-
 
