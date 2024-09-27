@@ -54,7 +54,7 @@ else:
         if st.session_state.current_page == "diagnoses":
             st.markdown("""
                 ## DIFFERENTIAL DIAGNOSIS
-                Please select 5 possible diagnoses you would consider. Do not provide duplicates.
+                Based on the information that been subsequently provided in the above case, please review your initial differential diagnosis list and update it as necessary. 
             """)
 
             # Load diagnoses from file
