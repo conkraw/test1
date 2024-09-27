@@ -86,18 +86,22 @@ else:
         elif st.session_state.current_page == "prioritize":
             st.markdown("""
                 ## PRIORITIZE YOUR DIAGNOSES
-                Please rank your diagnoses from 1 to 5.
+                Please rank your diagnoses as follows:
             """)
 
+            rank_options = ["Most Likely", "Second Most Likely", "Third Most Likely", "Fourth Most Likely", "Least Likely"]
             rankings = {}
+            used_ranks = set()
+
             for diagnosis in st.session_state.prioritized_diagnoses:
-                rank = st.selectbox(f"Rank for {diagnosis}", options=range(1, 6), key=diagnosis)
+                rank = st.selectbox(f"Rank for {diagnosis}", options=[rank for rank in rank_options if rank not in used_ranks], key=diagnosis)
                 rankings[diagnosis] = rank
+                used_ranks.add(rank)
 
             # Button to submit rankings
             if st.button("Submit Rankings"):
                 entry = {
-                    'ranked_diagnoses': {diagnosis: rank for diagnosis, rank in sorted(rankings.items(), key=lambda x: x[1])}  # Create a dictionary for ranked diagnoses
+                    'ranked_diagnoses': rankings  # Create a dictionary for ranked diagnoses
                 }
                 result = upload_to_firebase(entry)
                 st.success(result)  # Display success message
@@ -110,6 +114,5 @@ else:
 
     except Exception as e:
         st.error(f"Error initializing Firebase: {e}")
-
 
 
