@@ -45,7 +45,7 @@ else:
             st.session_state.prioritized_diagnoses = []
 
         # Title of the app
-        st.title("Diagnosis Prioritization Tool")
+        st.title("Differential Diagnosis Tool")
 
         # Diagnoses Page
         if st.session_state.current_page == "diagnoses":
@@ -56,7 +56,7 @@ else:
 
             # Load diagnoses from file
             dx_options = read_diagnoses_from_file()
-            dx_options.insert(0, "")  # Add an empty option
+            dx_options.insert(0, "") 
             
             # Create columns for each diagnosis input
             cols = st.columns(5)
@@ -74,9 +74,8 @@ else:
                 diagnoses = [d.strip() for d in st.session_state.diagnoses]
                 if all(diagnosis for diagnosis in diagnoses):
                     if len(diagnoses) == len(set(diagnoses)):
-                        # Move to prioritization page
-                        st.session_state.current_page = "prioritize"
-                        st.session_state.prioritized_diagnoses = diagnoses  # Store diagnoses for prioritization
+                        st.session_state.current_page = "prioritize"  # Move to Prioritization page
+                        st.session_state.prioritized_diagnoses = diagnoses.copy()  # Save for prioritization
                         st.rerun()  # Rerun the app to refresh the page
                     else:
                         st.error("Please do not provide duplicate diagnoses.")
@@ -87,21 +86,24 @@ else:
         elif st.session_state.current_page == "prioritize":
             st.markdown("""
                 ## PRIORITIZE YOUR DIAGNOSES
-                Drag and drop to reorder your diagnoses.
+                Please prioritize your diagnoses by selecting their order.
             """)
 
-            # Create a reorderable list
-            sorted_diagnoses = st.session_state.prioritized_diagnoses.copy()
-            diagnoses_df = pd.DataFrame(sorted_diagnoses, columns=["Diagnoses"])
-            reordered_diagnoses = st.data_editor(
-                diagnoses_df,
-                use_container_width=True,
-                hide_index=True
-            )
+            prioritized_diagnoses = []
+            for i in range(5):
+                selected_diagnosis = st.selectbox(
+                    f"Select Diagnosis {i + 1}",
+                    options=st.session_state.prioritized_diagnoses,
+                    index=0 if i == 0 else None,
+                    key=f"priority_{i}"
+                )
+                prioritized_diagnoses.append(selected_diagnosis)
+                # Remove selected diagnosis from options to avoid duplicates
+                st.session_state.prioritized_diagnoses.remove(selected_diagnosis)
 
             if st.button("Submit Prioritization"):
                 entry = {
-                    'diagnoses': reordered_diagnoses['Diagnoses'].tolist()
+                    'prioritized_diagnoses': prioritized_diagnoses
                 }
                 result = upload_to_firebase(entry)
                 st.success(result)
