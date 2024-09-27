@@ -46,10 +46,6 @@ else:
             st.session_state.diagnoses = [""] * 5
         if 'laboratory_features' not in st.session_state:
             st.session_state.laboratory_features = [""] * 5
-        if 'selected_diagnosis' not in st.session_state:
-            st.session_state.selected_diagnosis = ""
-        if 'update_saved' not in st.session_state:
-            st.session_state.update_saved = False
 
         # Title of the app
         st.title("")
@@ -100,32 +96,19 @@ else:
                 # Reorder section in the sidebar
                 with st.sidebar:
                     st.subheader("Reorder Diagnoses")
-                    
-                    # Maintain the diagnosis selection
-                    st.session_state.selected_diagnosis = st.selectbox(
+                    selected_diagnosis = st.selectbox(
                         "Select a diagnosis to move",
                         options=st.session_state.diagnoses,
-                        key="move_diagnosis",
-                        index=st.session_state.diagnoses.index(st.session_state.selected_diagnosis) if st.session_state.selected_diagnosis in st.session_state.diagnoses else 0
+                        key="move_diagnosis"
                     )
-                    
                     move_direction = st.radio("Adjust Priority:", options=["Higher Priority", "Lower Priority"], key="move_direction")
 
                     if st.button("Adjust Priority"):
-                        idx = st.session_state.diagnoses.index(st.session_state.selected_diagnosis)
+                        idx = st.session_state.diagnoses.index(selected_diagnosis)
                         if move_direction == "Higher Priority" and idx > 0:
                             st.session_state.diagnoses[idx], st.session_state.diagnoses[idx - 1] = st.session_state.diagnoses[idx - 1], st.session_state.diagnoses[idx]
                         elif move_direction == "Lower Priority" and idx < len(st.session_state.diagnoses) - 1:
                             st.session_state.diagnoses[idx], st.session_state.diagnoses[idx + 1] = st.session_state.diagnoses[idx + 1], st.session_state.diagnoses[idx]
-                        
-                        # Only upload if the update hasn't been saved yet
-                        if not st.session_state.update_saved:
-                            entry = {
-                                'updated_diagnoses': st.session_state.diagnoses
-                            }
-                            result = upload_to_firebase(entry)
-                            st.success(result)
-                            st.session_state.update_saved = True  # Set the flag to indicate the update has been saved
 
                 # Create columns for each diagnosis input
                 cols = st.columns(len(st.session_state.diagnoses) + 1)
@@ -150,6 +133,7 @@ else:
                                 label_visibility="collapsed"
                             )
 
+                # Submit button for laboratory features
                 if st.button("Submit Laboratory Features"):
                     assessments = {}
                     for i in range(5):
@@ -162,7 +146,7 @@ else:
                                 'assessment': assessment
                             })
 
-                    # Prepare the entry for Firebase with the new key for diagnoses
+                    # Prepare the entry for Firebase
                     entry = {
                         'updated_diagnoses': st.session_state.diagnoses,
                         'laboratory_features': st.session_state.laboratory_features,
