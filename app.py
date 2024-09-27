@@ -138,6 +138,20 @@ else:
                     # Update selected diagnosis to maintain its reference
                     st.session_state.selected_diagnosis = selected_diagnosis
 
+                # Search to change a diagnosis
+                st.subheader("Change a Diagnosis")
+                change_search_input = st.text_input("Search for a diagnosis to change", "")
+                if change_search_input:
+                    change_filtered_options = [dx for dx in dx_options if change_search_input.lower() in dx.lower()]
+                    if change_filtered_options:
+                        st.write("**Available Options:**")
+                        for option in change_filtered_options:
+                            if st.button(option):
+                                # Change selected diagnosis to the new one
+                                index_to_change = st.session_state.diagnoses.index(st.session_state.selected_diagnosis)
+                                st.session_state.diagnoses[index_to_change] = option
+                                st.session_state.selected_diagnosis = option  # Update the selected diagnosis
+
             # Create columns for each diagnosis input
             cols = st.columns(len(st.session_state.diagnoses) + 1)
             with cols[0]:
@@ -186,3 +200,4 @@ else:
 
     except Exception as e:
         st.error(f"Error initializing Firebase: {e}")
+
