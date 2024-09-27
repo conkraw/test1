@@ -49,6 +49,10 @@ else:
             st.session_state.diagnoses = [""] * 5
         if 'laboratory_testing' not in st.session_state:
             st.session_state.laboratory_testing = [""] * 5
+        if 'radiological_tests' not in st.session_state:
+            st.session_state.radiological_tests = [""] * 5
+        if 'other_tests' not in st.session_state:
+            st.session_state.other_tests = [""] * 5
 
         # Title of the app
         st.title("Differential Diagnosis Tool")
@@ -92,10 +96,8 @@ else:
 
         # Laboratory Testing Page
         elif st.session_state.current_page == "laboratory_testing":
-            st.markdown("""
-                ### LABORATORY TESTING
-                For each laboratory, radiological, or other diagnostic study that you have chosen, please describe how they would influence your differential diagnsosis. 
-            """)
+            st.markdown("### LABORATORY TESTING")
+            st.write("For each laboratory test that you have chosen, please describe how they would influence your differential diagnosis.")
 
             cols = st.columns(len(st.session_state.diagnoses) + 1)
             with cols[0]:
@@ -132,7 +134,7 @@ else:
                         })
 
                 entry = {
-                    'diagnoses': st.session_state.diagnoses,  # Key for uploaded diagnoses
+                    'diagnoses': st.session_state.diagnoses,
                     'laboratory_testing': st.session_state.laboratory_testing,
                     'lab_assessments': assessments
                 }
@@ -140,6 +142,112 @@ else:
                 result = upload_to_firebase(entry)
                 st.success(result)
 
+                # Move to Radiological Tests page
+                st.session_state.current_page = "radiological_tests"
+                st.rerun()  # Rerun the app to refresh the page
+
+        # Radiological Tests Page
+        elif st.session_state.current_page == "radiological_tests":
+            st.markdown("### RADIOLOGICAL TESTS")
+            st.write("For each radiological test that you have chosen, please describe how they would influence your differential diagnosis.")
+
+            cols = st.columns(len(st.session_state.diagnoses) + 1)
+            with cols[0]:
+                st.markdown("Radiological Tests")
+
+            for diagnosis, col in zip(st.session_state.diagnoses, cols[1:]):
+                with col:
+                    st.markdown(diagnosis)
+
+            for i in range(5):
+                cols = st.columns(len(st.session_state.diagnoses) + 1)
+                with cols[0]:
+                    st.session_state.radiological_tests[i] = st.text_input("", key=f"radio_test_row_{i}", label_visibility="collapsed")
+
+                for diagnosis, col in zip(st.session_state.diagnoses, cols[1:]):
+                    with col:
+                        st.selectbox(
+                            "",
+                            options=["", "Supports", "Does not support"],
+                            key=f"select_{i}_{diagnosis}_radio",
+                            label_visibility="collapsed"
+                        )
+
+            if st.button("Submit Radiological Tests"):
+                assessments = {}
+                for i in range(5):
+                    for diagnosis in st.session_state.diagnoses:
+                        assessment = st.session_state[f"select_{i}_{diagnosis}_radio"]
+                        if diagnosis not in assessments:
+                            assessments[diagnosis] = []
+                        assessments[diagnosis].append({
+                            'radiological_test': st.session_state.radiological_tests[i],
+                            'assessment': assessment
+                        })
+
+                entry = {
+                    'diagnoses': st.session_state.diagnoses,
+                    'radiological_tests': st.session_state.radiological_tests,
+                    'radio_assessments': assessments
+                }
+
+                result = upload_to_firebase(entry)
+                st.success(result)
+
+                # Move to Other Tests page
+                st.session_state.current_page = "other_tests"
+                st.rerun()  # Rerun the app to refresh the page
+
+        # Other Tests Page
+        elif st.session_state.current_page == "other_tests":
+            st.markdown("### OTHER TESTS")
+            st.write("For each other test that you have chosen, please describe how they would influence your differential diagnosis.")
+
+            cols = st.columns(len(st.session_state.diagnoses) + 1)
+            with cols[0]:
+                st.markdown("Other Tests")
+
+            for diagnosis, col in zip(st.session_state.diagnoses, cols[1:]):
+                with col:
+                    st.markdown(diagnosis)
+
+            for i in range(5):
+                cols = st.columns(len(st.session_state.diagnoses) + 1)
+                with cols[0]:
+                    st.session_state.other_tests[i] = st.text_input("", key=f"other_test_row_{i}", label_visibility="collapsed")
+
+                for diagnosis, col in zip(st.session_state.diagnoses, cols[1:]):
+                    with col:
+                        st.selectbox(
+                            "",
+                            options=["", "Supports", "Does not support"],
+                            key=f"select_{i}_{diagnosis}_other",
+                            label_visibility="collapsed"
+                        )
+
+            if st.button("Submit Other Tests"):
+                assessments = {}
+                for i in range(5):
+                    for diagnosis in st.session_state.diagnoses:
+                        assessment = st.session_state[f"select_{i}_{diagnosis}_other"]
+                        if diagnosis not in assessments:
+                            assessments[diagnosis] = []
+                        assessments[diagnosis].append({
+                            'other_test': st.session_state.other_tests[i],
+                            'assessment': assessment
+                        })
+
+                entry = {
+                    'diagnoses': st.session_state.diagnoses,
+                    'other_tests': st.session_state.other_tests,
+                    'other_assessments': assessments
+                }
+
+                result = upload_to_firebase(entry)
+                st.success(result)
+
     except Exception as e:
         st.error(f"Error initializing Firebase: {e}")
+``
+
 
