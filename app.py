@@ -20,8 +20,8 @@ st.set_page_config(layout="wide")
 # Load Firebase credentials from environment variable
 FIREBASE_KEY_JSON = os.getenv('FIREBASE_KEY')
 
-if FIREBASE_KEY_JSON is None:
-    st.error("FIREBASE_KEY environment variable not set.")
+if FIREBASE_KEY_JSON is None or FIREBASE_KEY_JSON == "":
+    st.error("FIREBASE_KEY environment variable not set or is empty.")
 else:
     try:
         # Parse the JSON string into a dictionary
@@ -63,8 +63,15 @@ else:
             dx_options = read_diagnoses_from_file()
             dx_options.insert(0, "")  # Add a blank option at the beginning
 
+            # Debugging output
+            st.write("Diagnoses:", st.session_state.diagnoses)
+            st.write("Diagnosis options:", dx_options)
+
             # Create a draggable list for diagnoses
             for i in range(5):
+                # Ensure valid selection
+                if st.session_state.diagnoses[i] not in dx_options:
+                    st.session_state.diagnoses[i] = ""  # Default to blank if not found
                 st.session_state.diagnoses[i] = st.selectbox(
                     f"Diagnosis {i + 1}",
                     options=dx_options,
