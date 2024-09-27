@@ -89,17 +89,18 @@ else:
                 Please provide up to 5 laboratory features that influence the differential diagnosis.
             """)
 
-            # Draggable functionality for column headers
-            st.subheader("Reorder Diagnoses")
-            selected_diagnosis = st.selectbox("Select a diagnosis to move", options=st.session_state.diagnoses, key="move_diagnosis")
-            move_direction = st.radio("Move Diagnosis:", options=["Up", "Down"], key="move_direction")
+            # Reorder section in the sidebar
+            with st.sidebar:
+                st.subheader("Reorder Diagnoses")
+                selected_diagnosis = st.selectbox("Select a diagnosis to move", options=st.session_state.diagnoses, key="move_diagnosis")
+                move_direction = st.radio("Adjust Priority:", options=["Higher Priority", "Lower Priority"], key="move_direction")
 
-            if st.button("Move Diagnosis"):
-                idx = st.session_state.diagnoses.index(selected_diagnosis)
-                if move_direction == "Up" and idx > 0:
-                    st.session_state.diagnoses[idx], st.session_state.diagnoses[idx - 1] = st.session_state.diagnoses[idx - 1], st.session_state.diagnoses[idx]
-                elif move_direction == "Down" and idx < len(st.session_state.diagnoses) - 1:
-                    st.session_state.diagnoses[idx], st.session_state.diagnoses[idx + 1] = st.session_state.diagnoses[idx + 1], st.session_state.diagnoses[idx]
+                if st.button("Adjust Priority"):
+                    idx = st.session_state.diagnoses.index(selected_diagnosis)
+                    if move_direction == "Higher Priority" and idx > 0:
+                        st.session_state.diagnoses[idx], st.session_state.diagnoses[idx - 1] = st.session_state.diagnoses[idx - 1], st.session_state.diagnoses[idx]
+                    elif move_direction == "Lower Priority" and idx < len(st.session_state.diagnoses) - 1:
+                        st.session_state.diagnoses[idx], st.session_state.diagnoses[idx + 1] = st.session_state.diagnoses[idx + 1], st.session_state.diagnoses[idx]
 
             # Create columns for each diagnosis input
             cols = st.columns(len(st.session_state.diagnoses) + 1)
@@ -148,4 +149,5 @@ else:
 
     except Exception as e:
         st.error(f"Error initializing Firebase: {e}")
+
 
