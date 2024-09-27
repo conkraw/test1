@@ -1,4 +1,3 @@
-import pandas as pd
 import firebase_admin
 from firebase_admin import credentials, firestore
 import streamlit as st
@@ -60,19 +59,15 @@ else:
 
             # Load diagnoses from file
             dx_options = read_diagnoses_from_file()
-            st.write("Diagnoses loaded from file:", dx_options)  # Debugging output
             dx_options.insert(0, "")  # Add a blank option at the beginning
 
             # Create columns for each diagnosis input
             cols = st.columns(5)
             for i, col in enumerate(cols):
                 with col:
-                    # Filter out already selected diagnoses from options
-                    available_options = [option for option in dx_options if option not in st.session_state.diagnoses[:i]]
-
                     st.session_state.diagnoses[i] = st.selectbox(
                         f"Diagnosis {i + 1}",
-                        options=available_options,
+                        options=dx_options,
                         index=0,  # Default to the blank option
                         key=f"diagnosis_{i}"
                     )
@@ -142,3 +137,4 @@ else:
 
     except Exception as e:
         st.error(f"Error initializing Firebase: {e}")
+
