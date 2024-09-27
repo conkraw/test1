@@ -61,16 +61,16 @@ else:
             dx_options.insert(0, "") 
             
             # Create columns for each diagnosis input
-                cols = st.columns(5)
-                for i, col in enumerate(cols):
-                    with col:
-                    # Filter out already selected diagnoses from options
-                    available_options = [option for option in dx_options if option not in st.session_state.diagnoses[:i]]
-                    st.session_state.diagnoses[i] = st.selectbox(
-                        f"Diagnosis {i + 1}",
-                        options=available_options,
-                        index=0,  # Default to the blank option
-                        key=f"diagnosis_{i}"
+            cols = st.columns(5)
+            for i, col in enumerate(cols):
+                with col:
+                # Filter out already selected diagnoses from options
+                available_options = [option for option in dx_options if option not in st.session_state.diagnoses[:i]]
+                st.session_state.diagnoses[i] = st.selectbox(
+                    f"Diagnosis {i + 1}",
+                    options=available_options,
+                    index=0,  # Default to the blank option
+                    key=f"diagnosis_{i}"
                 )
 
             # Button to submit the diagnoses
