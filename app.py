@@ -130,9 +130,6 @@ else:
                             # Swap with the next diagnosis
                             st.session_state.diagnoses[idx], st.session_state.diagnoses[idx + 1] = st.session_state.diagnoses[idx + 1], st.session_state.diagnoses[idx]
 
-                        # Re-select the adjusted diagnosis
-                        st.session_state.diagnoses[idx], st.session_state.diagnoses[idx + (1 if move_direction == "Lower Priority" else -1)] = st.session_state.diagnoses[idx + (1 if move_direction == "Lower Priority" else -1)], st.session_state.diagnoses[idx]
-
                 # Create columns for each diagnosis input
                 cols = st.columns(len(st.session_state.diagnoses) + 1)
                 with cols[0]:
