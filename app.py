@@ -45,7 +45,7 @@ else:
         if 'diagnoses' not in st.session_state:
             st.session_state.diagnoses = [""] * 5
         if 'laboratory_features' not in st.session_state:
-            st.session_state.laboratory_features = [""] * 5  # Initialize laboratory_features
+            st.session_state.laboratory_features = [""] * 5
 
         # Load diagnoses from file after Firebase initialization
         dx_options = read_diagnoses_from_file()
@@ -130,6 +130,9 @@ else:
                             # Swap with the next diagnosis
                             st.session_state.diagnoses[idx], st.session_state.diagnoses[idx + 1] = st.session_state.diagnoses[idx + 1], st.session_state.diagnoses[idx]
 
+                        # Re-select the adjusted diagnosis
+                        st.session_state.diagnoses[idx], st.session_state.diagnoses[idx + (1 if move_direction == "Lower Priority" else -1)] = st.session_state.diagnoses[idx + (1 if move_direction == "Lower Priority" else -1)], st.session_state.diagnoses[idx]
+
                 # Create columns for each diagnosis input
                 cols = st.columns(len(st.session_state.diagnoses) + 1)
                 with cols[0]:
@@ -178,7 +181,6 @@ else:
 
     except Exception as e:
         st.error(f"Error initializing Firebase: {e}")
-
 
 
 
