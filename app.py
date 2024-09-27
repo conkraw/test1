@@ -95,7 +95,7 @@ else:
             # Button to submit rankings
             if st.button("Submit Rankings"):
                 entry = {
-                    'ranked_diagnoses': sorted(rankings.items(), key=lambda x: x[1])  # Sort by rank
+                    'ranked_diagnoses': {diagnosis: rank for diagnosis, rank in sorted(rankings.items(), key=lambda x: x[1])}  # Create a dictionary for ranked diagnoses
                 }
                 result = upload_to_firebase(entry)
                 st.success(result)
@@ -107,4 +107,5 @@ else:
 
     except Exception as e:
         st.error(f"Error initializing Firebase: {e}")
+
 
