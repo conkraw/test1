@@ -115,6 +115,13 @@ else:
                             st.session_state.diagnoses[idx], st.session_state.diagnoses[idx - 1] = st.session_state.diagnoses[idx - 1], st.session_state.diagnoses[idx]
                         elif move_direction == "Lower Priority" and idx < len(st.session_state.diagnoses) - 1:
                             st.session_state.diagnoses[idx], st.session_state.diagnoses[idx + 1] = st.session_state.diagnoses[idx + 1], st.session_state.diagnoses[idx]
+                        
+                        # Upload the updated diagnoses to Firebase
+                        entry = {
+                            'updated_diagnoses': st.session_state.diagnoses
+                        }
+                        result = upload_to_firebase(entry)
+                        st.success(result)
 
                 # Create columns for each diagnosis input
                 cols = st.columns(len(st.session_state.diagnoses) + 1)
