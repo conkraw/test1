@@ -46,7 +46,9 @@ else:
             st.session_state.diagnoses = [""] * 5
         if 'laboratory_features' not in st.session_state:
             st.session_state.laboratory_features = [""] * 5
-
+        if 'selected_diagnosis' not in st.session_state:
+            st.session_state.selected_diagnosis = st.session_state.diagnoses[0]
+        
         # Title of the app
         st.title("")
 
@@ -96,19 +98,28 @@ else:
                 # Reorder section in the sidebar
                 with st.sidebar:
                     st.subheader("Reorder Diagnoses")
+
+                    # Maintain the diagnosis selection
                     selected_diagnosis = st.selectbox(
                         "Select a diagnosis to move",
                         options=st.session_state.diagnoses,
-                        key="move_diagnosis"
+                        key="move_diagnosis",
+                        index=st.session_state.diagnoses.index(st.session_state.selected_diagnosis)
                     )
+
                     move_direction = st.radio("Adjust Priority:", options=["Higher Priority", "Lower Priority"], key="move_direction")
 
                     if st.button("Adjust Priority"):
                         idx = st.session_state.diagnoses.index(selected_diagnosis)
                         if move_direction == "Higher Priority" and idx > 0:
+                            # Swap with the previous diagnosis
                             st.session_state.diagnoses[idx], st.session_state.diagnoses[idx - 1] = st.session_state.diagnoses[idx - 1], st.session_state.diagnoses[idx]
                         elif move_direction == "Lower Priority" and idx < len(st.session_state.diagnoses) - 1:
+                            # Swap with the next diagnosis
                             st.session_state.diagnoses[idx], st.session_state.diagnoses[idx + 1] = st.session_state.diagnoses[idx + 1], st.session_state.diagnoses[idx]
+
+                        # Update the selected diagnosis
+                        st.session_state.selected_diagnosis = selected_diagnosis
 
                 # Create columns for each diagnosis input
                 cols = st.columns(len(st.session_state.diagnoses) + 1)
