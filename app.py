@@ -75,18 +75,12 @@ else:
                 # Filter options based on the search input
                 filtered_options = [dx for dx in dx_options if search_input.lower() in dx.lower()] if search_input else []
 
-                # Automatically update the diagnosis if it matches
-                if search_input in dx_options:
-                    st.session_state.diagnoses[i] = search_input
-                elif filtered_options:
-                    # If there's a match, auto-select the first filtered option
-                    st.session_state.diagnoses[i] = filtered_options[0]
-
                 # Display filtered options
                 if filtered_options:
                     st.write("**Suggestions:**")
                     for option in filtered_options[:5]:  # Show a maximum of 5 options
-                        st.write(f"- {option}")  # List suggestions without buttons
+                        if st.button(f"Select {option}", key=f"select_option_{i}_{option}"):
+                            st.session_state.diagnoses[i] = option
 
             # Button to submit the diagnoses
             if st.button("Submit Diagnoses"):
@@ -143,7 +137,6 @@ else:
                     if new_filtered_options:
                         st.write("**Available Options:**")
                         for option in new_filtered_options:
-                            st.write(f"- {option}")  # List options without buttons
                             if st.button(f"Select {option}", key=f"select_new_{option}"):
                                 # Change selected diagnosis to the new one
                                 index_to_change = st.session_state.diagnoses.index(change_diagnosis)
