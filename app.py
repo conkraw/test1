@@ -89,63 +89,67 @@ else:
                 Please provide up to 5 laboratory features that influence the differential diagnosis.
             """)
 
-            # Reorder section in the sidebar
-            with st.sidebar:
-                st.subheader("Reorder Diagnoses")
-                selected_diagnosis = st.selectbox("Select a diagnosis to move", options=st.session_state.diagnoses, key="move_diagnosis")
-                move_direction = st.radio("Adjust Priority:", options=["Higher Priority", "Lower Priority"], key="move_direction")
+            # Create a container for centering
+            main_container = st.container()
 
-                if st.button("Adjust Priority"):
-                    idx = st.session_state.diagnoses.index(selected_diagnosis)
-                    if move_direction == "Higher Priority" and idx > 0:
-                        st.session_state.diagnoses[idx], st.session_state.diagnoses[idx - 1] = st.session_state.diagnoses[idx - 1], st.session_state.diagnoses[idx]
-                    elif move_direction == "Lower Priority" and idx < len(st.session_state.diagnoses) - 1:
-                        st.session_state.diagnoses[idx], st.session_state.diagnoses[idx + 1] = st.session_state.diagnoses[idx + 1], st.session_state.diagnoses[idx]
+            with main_container:
+                # Reorder section in the sidebar
+                with st.sidebar:
+                    st.subheader("Reorder Diagnoses")
+                    selected_diagnosis = st.selectbox("Select a diagnosis to move", options=st.session_state.diagnoses, key="move_diagnosis")
+                    move_direction = st.radio("Adjust Priority:", options=["Higher Priority", "Lower Priority"], key="move_direction")
 
-            # Create columns for each diagnosis input
-            cols = st.columns(len(st.session_state.diagnoses) + 1)
-            with cols[0]:
-                st.markdown("Laboratory Features")
+                    if st.button("Adjust Priority"):
+                        idx = st.session_state.diagnoses.index(selected_diagnosis)
+                        if move_direction == "Higher Priority" and idx > 0:
+                            st.session_state.diagnoses[idx], st.session_state.diagnoses[idx - 1] = st.session_state.diagnoses[idx - 1], st.session_state.diagnoses[idx]
+                        elif move_direction == "Lower Priority" and idx < len(st.session_state.diagnoses) - 1:
+                            st.session_state.diagnoses[idx], st.session_state.diagnoses[idx + 1] = st.session_state.diagnoses[idx + 1], st.session_state.diagnoses[idx]
 
-            for diagnosis, col in zip(st.session_state.diagnoses, cols[1:]):
-                with col:
-                    st.markdown(diagnosis)
-
-            for i in range(5):
+                # Create columns for each diagnosis input
                 cols = st.columns(len(st.session_state.diagnoses) + 1)
                 with cols[0]:
-                    st.session_state.laboratory_features[i] = st.text_input("", key=f"lab_row_{i}", label_visibility="collapsed")
+                    st.markdown("Laboratory Features")
 
                 for diagnosis, col in zip(st.session_state.diagnoses, cols[1:]):
                     with col:
-                        st.selectbox(
-                            "",
-                            options=["", "Supports", "Does not support"],
-                            key=f"select_{i}_{diagnosis}_lab",
-                            label_visibility="collapsed"
-                        )
+                        st.markdown(diagnosis)
 
-            if st.button("Submit Laboratory Features"):
-                assessments = {}
                 for i in range(5):
-                    for diagnosis in st.session_state.diagnoses:
-                        assessment = st.session_state[f"select_{i}_{diagnosis}_lab"]
-                        if diagnosis not in assessments:
-                            assessments[diagnosis] = []
-                        assessments[diagnosis].append({
-                            'laboratory_feature': st.session_state.laboratory_features[i],
-                            'assessment': assessment
-                        })
+                    cols = st.columns(len(st.session_state.diagnoses) + 1)
+                    with cols[0]:
+                        st.session_state.laboratory_features[i] = st.text_input("", key=f"lab_row_{i}", label_visibility="collapsed")
 
-                # Prepare the entry for Firebase with the new key for diagnoses
-                entry = {
-                    'updated_diagnoses': st.session_state.diagnoses,
-                    'laboratory_features': st.session_state.laboratory_features,
-                    'lab_assessments': assessments
-                }
+                    for diagnosis, col in zip(st.session_state.diagnoses, cols[1:]):
+                        with col:
+                            st.selectbox(
+                                "",
+                                options=["", "Supports", "Does not support"],
+                                key=f"select_{i}_{diagnosis}_lab",
+                                label_visibility="collapsed"
+                            )
 
-                result = upload_to_firebase(entry)
-                st.success(result)
+                if st.button("Submit Laboratory Features"):
+                    assessments = {}
+                    for i in range(5):
+                        for diagnosis in st.session_state.diagnoses:
+                            assessment = st.session_state[f"select_{i}_{diagnosis}_lab"]
+                            if diagnosis not in assessments:
+                                assessments[diagnosis] = []
+                            assessments[diagnosis].append({
+                                'laboratory_feature': st.session_state.laboratory_features[i],
+                                'assessment': assessment
+                            })
+
+                    # Prepare the entry for Firebase with the new key for diagnoses
+                    entry = {
+                        'updated_diagnoses': st.session_state.diagnoses,
+                        'laboratory_features': st.session_state.laboratory_features,
+                        'lab_assessments': assessments
+                    }
+
+                    result = upload_to_firebase(entry)
+                    st.success(result)
 
     except Exception as e:
         st.error(f"Error initializing Firebase: {e}")
