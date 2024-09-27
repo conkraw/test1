@@ -66,8 +66,6 @@ else:
             # Create a draggable list for diagnoses
             for i in range(5):
                 current_diagnosis = st.session_state.diagnoses[i]
-                
-                # Use a safe index for selectbox
                 if current_diagnosis not in dx_options:
                     current_diagnosis = ""  # Default to blank if not found
 
@@ -97,105 +95,43 @@ else:
                 Please provide up to 5 laboratory features that influence the differential diagnosis.
             """)
 
-            # Create a container for centering
-            main_container = st.container()
+            # Create a table layout for laboratory features
+            features_data = []
+            for i in range(5):
+                lab_feature = st.text_input(f"Laboratory Feature {i + 1}", key=f"lab_feature_{i}")
+                assessments = []
+                for diagnosis in st.session_state.diagnoses:
+                    if diagnosis:  # Ensure it's not empty
+                        assessment = st.selectbox(
+                            f"{diagnosis} Assessment",
+                            options=["", "Supports", "Does not support"],
+                            key=f"assessment_{i}_{diagnosis}"
+                        )
+                        assessments.append((diagnosis, assessment))
+                features_data.append((lab_feature, assessments))
 
-            with main_container:
-                # Reorder section in the sidebar
-                with st.sidebar:
-                    st.subheader("Reorder Diagnoses")
+            # Submit button for laboratory features
+            if st.button("Submit Laboratory Features"):
+                assessments = {}
+                for lab_feature, assessment_list in features_data:
+                    for diagnosis, assessment in assessment_list:
+                        if diagnosis not in assessments:
+                            assessments[diagnosis] = []
+                        assessments[diagnosis].append({
+                            'laboratory_feature': lab_feature,
+                            'assessment': assessment
+                        })
 
-                    selected_diagnosis = st.selectbox(
-                        "Select a diagnosis to move",
-                        options=st.session_state.diagnoses,
-                        key="move_diagnosis",
-                        index=st.session_state.diagnoses.index(st.session_state.selected_diagnosis) if st.session_state.selected_diagnosis in st.session_state.diagnoses else 0
-                    )
+                # Prepare the entry for Firebase
+                entry = {
+                    'updated_diagnoses': st.session_state.diagnoses,
+                    'lab_assessments': assessments
+                }
 
-                    move_direction = st.radio("Adjust Priority:", options=["Higher Priority", "Lower Priority"], key="move_direction")
-
-                    if st.button("Adjust Priority"):
-                        idx = st.session_state.diagnoses.index(selected_diagnosis)
-                        if move_direction == "Higher Priority" and idx > 0:
-                            # Swap with the previous diagnosis
-                            st.session_state.diagnoses[idx], st.session_state.diagnoses[idx - 1] = st.session_state.diagnoses[idx - 1], st.session_state.diagnoses[idx]
-                        elif move_direction == "Lower Priority" and idx < len(st.session_state.diagnoses) - 1:
-                            # Swap with the next diagnosis
-                            st.session_state.diagnoses[idx], st.session_state.diagnoses[idx + 1] = st.session_state.diagnoses[idx + 1], st.session_state.diagnoses[idx]
-
-                        # Update the selected diagnosis
-                        st.session_state.selected_diagnosis = selected_diagnosis
-
-                    # Diagnosis change section
-                    st.subheader("Change a Diagnosis")
-                    diagnosis_to_change = st.selectbox(
-                        "Select a diagnosis to change",
-                        options=st.session_state.diagnoses,
-                        key="change_diagnosis"
-                    )
-                    new_diagnosis = st.selectbox(
-                        "Select a new diagnosis",
-                        options=dx_options,
-                        key="new_diagnosis"
-                    )
-
-                    if st.button("Change Diagnosis"):
-                        if new_diagnosis in st.session_state.diagnoses:
-                            st.error("This diagnosis is already in your list! Please choose a different one.")
-                        else:
-                            change_index = st.session_state.diagnoses.index(diagnosis_to_change)
-                            st.session_state.diagnoses[change_index] = new_diagnosis
-
-                # Create columns for laboratory features
-                unique_diagnoses = list(set(st.session_state.diagnoses))  # Ensure unique diagnoses
-                cols = st.columns(len(unique_diagnoses) + 1)
-                with cols[0]:
-                    st.markdown("Laboratory Features")
-
-                # Store laboratory features
-                for diagnosis, col in zip(unique_diagnoses, cols[1:]):
-                    with col:
-                        st.markdown(diagnosis)
-
-                # Create text inputs for laboratory features
-                for i in range(5):
-                    cols = st.columns(len(unique_diagnoses) + 1)
-                    with cols[0]:
-                        st.session_state.laboratory_features[i] = st.text_input("", key=f"lab_row_{i}", label_visibility="collapsed")
-
-                    for diagnosis in unique_diagnoses:
-                        key = f"select_{i}_{diagnosis}_lab"
-                        with col:
-                            st.selectbox(
-                                "",
-                                options=["", "Supports", "Does not support"],
-                                key=key,
-                                label_visibility="collapsed"
-                            )
-
-                # Submit button for laboratory features
-                if st.button("Submit Laboratory Features"):
-                    assessments = {}
-                    for i in range(5):
-                        for diagnosis in unique_diagnoses:
-                            assessment = st.session_state[f"select_{i}_{diagnosis}_lab"]
-                            if diagnosis not in assessments:
-                                assessments[diagnosis] = []
-                            assessments[diagnosis].append({
-                                'laboratory_feature': st.session_state.laboratory_features[i],
-                                'assessment': assessment
-                            })
-
-                    # Prepare the entry for Firebase
-                    entry = {
-                        'updated_diagnoses': unique_diagnoses,
-                        'laboratory_features': st.session_state.laboratory_features,
-                        'lab_assessments': assessments
-                    }
-
-                    result = upload_to_firebase(entry)
-                    st.success(result)
+                result = upload_to_firebase(entry)
+                st.success(result)
 
     except Exception as e:
         st.error(f"Error initializing Firebase: {e}")
+
 
