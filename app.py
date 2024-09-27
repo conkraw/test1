@@ -41,6 +41,8 @@ else:
             st.session_state.current_page = "diagnoses"
         if 'diagnoses' not in st.session_state:
             st.session_state.diagnoses = [""] * 5
+        if 'prioritized_diagnoses' not in st.session_state:
+            st.session_state.prioritized_diagnoses = []
 
         # Title of the app
         st.title("Differential Diagnosis Tool")
@@ -72,9 +74,9 @@ else:
                 diagnoses = [d.strip() for d in st.session_state.diagnoses]
                 if all(diagnosis for diagnosis in diagnoses):
                     if len(diagnoses) == len(set(diagnoses)):
-                        st.session_state.current_page = "prioritize"  # Move to Prioritization page
                         st.session_state.prioritized_diagnoses = diagnoses.copy()  # Save for prioritization
-                        st.rerun()  # Rerun the app to refresh the page
+                        st.session_state.current_page = "prioritize"  # Move to Prioritization page
+                        st.experimental_rerun()  # Rerun the app to refresh the page
                     else:
                         st.error("Please do not provide duplicate diagnoses.")
                 else:
@@ -103,7 +105,8 @@ else:
                 # Reset for the next round
                 st.session_state.current_page = "diagnoses"
                 st.session_state.diagnoses = [""] * 5  # Reset for the next round
-                st.rerun()  # Rerun to refresh the app
+                st.session_state.prioritized_diagnoses = []  # Clear prioritized diagnoses
+                st.experimental_rerun()  # Rerun to refresh the app
 
     except Exception as e:
         st.error(f"Error initializing Firebase: {e}")
