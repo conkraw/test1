@@ -48,6 +48,8 @@ else:
             st.session_state.laboratory_features = [""] * 5
         if 'selected_diagnosis' not in st.session_state:
             st.session_state.selected_diagnosis = ""
+        if 'update_saved' not in st.session_state:
+            st.session_state.update_saved = False
 
         # Title of the app
         st.title("")
@@ -116,12 +118,14 @@ else:
                         elif move_direction == "Lower Priority" and idx < len(st.session_state.diagnoses) - 1:
                             st.session_state.diagnoses[idx], st.session_state.diagnoses[idx + 1] = st.session_state.diagnoses[idx + 1], st.session_state.diagnoses[idx]
                         
-                        # Upload the updated diagnoses to Firebase
-                        entry = {
-                            'updated_diagnoses': st.session_state.diagnoses
-                        }
-                        result = upload_to_firebase(entry)
-                        st.success(result)
+                        # Only upload if the update hasn't been saved yet
+                        if not st.session_state.update_saved:
+                            entry = {
+                                'updated_diagnoses': st.session_state.diagnoses
+                            }
+                            result = upload_to_firebase(entry)
+                            st.success(result)
+                            st.session_state.update_saved = True  # Set the flag to indicate the update has been saved
 
                 # Create columns for each diagnosis input
                 cols = st.columns(len(st.session_state.diagnoses) + 1)
