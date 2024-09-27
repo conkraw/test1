@@ -122,23 +122,12 @@ else:
 
                     if move_direction == "Higher Priority":
                         if idx > 0:  # Ensure not moving out of bounds
+                            # Swap with the previous diagnosis
                             st.session_state.diagnoses[idx], st.session_state.diagnoses[idx - 1] = st.session_state.diagnoses[idx - 1], st.session_state.diagnoses[idx]
                     elif move_direction == "Lower Priority":
                         if idx < len(st.session_state.diagnoses) - 1:  # Ensure not moving out of bounds
+                            # Swap with the next diagnosis
                             st.session_state.diagnoses[idx], st.session_state.diagnoses[idx + 1] = st.session_state.diagnoses[idx + 1], st.session_state.diagnoses[idx]
-
-                # Allow moving to the farthest position
-                if st.button("Move to Top"):
-                    idx = st.session_state.diagnoses.index(selected_diagnosis)
-                    if idx > 0:
-                        # Move to the top
-                        st.session_state.diagnoses.insert(0, st.session_state.diagnoses.pop(idx))
-
-                if st.button("Move to Bottom"):
-                    idx = st.session_state.diagnoses.index(selected_diagnosis)
-                    if idx < len(st.session_state.diagnoses) - 1:
-                        # Move to the bottom
-                        st.session_state.diagnoses.append(st.session_state.diagnoses.pop(idx))
 
             # Create columns for each diagnosis input
             cols = st.columns(len(st.session_state.diagnoses) + 1)
@@ -188,5 +177,4 @@ else:
 
     except Exception as e:
         st.error(f"Error initializing Firebase: {e}")
-
 
