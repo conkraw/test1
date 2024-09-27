@@ -7,14 +7,14 @@ import json
 # Constants
 COLLECTION_NAME = 'your_collection_name'  # Change this to your collection name
 
-# Function to read diagnoses from a file
-def read_diagnoses_from_file():
+# Function to read test options from a file
+def read_tests_from_file(filename):
     try:
-        with open('dx_list.txt', 'r') as file:
-            diagnoses = [line.strip() for line in file.readlines() if line.strip()]
-        return diagnoses
+        with open(filename, 'r') as file:
+            tests = [line.strip() for line in file.readlines() if line.strip()]
+        return tests
     except Exception as e:
-        st.error(f"Error reading dx_list.txt: {e}")
+        st.error(f"Error reading {filename}: {e}")
         return []  # Return an empty list if error occurs
 
 # Set the page config to normal
@@ -65,7 +65,7 @@ else:
             """)
 
             # Load diagnoses from file
-            dx_options = read_diagnoses_from_file()
+            dx_options = read_tests_from_file('dx_list.txt')
             if not dx_options:
                 st.error("No diagnoses available. Please check the dx_list.txt file.")
             else:
@@ -99,6 +99,7 @@ else:
             st.markdown("### LABORATORY TESTING")
             st.write("For each laboratory test that you have chosen, please describe how they would influence your differential diagnosis.")
 
+            lab_options = read_tests_from_file('labtests.txt')
             cols = st.columns(len(st.session_state.diagnoses) + 1)
             with cols[0]:
                 st.markdown("Laboratory Tests")
@@ -110,7 +111,11 @@ else:
             for i in range(5):
                 cols = st.columns(len(st.session_state.diagnoses) + 1)
                 with cols[0]:
-                    st.session_state.laboratory_testing[i] = st.text_input("", key=f"lab_test_row_{i}", label_visibility="collapsed")
+                    st.session_state.laboratory_testing[i] = st.selectbox(
+                        "",
+                        options=[""] + lab_options,
+                        key=f"lab_test_row_{i}"
+                    )
 
                 for diagnosis, col in zip(st.session_state.diagnoses, cols[1:]):
                     with col:
@@ -154,6 +159,7 @@ else:
             st.markdown("### RADIOLOGICAL TESTS")
             st.write("For each radiological test that you have chosen, please describe how they would influence your differential diagnosis.")
 
+            rad_options = read_tests_from_file('radtests.txt')
             cols = st.columns(len(st.session_state.diagnoses) + 1)
             with cols[0]:
                 st.markdown("Radiological Tests")
@@ -165,7 +171,11 @@ else:
             for i in range(5):
                 cols = st.columns(len(st.session_state.diagnoses) + 1)
                 with cols[0]:
-                    st.session_state.radiological_tests[i] = st.text_input("", key=f"radio_test_row_{i}", label_visibility="collapsed")
+                    st.session_state.radiological_tests[i] = st.selectbox(
+                        "",
+                        options=[""] + rad_options,
+                        key=f"radio_test_row_{i}"
+                    )
 
                 for diagnosis, col in zip(st.session_state.diagnoses, cols[1:]):
                     with col:
@@ -209,6 +219,7 @@ else:
             st.markdown("### OTHER TESTS")
             st.write("For each other test that you have chosen, please describe how they would influence your differential diagnosis.")
 
+            other_options = read_tests_from_file('othertests.txt')
             cols = st.columns(len(st.session_state.diagnoses) + 1)
             with cols[0]:
                 st.markdown("Other Tests")
@@ -220,7 +231,11 @@ else:
             for i in range(5):
                 cols = st.columns(len(st.session_state.diagnoses) + 1)
                 with cols[0]:
-                    st.session_state.other_tests[i] = st.text_input("", key=f"other_test_row_{i}", label_visibility="collapsed")
+                    st.session_state.other_tests[i] = st.selectbox(
+                        "",
+                        options=[""] + other_options,
+                        key=f"other_test_row_{i}"
+                    )
 
                 for diagnosis, col in zip(st.session_state.diagnoses, cols[1:]):
                     with col:
@@ -257,5 +272,4 @@ else:
 
     except Exception as e:
         st.error(f"Error initializing Firebase: {e}")
-
 
