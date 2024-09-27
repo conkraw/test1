@@ -46,8 +46,6 @@ else:
             st.session_state.diagnoses = [""] * 5
         if 'laboratory_features' not in st.session_state:
             st.session_state.laboratory_features = [""] * 5
-        if 'selected_diagnosis' not in st.session_state:
-            st.session_state.selected_diagnosis = st.session_state.diagnoses[0]
 
         # Load diagnoses from file after Firebase initialization
         dx_options = read_diagnoses_from_file()
@@ -87,6 +85,8 @@ else:
                     for option in filtered_options[:5]:  # Show a maximum of 5 options
                         if st.button(option, key=f"select_{i}_{option}"):
                             st.session_state.diagnoses[i] = option
+                            # Clear the search input when an option is selected
+                            st.session_state[f"diagnosis_search_{i}"] = option
 
                 # Automatically update the diagnosis if it matches
                 if search_input in dx_options:
@@ -122,8 +122,7 @@ else:
                     selected_diagnosis = st.selectbox(
                         "Select a diagnosis to move",
                         options=st.session_state.diagnoses,
-                        key="move_diagnosis",
-                        index=st.session_state.diagnoses.index(st.session_state.selected_diagnosis) if st.session_state.selected_diagnosis in st.session_state.diagnoses else 0
+                        key="move_diagnosis"
                     )
 
                     move_direction = st.radio("Adjust Priority:", options=["Higher Priority", "Lower Priority"], key="move_direction")
@@ -136,29 +135,6 @@ else:
                         elif move_direction == "Lower Priority" and idx < len(st.session_state.diagnoses) - 1:
                             # Swap with the next diagnosis
                             st.session_state.diagnoses[idx], st.session_state.diagnoses[idx + 1] = st.session_state.diagnoses[idx + 1], st.session_state.diagnoses[idx]
-
-                        # Update the selected diagnosis
-                        st.session_state.selected_diagnosis = selected_diagnosis
-
-                    # Diagnosis change section
-                    st.subheader("Change a Diagnosis")
-                    diagnosis_to_change = st.selectbox(
-                        "Select a diagnosis to change",
-                        options=st.session_state.diagnoses,
-                        key="change_diagnosis"
-                    )
-
-                    # Ensure new_diagnosis does not match existing selections
-                    available_new_diagnoses = [dx for dx in dx_options if dx not in st.session_state.diagnoses or dx == diagnosis_to_change]
-                    new_diagnosis = st.selectbox(
-                        "Select a new diagnosis",
-                        options=available_new_diagnoses,
-                        key="new_diagnosis"
-                    )
-
-                    if st.button("Change Diagnosis"):
-                        change_index = st.session_state.diagnoses.index(diagnosis_to_change)
-                        st.session_state.diagnoses[change_index] = new_diagnosis
 
                 # Create columns for each diagnosis input
                 cols = st.columns(len(st.session_state.diagnoses) + 1)
