@@ -100,13 +100,13 @@ else:
                     'ranked_diagnoses': {diagnosis: rank for diagnosis, rank in sorted(rankings.items(), key=lambda x: x[1])}  # Create a dictionary for ranked diagnoses
                 }
                 result = upload_to_firebase(entry)
-                st.success(result)
+                st.success(result)  # Display success message
 
-                # Reset for the next round
-                st.session_state.current_page = "diagnoses"
-                st.session_state.diagnoses = [""] * 5  # Reset for the next round
-                st.session_state.prioritized_diagnoses = []  # Clear prioritized diagnoses
-                st.rerun()  # Rerun to refresh the app
+                # Optionally: Reset state if desired, or keep current state
+                st.session_state.current_page = "diagnoses"  # Uncomment this line to go back
+                # st.session_state.diagnoses = [""] * 5  # Uncomment this line to reset for the next round
+                # st.session_state.prioritized_diagnoses = []  # Uncomment this line to clear prioritized diagnoses
+                # st.rerun()  # Uncomment to refresh the app
 
     except Exception as e:
         st.error(f"Error initializing Firebase: {e}")
