@@ -117,9 +117,9 @@ else:
                         st.selectbox(
                             "",
                             options=["", 
-                                     "Completely or Almost Completely Necessary", 
+                                     "Necessary", 
                                      "Neither More Nor Less Useful", 
-                                     "Completely or Almost Completely Unnecessary"],
+                                     "Unnecessary"],
                             key=f"select_{i}_{diagnosis}_lab",
                             label_visibility="collapsed"
                         )
@@ -172,9 +172,9 @@ else:
                         st.selectbox(
                             "",
                             options=["", 
-                                     "Completely or Almost Completely Necessary", 
+                                     "Necessary", 
                                      "Neither More Nor Less Useful", 
-                                     "Completely or Almost Completely Unnecessary"],
+                                     "Unnecessary"],
                             key=f"select_{i}_{diagnosis}_radio",
                             label_visibility="collapsed"
                         )
@@ -227,9 +227,9 @@ else:
                         st.selectbox(
                             "",
                             options=["", 
-                                     "Completely or Almost Completely Necessary", 
+                                     "Necessary", 
                                      "Neither More Nor Less Useful", 
-                                     "Completely or Almost Completely Unnecessary"],
+                                     "Unnecessary"],
                             key=f"select_{i}_{diagnosis}_other",
                             label_visibility="collapsed"
                         )
