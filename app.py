@@ -56,7 +56,7 @@ else:
 
             # Load diagnoses from file
             dx_options = read_diagnoses_from_file()
-            dx_options.insert(0, "") 
+            dx_options.insert(0, "")  # Insert a blank option
             
             # Create columns for each diagnosis input
             cols = st.columns(5)
@@ -86,17 +86,19 @@ else:
         elif st.session_state.current_page == "prioritize":
             st.markdown("""
                 ## PRIORITIZE YOUR DIAGNOSES
-                Please rank your diagnoses as follows:
+                Please rank your diagnoses:
             """)
 
-            rank_options = ["Most Likely", "Second Most Likely", "Third Most Likely", "Fourth Most Likely", "Least Likely"]
+            rank_options = ["", "Most Likely", "Second Most Likely", "Third Most Likely", "Fourth Most Likely", "Least Likely"]
             rankings = {}
             used_ranks = set()
 
             for diagnosis in st.session_state.prioritized_diagnoses:
-                rank = st.selectbox(f"Rank for {diagnosis}", options=[rank for rank in rank_options if rank not in used_ranks], key=diagnosis)
-                rankings[diagnosis] = rank
-                used_ranks.add(rank)
+                available_ranks = [rank for rank in rank_options if rank not in used_ranks]
+                rank = st.selectbox(f"Rank for {diagnosis}", options=available_ranks, key=diagnosis)
+                if rank:  # Only add to rankings if a rank is selected
+                    rankings[diagnosis] = rank
+                    used_ranks.add(rank)
 
             # Button to submit rankings
             if st.button("Submit Rankings"):
@@ -114,5 +116,4 @@ else:
 
     except Exception as e:
         st.error(f"Error initializing Firebase: {e}")
-
 
