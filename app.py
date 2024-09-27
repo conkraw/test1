@@ -58,7 +58,8 @@ else:
 
             # Load diagnoses from file
             dx_options = read_diagnoses_from_file()
-
+            dx_options.insert(0, "") 
+            
             # Create columns for each diagnosis input
             cols = st.columns(5)
             for i, col in enumerate(cols):
@@ -66,7 +67,7 @@ else:
                     st.session_state.diagnoses[i] = st.selectbox(
                         f"Diagnosis {i + 1}",
                         options=dx_options,
-                        index=dx_options.index(st.session_state.diagnoses[i]) if st.session_state.diagnoses[i] in dx_options else 0,
+                        index=0,
                         key=f"diagnosis_{i}"
                     )
 
