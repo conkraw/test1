@@ -63,10 +63,6 @@ else:
                 Based on the information that has been subsequently provided in the above case, please review your initial differential diagnosis list and update it as necessary. 
             """)
 
-            # Debugging output
-            st.write("Diagnoses:", st.session_state.diagnoses)
-            st.write("Diagnosis options:", dx_options)
-
             # Create a draggable list for diagnoses
             for i in range(5):
                 current_diagnosis = st.session_state.diagnoses[i]
@@ -150,16 +146,18 @@ else:
                             change_index = st.session_state.diagnoses.index(diagnosis_to_change)
                             st.session_state.diagnoses[change_index] = new_diagnosis
 
-                # Create columns for each diagnosis input
+                # Create columns for laboratory features
                 unique_diagnoses = list(set(st.session_state.diagnoses))  # Ensure unique diagnoses
                 cols = st.columns(len(unique_diagnoses) + 1)
                 with cols[0]:
                     st.markdown("Laboratory Features")
 
+                # Store laboratory features
                 for diagnosis, col in zip(unique_diagnoses, cols[1:]):
                     with col:
                         st.markdown(diagnosis)
 
+                # Create text inputs for laboratory features
                 for i in range(5):
                     cols = st.columns(len(unique_diagnoses) + 1)
                     with cols[0]:
@@ -200,5 +198,4 @@ else:
 
     except Exception as e:
         st.error(f"Error initializing Firebase: {e}")
-
 
