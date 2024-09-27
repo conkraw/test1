@@ -1,6 +1,16 @@
 import streamlit as st
 import os
 
+# Load examination components from a file
+def load_exam_components(file_path):
+    try:
+        with open(file_path, 'r') as file:
+            components = [line.strip() for line in file.readlines() if line.strip()]
+        return components
+    except FileNotFoundError:
+        st.error(f"File not found: {file_path}. Please check the file path.")
+        return []
+
 # Load physical examination text from a file
 def load_phys_exam_data(file_path):
     try:
@@ -28,7 +38,7 @@ def display_selected_component(selected_component):
 
 # Function to check and display an image if present
 def display_image(base_image_name):
-    image_extensions = ['.png', '.jpg', '.jpeg', '.gif', '.bmp', '.tiff', '.PNG', '.JPG', '.JPEG', '.GIF', '.BMP', '.TIFF']
+    image_extensions = ['.png', '.jpg', '.jpeg', '.gif', '.bmp', '.tiff']
     image_found = False
 
     for ext in image_extensions:
@@ -43,7 +53,7 @@ def display_image(base_image_name):
 
 # Function to check and display audio if present
 def display_audio(base_audio_name):
-    audio_extensions = ['.mp3', '.wav', '.ogg', '.flac', '.MP3', '.WAV', '.OGG', '.FLAC']
+    audio_extensions = ['.mp3', '.wav', '.ogg', '.flac']
     audio_found = False
 
     for ext in audio_extensions:
@@ -58,7 +68,7 @@ def display_audio(base_audio_name):
 
 # Function to check and display video if present
 def display_video(base_video_name):
-    video_extensions = ['.mp4', '.mov', '.avi', '.mkv', '.MP4', '.MOV', '.AVI', '.MKV']
+    video_extensions = ['.mp4', '.mov', '.avi', '.mkv']
     video_found = False
 
     for ext in video_extensions:
@@ -80,12 +90,8 @@ def main():
     Please note that any image provided requires interpretation.
     """)
 
-    # List of examination components
-    components = [
-        "General Appearance", "Eyes", "Ears, Neck, Nose, Throat", "Lymph Nodes",
-        "Cardiovascular", "Lungs", "Abdomen", "Skin", "Extremities",
-        "Musculoskeletal", "Neurological", "Psychiatry", "Genitourinary", "Image", "Audio", "Video"
-    ]
+    # Load examination components from results.txt
+    components = load_exam_components("results.txt")
 
     # User selection
     selected_component = st.selectbox("Select a physical examination component:", components)
@@ -103,4 +109,5 @@ def main():
 
 if __name__ == '__main__':
     main()
+
 
