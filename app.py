@@ -49,6 +49,10 @@ else:
         if 'selected_diagnosis' not in st.session_state:
             st.session_state.selected_diagnosis = st.session_state.diagnoses[0]
 
+        # Load diagnoses from file after Firebase initialization
+        dx_options = read_diagnoses_from_file()
+        dx_options.insert(0, "")  # Add a blank option at the beginning
+
         # Title of the app
         st.title("")
 
@@ -58,10 +62,6 @@ else:
                 ## DIFFERENTIAL DIAGNOSIS UPDATE
                 Based on the information that has been subsequently provided in the above case, please review your initial differential diagnosis list and update it as necessary. 
             """)
-
-            # Load diagnoses from file
-            dx_options = read_diagnoses_from_file()
-            dx_options.insert(0, "")  # Add a blank option at the beginning
 
             # Debugging output
             st.write("Diagnoses:", st.session_state.diagnoses)
@@ -195,5 +195,4 @@ else:
 
     except Exception as e:
         st.error(f"Error initializing Firebase: {e}")
-
 
