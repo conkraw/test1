@@ -79,7 +79,7 @@ else:
                 if search_input in dx_options:
                     st.session_state.diagnoses[i] = search_input
                 elif filtered_options:
-                    # If there's a match, update the diagnosis
+                    # If there's a match, auto-select the first filtered option
                     st.session_state.diagnoses[i] = filtered_options[0]
 
                 # Display filtered options
@@ -197,4 +197,5 @@ else:
 
     except Exception as e:
         st.error(f"Error initializing Firebase: {e}")
+
 
