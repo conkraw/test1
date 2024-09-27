@@ -38,7 +38,8 @@ def display_selected_component(selected_component):
 
 # Function to check and display an image if present
 def display_image(base_image_name):
-    image_extensions = ['.png', '.jpg', '.jpeg', '.gif', '.bmp', '.tiff']
+    image_extensions = ['.png', '.jpg', '.jpeg', '.gif', '.bmp', '.tiff', 
+                        '.PNG', '.JPG', '.JPEG', '.GIF', '.BMP', '.TIFF']
     image_found = False
 
     for ext in image_extensions:
@@ -53,7 +54,8 @@ def display_image(base_image_name):
 
 # Function to check and display audio if present
 def display_audio(base_audio_name):
-    audio_extensions = ['.mp3', '.wav', '.ogg', '.flac']
+    audio_extensions = ['.mp3', '.wav', '.ogg', '.flac', 
+                        '.MP3', '.WAV', '.OGG', '.FLAC']
     audio_found = False
 
     for ext in audio_extensions:
@@ -68,7 +70,8 @@ def display_audio(base_audio_name):
 
 # Function to check and display video if present
 def display_video(base_video_name):
-    video_extensions = ['.mp4', '.mov', '.avi', '.mkv']
+    video_extensions = ['.mp4', '.mov', '.avi', '.mkv', 
+                        '.MP4', '.MOV', '.AVI', '.MKV']
     video_found = False
 
     for ext in video_extensions:
@@ -83,29 +86,34 @@ def display_video(base_video_name):
 
 # Main Streamlit app
 def main():
-    st.title("Physical Examination Components")
+    st.title("Test Results")
 
     st.markdown("""
-    Please select and review the physical examination components to help develop your differential diagnosis.
+    Please select and review the following test results to help develop your differential diagnosis. 
     Please note that any image provided requires interpretation.
     """)
 
     # Load examination components from results.txt
     components = load_exam_components("results.txt")
 
+    # Add media options to the component list
+    media_components = ["Image", "Audio", "Video"]
+    components.extend(media_components)
+
     # User selection
-    selected_component = st.selectbox("Select a physical examination component:", components)
+    selected_component = st.selectbox("Select a test result component:", components)
 
     # Display selected component text
-    display_selected_component(selected_component)
-
-    # Check for media files based on selected component
-    if selected_component == "Image":
-        display_image("image_1")  # Check for various formats of image_1
-    elif selected_component == "Audio":
-        display_audio("audio_1")  # Check for various formats of audio_1
-    elif selected_component == "Video":
-        display_video("video_1")  # Check for various formats of video_1
+    if selected_component in media_components:
+        base_name = selected_component.lower() + "_1re"
+        if selected_component == "Image":
+            display_image(base_name)
+        elif selected_component == "Audio":
+            display_audio(base_name)
+        elif selected_component == "Video":
+            display_video(base_name)
+    else:
+        display_selected_component(selected_component)
 
 if __name__ == '__main__':
     main()
