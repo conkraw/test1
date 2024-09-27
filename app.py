@@ -72,16 +72,48 @@ else:
                 diagnoses = [d.strip() for d in st.session_state.diagnoses]
                 if all(diagnosis for diagnosis in diagnoses):
                     if len(diagnoses) == len(set(diagnoses)):
-                        entry = {
-                            'diagnoses': st.session_state.diagnoses,
-                        }
-                        result = upload_to_firebase(entry)
-                        st.success(result)
+                        # Move to prioritization page
+                        st.session_state.current_page = "prioritize"
+                        st.session_state.prioritized_diagnoses = diagnoses  # Store diagnoses for prioritization
+                        st.rerun()  # Rerun the app to refresh the page
                     else:
                         st.error("Please do not provide duplicate diagnoses.")
                 else:
                     st.error("Please select all 5 diagnoses.")
 
+        # Prioritization Page
+        elif st.session_state.current_page == "prioritize":
+            st.markdown("""
+                ## PRIORITIZE YOUR DIAGNOSES
+                Please prioritize the diagnoses you selected by ranking them from 1 to 5.
+            """)
+
+            priorities = {}
+            for i, diagnosis in enumerate(st.session_state.prioritized_diagnoses):
+                priority = st.selectbox(
+                    f"Priority for {diagnosis}",
+                    options=[1, 2, 3, 4, 5],
+                    key=f"priority_{i}"
+                )
+                priorities[diagnosis] = priority
+
+            if st.button("Submit Prioritization"):
+                # Sort the diagnoses by priority
+                sorted_diagnoses = sorted(priorities.items(), key=lambda x: x[1])
+                entry = {
+                    'diagnoses': [d[0] for d in sorted_diagnoses],
+                    'priorities': [d[1] for d in sorted_diagnoses]
+                }
+                result = upload_to_firebase(entry)
+                st.success(result)
+
+                # Optionally reset the session state or navigate to another page
+                st.session_state.current_page = "diagnoses"  # or any other page
+                st.session_state.diagnoses = [""] * 5  # Reset for the next round
+                st.session_state.prioritized_diagnoses = []
+                st.rerun()  # Rerun to refresh the app
+
     except Exception as e:
         st.error(f"Error initializing Firebase: {e}")
+
 
