@@ -94,7 +94,7 @@ else:
         elif st.session_state.current_page == "laboratory_testing":
             st.markdown("""
                 ### LABORATORY TESTING
-                Please provide up to 5 laboratory tests that influence the differential diagnosis.
+                For each laboratory, radiological, or other diagnostic study that you have chosen, please describe how they would influence your differential diagnsosis. 
             """)
 
             cols = st.columns(len(st.session_state.diagnoses) + 1)
