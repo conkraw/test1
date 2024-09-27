@@ -124,7 +124,8 @@ else:
                     st.selectbox(
                         "",
                         options=[""] + lab_options,
-                        key=f"lab_test_row_{i}"
+                        key=f"lab_test_row_{i}",
+                        label_visibility="collapsed"
                     )
 
                 for diagnosis, col in zip(st.session_state.diagnoses, cols[1:]):
@@ -181,7 +182,8 @@ else:
                     st.selectbox(
                         "",
                         options=[""] + rad_options,
-                        key=f"rad_test_row_{i}"
+                        key=f"rad_test_row_{i}",
+                        label_visibility="collapsed"
                     )
 
                 for diagnosis, col in zip(st.session_state.diagnoses, cols[1:]):
@@ -238,7 +240,8 @@ else:
                     st.selectbox(
                         "",
                         options=[""] + other_options,
-                        key=f"other_test_row_{i}"
+                        key=f"other_test_row_{i}",
+                        label_visibility="collapsed"
                     )
 
                 for diagnosis, col in zip(st.session_state.diagnoses, cols[1:]):
@@ -273,3 +276,4 @@ else:
 
     except Exception as e:
         st.error(f"Error initializing Firebase: {e}")
+
