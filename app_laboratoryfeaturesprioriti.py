@@ -48,7 +48,7 @@ else:
             st.session_state.laboratory_features = [""] * 5
         if 'selected_diagnosis' not in st.session_state:
             st.session_state.selected_diagnosis = st.session_state.diagnoses[0]
-        
+
         # Title of the app
         st.title("")
 
@@ -121,6 +121,23 @@ else:
                         # Update the selected diagnosis
                         st.session_state.selected_diagnosis = selected_diagnosis
 
+                    # Diagnosis change section
+                    st.subheader("Change a Diagnosis")
+                    diagnosis_to_change = st.selectbox(
+                        "Select a diagnosis to change",
+                        options=st.session_state.diagnoses,
+                        key="change_diagnosis"
+                    )
+                    new_diagnosis = st.selectbox(
+                        "Select a new diagnosis",
+                        options=dx_options,
+                        key="new_diagnosis"
+                    )
+
+                    if st.button("Change Diagnosis"):
+                        change_index = st.session_state.diagnoses.index(diagnosis_to_change)
+                        st.session_state.diagnoses[change_index] = new_diagnosis
+
                 # Create columns for each diagnosis input
                 cols = st.columns(len(st.session_state.diagnoses) + 1)
                 with cols[0]:
@@ -169,5 +186,6 @@ else:
 
     except Exception as e:
         st.error(f"Error initializing Firebase: {e}")
+
 
 
