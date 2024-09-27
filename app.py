@@ -81,6 +81,7 @@ else:
                     for option in filtered_options[:5]:  # Show a maximum of 5 options
                         if st.button(f"Select {option}", key=f"select_option_{i}_{option}"):
                             st.session_state.diagnoses[i] = option
+                            st.rerun()  # Use st.rerun() to refresh the app
 
             # Button to submit the diagnoses
             if st.button("Submit Diagnoses"):
@@ -141,6 +142,7 @@ else:
                                 # Change selected diagnosis to the new one
                                 index_to_change = st.session_state.diagnoses.index(change_diagnosis)
                                 st.session_state.diagnoses[index_to_change] = option
+                                st.rerun()  # Rerun to update the displayed diagnoses
 
             # Create columns for each diagnosis input
             cols = st.columns(len(st.session_state.diagnoses) + 1)
@@ -190,5 +192,4 @@ else:
 
     except Exception as e:
         st.error(f"Error initializing Firebase: {e}")
-
 
