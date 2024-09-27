@@ -41,9 +41,11 @@ else:
             st.session_state.current_page = "diagnoses"
         if 'diagnoses' not in st.session_state:
             st.session_state.diagnoses = [""] * 5
+        if 'prioritized_diagnoses' not in st.session_state:
+            st.session_state.prioritized_diagnoses = []
 
         # Title of the app
-        st.title("")
+        st.title("Diagnosis Prioritization Tool")
 
         # Diagnoses Page
         if st.session_state.current_page == "diagnoses":
@@ -54,7 +56,7 @@ else:
 
             # Load diagnoses from file
             dx_options = read_diagnoses_from_file()
-            dx_options.insert(0, "")
+            dx_options.insert(0, "")  # Add an empty option
             
             # Create columns for each diagnosis input
             cols = st.columns(5)
@@ -90,8 +92,9 @@ else:
 
             # Create a reorderable list
             sorted_diagnoses = st.session_state.prioritized_diagnoses.copy()
+            diagnoses_df = pd.DataFrame(sorted_diagnoses, columns=["Diagnoses"])
             reordered_diagnoses = st.data_editor(
-                pd.DataFrame(sorted_diagnoses, columns=["Diagnoses"]),
+                diagnoses_df,
                 use_container_width=True,
                 hide_index=True
             )
@@ -111,5 +114,4 @@ else:
 
     except Exception as e:
         st.error(f"Error initializing Firebase: {e}")
-
 
