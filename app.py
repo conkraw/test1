@@ -44,6 +44,8 @@ else:
             st.session_state.current_page = "diagnoses"
         if 'diagnoses' not in st.session_state:
             st.session_state.diagnoses = [""] * 5
+        if 'laboratory_features' not in st.session_state:
+            st.session_state.laboratory_features = [""] * 5  # Initialize laboratory_features
 
         # Load diagnoses from file after Firebase initialization
         dx_options = read_diagnoses_from_file()
@@ -176,6 +178,7 @@ else:
 
     except Exception as e:
         st.error(f"Error initializing Firebase: {e}")
+
 
 
 
