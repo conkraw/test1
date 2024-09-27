@@ -89,10 +89,10 @@ else:
                 Please provide up to 5 laboratory features that influence the differential diagnosis.
             """)
 
-            # Create a container for centering
-            main_container = st.container()
+            # Centering the main content using columns
+            col1, col2, col3 = st.columns([1, 2, 1])  # Adjust ratios for centering
 
-            with main_container:
+            with col2:  # This is the center column
                 # Reorder section in the sidebar
                 with st.sidebar:
                     st.subheader("Reorder Diagnoses")
@@ -106,28 +106,19 @@ else:
                         elif move_direction == "Lower Priority" and idx < len(st.session_state.diagnoses) - 1:
                             st.session_state.diagnoses[idx], st.session_state.diagnoses[idx + 1] = st.session_state.diagnoses[idx + 1], st.session_state.diagnoses[idx]
 
-                # Create columns for each diagnosis input
-                cols = st.columns(len(st.session_state.diagnoses) + 1)
-                with cols[0]:
-                    st.markdown("Laboratory Features")
-
-                for diagnosis, col in zip(st.session_state.diagnoses, cols[1:]):
-                    with col:
-                        st.markdown(diagnosis)
+                st.subheader("Laboratory Features")
+                for diagnosis in st.session_state.diagnoses:
+                    st.markdown(f"**{diagnosis}**")
 
                 for i in range(5):
-                    cols = st.columns(len(st.session_state.diagnoses) + 1)
-                    with cols[0]:
-                        st.session_state.laboratory_features[i] = st.text_input("", key=f"lab_row_{i}", label_visibility="collapsed")
-
-                    for diagnosis, col in zip(st.session_state.diagnoses, cols[1:]):
-                        with col:
-                            st.selectbox(
-                                "",
-                                options=["", "Supports", "Does not support"],
-                                key=f"select_{i}_{diagnosis}_lab",
-                                label_visibility="collapsed"
-                            )
+                    st.text_input("Laboratory Feature", key=f"lab_row_{i}", label_visibility="collapsed")
+                    for diagnosis in st.session_state.diagnoses:
+                        st.selectbox(
+                            "",
+                            options=["", "Supports", "Does not support"],
+                            key=f"select_{i}_{diagnosis}_lab",
+                            label_visibility="collapsed"
+                        )
 
                 if st.button("Submit Laboratory Features"):
                     assessments = {}
