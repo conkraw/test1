@@ -69,13 +69,16 @@ else:
 
             # Create a draggable list for diagnoses
             for i in range(5):
-                # Ensure valid selection
-                if st.session_state.diagnoses[i] not in dx_options:
-                    st.session_state.diagnoses[i] = ""  # Default to blank if not found
+                current_diagnosis = st.session_state.diagnoses[i]
+                
+                # Use a safe index for selectbox
+                if current_diagnosis not in dx_options:
+                    current_diagnosis = ""  # Default to blank if not found
+
                 st.session_state.diagnoses[i] = st.selectbox(
                     f"Diagnosis {i + 1}",
                     options=dx_options,
-                    index=dx_options.index(st.session_state.diagnoses[i]) if st.session_state.diagnoses[i] in dx_options else 0,
+                    index=dx_options.index(current_diagnosis),
                     key=f"diagnosis_{i}"
                 )
 
@@ -106,12 +109,11 @@ else:
                 with st.sidebar:
                     st.subheader("Reorder Diagnoses")
 
-                    # Maintain the diagnosis selection
                     selected_diagnosis = st.selectbox(
                         "Select a diagnosis to move",
                         options=st.session_state.diagnoses,
                         key="move_diagnosis",
-                        index=st.session_state.diagnoses.index(st.session_state.selected_diagnosis)
+                        index=st.session_state.diagnoses.index(st.session_state.selected_diagnosis) if st.session_state.selected_diagnosis in st.session_state.diagnoses else 0
                     )
 
                     move_direction = st.radio("Adjust Priority:", options=["Higher Priority", "Lower Priority"], key="move_direction")
@@ -193,6 +195,5 @@ else:
 
     except Exception as e:
         st.error(f"Error initializing Firebase: {e}")
-
 
 
