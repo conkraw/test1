@@ -50,34 +50,33 @@ else:
         st.title("")
 
         # Diagnoses Page
-if st.session_state.current_page == "diagnoses":
-    st.markdown("""
-        ## DIFFERENTIAL DIAGNOSIS
-        Please select 5 possible diagnoses you would consider. Do not provide duplicates.
-    """)
+        if st.session_state.current_page == "diagnoses":
+            st.markdown("""
+                ## DIFFERENTIAL DIAGNOSIS
+                Please select 5 possible diagnoses you would consider. Do not provide duplicates.
+            """)
 
-    # Load diagnoses from file
-    dx_options = read_diagnoses_from_file()
-    dx_options.insert(0, "")  # Add a blank option at the beginning
+            # Load diagnoses from file
+            dx_options = read_diagnoses_from_file()
+            dx_options.insert(0, "")  # Add a blank option at the beginning
 
-    # Create columns for each diagnosis input
-    cols = st.columns(5)
-    for i, col in enumerate(cols):
-        with col:
-            st.session_state.diagnoses[i] = st.selectbox(
-                f"Diagnosis {i + 1}",
-                options=dx_options,
-                index=0,  # Default to the blank option
-                key=f"diagnosis_{i}"
-            )
+            # Create columns for each diagnosis input
+            cols = st.columns(5)
+            for i, col in enumerate(cols):
+                with col:
+                    # If the dropdown hasn't been interacted with, show a blank option
+                    if st.session_state.diagnoses[i] == "":
+                        available_options = [""]  # Start with only a blank option
+                    else:
+                        # Filter out already selected diagnoses from options
+                        available_options = [option for option in dx_options if option not in st.session_state.diagnoses[:i]]
 
-
-            st.session_state.diagnoses[i] = st.selectbox(
-                f"Diagnosis {i + 1}",
-                options=available_options,
-                index=0,  # Default to the blank option
-                key=f"diagnosis_{i}"
-            )
+                    st.session_state.diagnoses[i] = st.selectbox(
+                        f"Diagnosis {i + 1}",
+                        options=available_options,
+                        index=0,  # Default to the blank option
+                        key=f"diagnosis_{i}"
+                    )
 
             # Button to submit the diagnoses
             if st.button("Submit Diagnoses"):
@@ -197,3 +196,4 @@ if st.session_state.current_page == "diagnoses":
 
     except Exception as e:
         st.error(f"Error initializing Firebase: {e}")
+
