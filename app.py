@@ -36,7 +36,7 @@ else:
         db = firestore.client()
 
         def upload_to_firebase(entry):
-            db.collection('your_collection_name').add(entry)  # Change 'your_collection_name' to your collection name
+            db.collection('your_collection_name').add(entry)
             return "Data uploaded to Firebase."
 
         # Initialize session state
@@ -70,17 +70,6 @@ else:
                     key=f"diagnosis_{i}"
                 )
 
-            # Reorder functionality
-            selected_diagnosis = st.selectbox("Select a diagnosis to move", options=st.session_state.diagnoses, key="move_diagnosis")
-            move_direction = st.radio("Move Diagnosis:", options=["Up", "Down"], key="move_direction")
-
-            if st.button("Move Diagnosis"):
-                idx = st.session_state.diagnoses.index(selected_diagnosis)
-                if move_direction == "Up" and idx > 0:
-                    st.session_state.diagnoses[idx], st.session_state.diagnoses[idx - 1] = st.session_state.diagnoses[idx - 1], st.session_state.diagnoses[idx]
-                elif move_direction == "Down" and idx < len(st.session_state.diagnoses) - 1:
-                    st.session_state.diagnoses[idx], st.session_state.diagnoses[idx + 1] = st.session_state.diagnoses[idx + 1], st.session_state.diagnoses[idx]
-
             # Button to submit the diagnoses
             if st.button("Submit Diagnoses"):
                 diagnoses = [d.strip() for d in st.session_state.diagnoses]
@@ -100,6 +89,19 @@ else:
                 Please provide up to 5 laboratory features that influence the differential diagnosis.
             """)
 
+            # Draggable functionality for column headers
+            st.subheader("Reorder Diagnoses")
+            selected_diagnosis = st.selectbox("Select a diagnosis to move", options=st.session_state.diagnoses, key="move_diagnosis")
+            move_direction = st.radio("Move Diagnosis:", options=["Up", "Down"], key="move_direction")
+
+            if st.button("Move Diagnosis"):
+                idx = st.session_state.diagnoses.index(selected_diagnosis)
+                if move_direction == "Up" and idx > 0:
+                    st.session_state.diagnoses[idx], st.session_state.diagnoses[idx - 1] = st.session_state.diagnoses[idx - 1], st.session_state.diagnoses[idx]
+                elif move_direction == "Down" and idx < len(st.session_state.diagnoses) - 1:
+                    st.session_state.diagnoses[idx], st.session_state.diagnoses[idx + 1] = st.session_state.diagnoses[idx + 1], st.session_state.diagnoses[idx]
+
+            # Create columns for each diagnosis input
             cols = st.columns(len(st.session_state.diagnoses) + 1)
             with cols[0]:
                 st.markdown("Laboratory Features")
@@ -136,7 +138,7 @@ else:
 
                 # Prepare the entry for Firebase with the new key for diagnoses
                 entry = {
-                    'updated_diagnoses': st.session_state.diagnoses,  # Renamed key
+                    'updated_diagnoses': st.session_state.diagnoses,
                     'laboratory_features': st.session_state.laboratory_features,
                     'lab_assessments': assessments
                 }
@@ -146,3 +148,4 @@ else:
 
     except Exception as e:
         st.error(f"Error initializing Firebase: {e}")
+
