@@ -126,24 +126,24 @@ else:
                     elif move_direction == "Lower Priority" and idx < len(st.session_state.diagnoses) - 1:
                         st.session_state.diagnoses[idx], st.session_state.diagnoses[idx + 1] = st.session_state.diagnoses[idx + 1], st.session_state.diagnoses[idx]
 
-            # Change a diagnosis section
-            st.subheader("Change a Diagnosis")
-            change_diagnosis = st.selectbox(
-                "Select a diagnosis to change",
-                options=st.session_state.diagnoses,
-                key="change_diagnosis"
-            )
+                # Change a diagnosis section
+                st.subheader("Change a Diagnosis")
+                change_diagnosis = st.selectbox(
+                    "Select a diagnosis to change",
+                    options=st.session_state.diagnoses,
+                    key="change_diagnosis"
+                )
 
-            new_diagnosis_search = st.text_input("Search for a new diagnosis", "")
-            if new_diagnosis_search:
-                new_filtered_options = [dx for dx in dx_options if new_diagnosis_search.lower() in dx.lower() and dx not in st.session_state.diagnoses]
-                if new_filtered_options:
-                    st.write("**Available Options:**")
-                    for option in new_filtered_options:
-                        if st.button(option):
-                            # Change selected diagnosis to the new one
-                            index_to_change = st.session_state.diagnoses.index(change_diagnosis)
-                            st.session_state.diagnoses[index_to_change] = option
+                new_diagnosis_search = st.text_input("Search for a new diagnosis", "")
+                if new_diagnosis_search:
+                    new_filtered_options = [dx for dx in dx_options if new_diagnosis_search.lower() in dx.lower() and dx not in st.session_state.diagnoses]
+                    if new_filtered_options:
+                        st.write("**Available Options:**")
+                        for option in new_filtered_options:
+                            if st.button(option):
+                                # Change selected diagnosis to the new one
+                                index_to_change = st.session_state.diagnoses.index(change_diagnosis)
+                                st.session_state.diagnoses[index_to_change] = option
 
             # Create columns for each diagnosis input
             cols = st.columns(len(st.session_state.diagnoses) + 1)
