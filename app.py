@@ -79,19 +79,18 @@ else:
                 if search_input:
                     filtered_options = [dx for dx in dx_options if search_input.lower() in dx.lower()]
                 else:
-                    filtered_options = dx_options
+                    filtered_options = []
 
-                # Allow selection from filtered options
+                # Display filtered options
                 if filtered_options:
-                    selected_diagnosis = st.selectbox(
-                        "Select a diagnosis",
-                        options=filtered_options,
-                        index=filtered_options.index(current_diagnosis) if current_diagnosis in filtered_options else 0,
-                        key=f"diagnosis_{i}"
-                    )
-                    st.session_state.diagnoses[i] = selected_diagnosis
-                else:
-                    st.session_state.diagnoses[i] = ""
+                    st.write("**Suggestions:**")
+                    for option in filtered_options[:5]:  # Show a maximum of 5 options
+                        if st.button(option, key=f"select_{i}_{option}"):
+                            st.session_state.diagnoses[i] = option
+
+                # Automatically update the diagnosis if it matches
+                if search_input in dx_options:
+                    st.session_state.diagnoses[i] = search_input
 
             # Button to submit the diagnoses
             if st.button("Submit Diagnoses"):
@@ -209,3 +208,4 @@ else:
 
     except Exception as e:
         st.error(f"Error initializing Firebase: {e}")
+
