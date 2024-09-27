@@ -53,7 +53,7 @@ else:
         # Diagnoses Page
         if st.session_state.current_page == "diagnoses":
             st.markdown("""
-                ## DIFFERENTIAL DIAGNOSIS
+                ## DIFFERENTIAL DIAGNOSIS UPDATE
                 Based on the information that been subsequently provided in the above case, please review your initial differential diagnosis list and update it as necessary. 
             """)
 
