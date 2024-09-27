@@ -47,8 +47,8 @@ else:
             st.session_state.current_page = "diagnoses"
         if 'diagnoses' not in st.session_state:
             st.session_state.diagnoses = [""] * 5
-        if 'historical_features' not in st.session_state:
-            st.session_state.historical_features = [""] * 5
+        if 'laboratory_testing' not in st.session_state:
+            st.session_state.laboratory_testing = [""] * 5
 
         # Title of the app
         st.title("Differential Diagnosis Tool")
@@ -83,23 +83,23 @@ else:
                     diagnoses = [d.strip() for d in st.session_state.diagnoses]
                     if all(diagnosis for diagnosis in diagnoses):
                         if len(diagnoses) == len(set(diagnoses)):
-                            st.session_state.current_page = "historical_features"  # Move to Historical Features page
+                            st.session_state.current_page = "laboratory_testing"  # Move to Laboratory Testing page
                             st.rerun()  # Rerun the app to refresh the page
                         else:
                             st.error("Please do not provide duplicate diagnoses.")
                     else:
                         st.error("Please select all 5 diagnoses.")
 
-        # Historical Features Page
-        elif st.session_state.current_page == "historical_features":
+        # Laboratory Testing Page
+        elif st.session_state.current_page == "laboratory_testing":
             st.markdown("""
-                ### HISTORICAL FEATURES
-                Please provide up to 5 historical features that influence the differential diagnosis.
+                ### LABORATORY TESTING
+                Please provide up to 5 laboratory tests that influence the differential diagnosis.
             """)
 
             cols = st.columns(len(st.session_state.diagnoses) + 1)
             with cols[0]:
-                st.markdown("Historical Features")
+                st.markdown("Laboratory Tests")
 
             for diagnosis, col in zip(st.session_state.diagnoses, cols[1:]):
                 with col:
@@ -108,33 +108,33 @@ else:
             for i in range(5):
                 cols = st.columns(len(st.session_state.diagnoses) + 1)
                 with cols[0]:
-                    st.session_state.historical_features[i] = st.text_input("", key=f"hx_row_{i}", label_visibility="collapsed")
+                    st.session_state.laboratory_testing[i] = st.text_input("", key=f"lab_test_row_{i}", label_visibility="collapsed")
 
                 for diagnosis, col in zip(st.session_state.diagnoses, cols[1:]):
                     with col:
                         st.selectbox(
                             "",
                             options=["", "Supports", "Does not support"],
-                            key=f"select_{i}_{diagnosis}_hx",
+                            key=f"select_{i}_{diagnosis}_lab",
                             label_visibility="collapsed"
                         )
 
-            if st.button("Submit Historical Features"):
+            if st.button("Submit Laboratory Testing"):
                 assessments = {}
                 for i in range(5):
                     for diagnosis in st.session_state.diagnoses:
-                        assessment = st.session_state[f"select_{i}_{diagnosis}_hx"]
+                        assessment = st.session_state[f"select_{i}_{diagnosis}_lab"]
                         if diagnosis not in assessments:
                             assessments[diagnosis] = []
                         assessments[diagnosis].append({
-                            'historical_feature': st.session_state.historical_features[i],
+                            'laboratory_test': st.session_state.laboratory_testing[i],
                             'assessment': assessment
                         })
 
                 entry = {
                     'diagnoses': st.session_state.diagnoses,  # Key for uploaded diagnoses
-                    'historical_features': st.session_state.historical_features,
-                    'hx_assessments': assessments
+                    'laboratory_testing': st.session_state.laboratory_testing,
+                    'lab_assessments': assessments
                 }
 
                 result = upload_to_firebase(entry)
@@ -142,3 +142,4 @@ else:
 
     except Exception as e:
         st.error(f"Error initializing Firebase: {e}")
+
