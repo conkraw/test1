@@ -97,7 +97,7 @@ else:
         # Laboratory Testing Page
         elif st.session_state.current_page == "laboratory_testing":
             st.markdown("### LABORATORY TESTING")
-            st.write("For each laboratory test that you have chosen, please describe how they would influence your differential diagnosis.")
+            st.write("Please select up to 5 laboratory tests and describe how they would influence your differential diagnosis.")
 
             cols = st.columns(len(st.session_state.diagnoses) + 1)
             with cols[0]:
@@ -149,7 +149,7 @@ else:
         # Radiological Tests Page
         elif st.session_state.current_page == "radiological_tests":
             st.markdown("### RADIOLOGICAL TESTS")
-            st.write("For each radiological test that you have chosen, please describe how they would influence your differential diagnosis.")
+            st.write("Please select up to 5 radiological tests and describe how they would influence your differential diagnosis.")
 
             cols = st.columns(len(st.session_state.diagnoses) + 1)
             with cols[0]:
@@ -201,7 +201,7 @@ else:
         # Other Tests Page
         elif st.session_state.current_page == "other_tests":
             st.markdown("### OTHER TESTS")
-            st.write("For each other test that you have chosen, please describe how they would influence your differential diagnosis.")
+            st.write("Please select up to 5 other tests, and describe how they would influence your differential diagnosis.")
 
             cols = st.columns(len(st.session_state.diagnoses) + 1)
             with cols[0]:
