@@ -90,7 +90,7 @@ else:
 
             # Create a reorderable list
             sorted_diagnoses = st.session_state.prioritized_diagnoses.copy()
-            reordered_diagnoses = st.experimental_data_editor(
+            reordered_diagnoses = st.data_editor(
                 pd.DataFrame(sorted_diagnoses, columns=["Diagnoses"]),
                 use_container_width=True,
                 hide_index=True
