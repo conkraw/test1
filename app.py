@@ -58,7 +58,8 @@ else:
 
             # Load diagnoses from file
             dx_options = read_diagnoses_from_file()
-
+            dx_options.insert(0, "") 
+            
             # Create columns for each diagnosis input
             cols = st.columns(5)
             for i, col in enumerate(cols):
