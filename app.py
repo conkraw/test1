@@ -248,6 +248,5 @@ else:
 
     except Exception as e:
         st.error(f"Error initializing Firebase: {e}")
-``
 
 
