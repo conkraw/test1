@@ -46,6 +46,8 @@ else:
             st.session_state.diagnoses = [""] * 5
         if 'laboratory_features' not in st.session_state:
             st.session_state.laboratory_features = [""] * 5
+        if 'selected_diagnosis' not in st.session_state:
+            st.session_state.selected_diagnosis = st.session_state.diagnoses[0]
 
         # Load diagnoses from file after Firebase initialization
         dx_options = read_diagnoses_from_file()
@@ -109,9 +111,13 @@ else:
             with st.sidebar:
                 st.subheader("Reorder Diagnoses")
 
+                if 'selected_diagnosis' not in st.session_state:
+                    st.session_state.selected_diagnosis = st.session_state.diagnoses[0]
+
                 selected_diagnosis = st.selectbox(
                     "Select a diagnosis to move",
                     options=st.session_state.diagnoses,
+                    index=st.session_state.diagnoses.index(st.session_state.selected_diagnosis),
                     key="move_diagnosis"
                 )
 
@@ -128,6 +134,9 @@ else:
                         if idx < len(st.session_state.diagnoses) - 1:  # Ensure not moving out of bounds
                             # Swap with the next diagnosis
                             st.session_state.diagnoses[idx], st.session_state.diagnoses[idx + 1] = st.session_state.diagnoses[idx + 1], st.session_state.diagnoses[idx]
+
+                    # Update selected diagnosis to maintain its reference
+                    st.session_state.selected_diagnosis = selected_diagnosis
 
             # Create columns for each diagnosis input
             cols = st.columns(len(st.session_state.diagnoses) + 1)
@@ -177,4 +186,3 @@ else:
 
     except Exception as e:
         st.error(f"Error initializing Firebase: {e}")
-
