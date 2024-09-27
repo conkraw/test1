@@ -66,7 +66,7 @@ else:
                     st.session_state.diagnoses[i] = st.selectbox(
                         f"Diagnosis {i + 1}",
                         options=dx_options,
-                        index=dx_options.index(st.session_state.diagnoses[i]) if st.session_state.diagnoses[i] in dx_options else 0,
+                        index=0,
                         key=f"diagnosis_{i}"
                     )
 
