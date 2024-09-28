@@ -48,8 +48,6 @@ else:
             st.session_state.laboratory_features = [""] * 5
         if 'selected_buttons' not in st.session_state:
             st.session_state.selected_buttons = [False] * 5  # Track button visibility for each diagnosis
-        if 'shown_suggestions' not in st.session_state:
-            st.session_state.shown_suggestions = [True] * 5  # Track suggestions visibility
 
         # Load diagnoses from file after Firebase initialization
         dx_options = read_diagnoses_from_file()
@@ -87,12 +85,11 @@ else:
                         if st.button(f"{option}", key=button_key):
                             st.session_state.diagnoses[i] = option
                             st.session_state.selected_buttons[i] = True  # Mark as selected
-                            st.session_state.shown_suggestions[i] = False  # Hide suggestions
-                            st.rerun()  # Use st.rerun() to refresh the app
+                            st.rerun()  # Refresh the app
 
-                # Display selected diagnosis if a selection was made
-                if st.session_state.selected_buttons[i]:
-                    st.markdown(f"**Selected:** {st.session_state.diagnoses[i]}")
+            # Display selected diagnosis only if it hasn't been selected
+            if st.session_state.selected_buttons[i]:
+                st.markdown(f"**Selected:** {st.session_state.diagnoses[i]}")
 
             # Button to submit the diagnoses
             if st.button("Submit Diagnoses"):
