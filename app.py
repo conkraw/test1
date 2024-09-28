@@ -48,6 +48,8 @@ else:
             st.session_state.laboratory_features = [""] * 5
         if 'selected_buttons' not in st.session_state:
             st.session_state.selected_buttons = [False] * 5  # Track button visibility for each diagnosis
+        if 'selected_moving_diagnosis' not in st.session_state:
+            st.session_state.selected_moving_diagnosis = ""
 
         # Load diagnoses from file after Firebase initialization
         dx_options = read_diagnoses_from_file()
@@ -116,12 +118,15 @@ else:
                 st.subheader("Reorder Diagnoses")
 
                 # Update reorder options based on current diagnoses
-                selected_diagnosis = st.selectbox(
-                    "Select a diagnosis to move",
-                    options=st.session_state.diagnoses,
-                    index=0,  # Default to the first diagnosis
-                    key="move_diagnosis"
-                )
+                if st.session_state.selected_moving_diagnosis:
+                    selected_diagnosis = st.session_state.selected_moving_diagnosis
+                else:
+                    selected_diagnosis = st.selectbox(
+                        "Select a diagnosis to move",
+                        options=st.session_state.diagnoses,
+                        index=0,  # Default to the first diagnosis
+                        key="move_diagnosis"
+                    )
 
                 move_direction = st.radio("Adjust Priority:", options=["Higher Priority", "Lower Priority"], key="move_direction")
 
@@ -132,11 +137,13 @@ else:
                         st.session_state.diagnoses[idx], st.session_state.diagnoses[idx - 1] = (
                             st.session_state.diagnoses[idx - 1], st.session_state.diagnoses[idx]
                         )
+                        st.session_state.selected_moving_diagnosis = st.session_state.diagnoses[idx - 1]  # Update selected diagnosis
                     elif move_direction == "Lower Priority" and idx < len(st.session_state.diagnoses) - 1:
                         # Move down by one position
                         st.session_state.diagnoses[idx], st.session_state.diagnoses[idx + 1] = (
                             st.session_state.diagnoses[idx + 1], st.session_state.diagnoses[idx]
                         )
+                        st.session_state.selected_moving_diagnosis = st.session_state.diagnoses[idx + 1]  # Update selected diagnosis
 
                 # Change a diagnosis section
                 st.subheader("Change a Diagnosis")
@@ -206,5 +213,4 @@ else:
 
     except Exception as e:
         st.error(f"Error initializing Firebase: {e}")
-
 
