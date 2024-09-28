@@ -1,29 +1,23 @@
 import os
 import json
+import streamlit as st
 import firebase_admin
 from firebase_admin import credentials, firestore
 
 def initialize_firebase():
-    # Load Firebase credentials from environment variable
     FIREBASE_KEY_JSON = os.getenv('FIREBASE_KEY')
-
     if FIREBASE_KEY_JSON is None:
-        raise ValueError("FIREBASE_KEY environment variable not set.")
+        st.error("FIREBASE_KEY environment variable not set.")
+    else:
+        try:
+            firebase_credentials = json.loads(FIREBASE_KEY_JSON)
+            if not firebase_admin._apps:
+                cred = credentials.Certificate(firebase_credentials)
+                firebase_admin.initialize_app(cred)
+        except Exception as e:
+            st.error(f"Error initializing Firebase: {e}")
 
-    # Parse the JSON string into a dictionary
-    firebase_credentials = json.loads(FIREBASE_KEY_JSON)
-
-    # Initialize Firebase only if not already initialized
-    if not firebase_admin._apps:
-        cred = credentials.Certificate(firebase_credentials)
-        firebase_admin.initialize_app(cred)
-
-    # Get Firestore client
+def upload_to_firebase(entry):
     db = firestore.client()
-
-    return db
-
-# Function to upload data to Firebase
-def upload_to_firebase(db, entry):
-    db.collection('your_collection_name').add(entry)  # Change 'your_collection_name' to your collection name
+    db.collection('your_collection_name').add(entry)
     return "Data uploaded to Firebase."
