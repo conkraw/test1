@@ -99,6 +99,8 @@ else:
                 login_page(users)
             elif st.session_state.page == "diagnoses":
                 display_diagnoses()
+            elif st.session_state.page == "intervention":  # New page for interventions
+                upload_intervention()
 
         # Welcome page function
         def welcome_page():
@@ -282,11 +284,30 @@ else:
                 else:
                     st.error("Please select all 5 diagnoses.")
 
+        # New page for uploading interventions
+        def upload_intervention():
+            st.title("Intervention Description Entry")
+
+            # Prompt for user input
+            st.header("Describe any interventions that you would currently perform.")
+            interventions = st.text_area("Interventions Description", height=200)
+
+            # Button to upload to Firebase
+            if st.button("Upload Intervention"):
+                if interventions:
+                    entry = {'interventions': interventions}
+                    # Immediately upload to Firebase
+                    result = upload_to_firebase(entry)
+                    st.success("Your interventions have been accepted and are under review.")
+                else:
+                    st.error("Please enter a description of the interventions.")
+
         if __name__ == "__main__":
             main()
 
     except Exception as e:
         st.error(f"Error initializing Firebase: {e}")
+
 
 
 
