@@ -4,6 +4,7 @@ from user_management import load_users, welcome_page, login_page
 from assessment import display_assessment
 from diagnoses import display_diagnoses
 from intervention import upload_intervention
+from history import 
 
 #firebase_setup, user_management, assessment, diagnoses, intervention, utils
 
@@ -34,6 +35,8 @@ def main():
         display_diagnoses()
     elif st.session_state.page == "intervention":
         upload_intervention()
+    elif st.session_state.page == "history":
+        run_virtual_patient_app()
 
 if __name__ == "__main__":
     main()
