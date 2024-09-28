@@ -66,6 +66,16 @@ else:
 
             return vital_signs
 
+        # Function to read diagnoses from a file
+        def read_diagnoses_from_file():
+            try:
+                with open('dx_list.txt', 'r') as file:
+                    diagnoses = [line.strip() for line in file.readlines() if line.strip()]
+                return diagnoses
+            except Exception as e:
+                st.error(f"Error reading dx_list.txt: {e}")
+                return []
+
         # Main app function
         def main():
             st.title("Pediatric Clerkship Virtual Clinical Reasoning Assessment")
@@ -192,7 +202,7 @@ else:
 
                     st.markdown("</div>", unsafe_allow_html=True)  # Close the div
 
-                # Button to upload data to Firebase
+                # Button to upload data to Firebase and navigate to diagnoses page
                 if st.button("Submit Assessment"):
                     entry = {
                         'unique_code': st.session_state.unique_code,  # Use the stored unique code
@@ -209,11 +219,14 @@ else:
                     # Navigate to the diagnoses page
                     st.session_state.page = "diagnoses"
                     st.rerun()  # Rerun to refresh the view
+
             else:
                 st.error("No vital signs data available.")
 
         # Diagnoses Page function
         def display_diagnoses():
+            dx_options = read_diagnoses_from_file()  # Load diagnosis options from the file
+
             st.markdown("""
                 ## DIFFERENTIAL DIAGNOSIS UPDATE
                 Based on the information that has been subsequently provided in the above case, please review your initial differential diagnosis list and update it as necessary. 
@@ -233,8 +246,7 @@ else:
                         key=f"diagnosis_search_{i}"
                     )
 
-                    # Filter options based on the search input (You need to define dx_options)
-                    dx_options = ["Diagnosis A", "Diagnosis B", "Diagnosis C"]  # Example options, replace with your own
+                    # Filter options based on the search input
                     filtered_options = [dx for dx in dx_options if search_input.lower() in dx.lower()] if search_input else []
 
                     # Display filtered options
@@ -259,11 +271,10 @@ else:
                         st.error("Please do not provide duplicate diagnoses.")
                 else:
                     st.error("Please select all 5 diagnoses.")
-                    
+
         if __name__ == "__main__":
             main()
 
     except Exception as e:
         st.error(f"Error initializing Firebase: {e}")
-
 
