@@ -4,7 +4,7 @@ import os
 import json
 from firebase_setup import initialize_firebase, upload_to_firebase
 
-# Initialize Firestore client
+# Load Firebase credentials and initialize Firestore client
 try:
     db = initialize_firebase()  # Call the function to initialize Firebase
 except ValueError as e:
@@ -66,10 +66,10 @@ def main():
 
 # Welcome page function
 def welcome_page():
-    st.markdown("<h3>Welcome to the Pediatric Clerkship Assessment!</h3>", unsafe_allow_html=True)
-    st.markdown("<p>This assessment is designed to evaluate your clinical reasoning skills.</p>", unsafe_allow_html=True)
-    st.markdown("<h4>Instructions:</h4>", unsafe_allow_html=True)
-    st.markdown("<p>1. Please enter your unique code on the next page.<br>2. Follow the prompts to complete the assessment.</p>", unsafe_allow_html=True)
+    st.markdown("<h3 style='font-family: \"DejaVu Sans\";'>Welcome to the Pediatric Clerkship Assessment!</h3>", unsafe_allow_html=True)
+    st.markdown("<p style='font-family: \"DejaVu Sans\";'>This assessment is designed to evaluate your clinical reasoning skills.</p>", unsafe_allow_html=True)
+    st.markdown("<h4 style='font-family: \"DejaVu Sans\";'>Instructions:</h4>", unsafe_allow_html=True)
+    st.markdown("<p style='font-family: \"DejaVu Sans\";'>1. Please enter your unique code on the next page.<br>2. Follow the prompts to complete the assessment.</p>", unsafe_allow_html=True)
 
     if st.button("Next"):
         st.session_state.page = "login"  # Change to login page
@@ -77,7 +77,7 @@ def welcome_page():
 
 # Login page function
 def login_page(users):
-    st.markdown("<p>Please enter your unique code to access the assessment.</p>", unsafe_allow_html=True)
+    st.markdown("<p style='font-family: \"DejaVu Sans\";'>Please enter your unique code to access the assessment.</p>", unsafe_allow_html=True)
     unique_code = st.text_input("Unique Code:")
 
     if st.button("Submit"):
@@ -98,7 +98,7 @@ def login_page(users):
 
 # Function to display the assessment page
 def display_assessment():
-    st.markdown(f"<h3>Welcome {st.session_state.user_name}! Here is the intake form.</h3>", unsafe_allow_html=True)
+    st.markdown(f"<h3 style='font-family: \"DejaVu Sans\";'>Welcome {st.session_state.user_name}! Here is the intake form.</h3>", unsafe_allow_html=True)
 
     # Read and display the text from ptinfo.txt
     txt_file_path = "ptinfo.txt"
@@ -106,12 +106,14 @@ def display_assessment():
 
     if document_text:
         title_html = """
-        <h2>Patient Information:</h2>
+        <h2 style="font-family: 'DejaVu Sans'; font-size: 24px; margin-bottom: 10px; color: #2c3e50;">
+            Patient Information:
+        </h2>
         """
         st.markdown(title_html, unsafe_allow_html=True)
 
         custom_html = f"""
-        <div style="background-color: #ecf0f1; padding: 15px; border-radius: 8px;">
+        <div style="font-family: 'DejaVu Sans'; font-size: 18px; line-height: 1.5; color: #34495e; background-color: #ecf0f1; padding: 15px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
             {document_text.replace('\n', '<br>')}
         </div>
         """
@@ -124,7 +126,10 @@ def display_assessment():
     vital_signs = load_vital_signs(vital_signs_file)
 
     if vital_signs:
-        title_html = "<h2>Vital Signs:</h2>"
+        title_html = """
+        <h2 style="font-family: 'DejaVu Sans'; font-size: 24px; margin-bottom: 0; color: #2c3e50;">
+            Vital Signs:</h2>
+        """
         st.markdown(title_html, unsafe_allow_html=True)
 
         col1, col2 = st.columns([1, 2])  # Define two columns
@@ -199,9 +204,18 @@ def load_vital_signs(vital_signs_file):
 
     return vital_signs
 
-# Diagnoses Page function
+# Function to read diagnoses from file
+def read_diagnoses_from_file():
+    try:
+        with open('dx_list.txt', 'r') as file:
+            diagnoses = [line.strip() for line in file.readlines() if line.strip()]
+        return diagnoses
+    except Exception as e:
+        st.error(f"Error reading dx_list.txt: {e}")
+        return []
+
+# Function to display the diagnoses page
 def display_diagnoses():
-    # Check if assessment data exists
     if not st.session_state.assessment_data:
         st.error("Please complete the assessment before updating diagnoses.")
         return
@@ -221,7 +235,11 @@ def display_diagnoses():
 
         with col:
             # Search input for diagnosis
-            search_input = st.text_input(f"Diagnosis {i + 1}", value=current_diagnosis, key=f"diagnosis_{i}")
+            search_input = st.text_input(
+                f"Diagnosis {i + 1}",
+                value=current_diagnosis,
+                key=f"diagnosis_{i}"
+            )
 
             if st.button(f"Submit Diagnosis {i + 1}", key=f"submit_diagnosis_{i}"):
                 if search_input:
@@ -234,16 +252,7 @@ def display_diagnoses():
         st.session_state.page = "intervention"  # Move to Interventions page
         st.rerun()  # Rerun the app to refresh the page
 
-# Function to read diagnoses from a TXT file
-def read_diagnoses_from_file():
-    diagnoses = []
-    try:
-        with open("dx_list.txt", 'r') as file:
-            diagnoses = [line.strip() for line in file]
-    except FileNotFoundError:
-        st.error("Diagnoses file not found. Please check the file path.")
-    return diagnoses
-
 if __name__ == "__main__":
     main()
+
 
