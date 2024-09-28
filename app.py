@@ -5,6 +5,8 @@ from assessment import display_assessment
 from diagnoses import display_diagnoses
 from intervention import upload_intervention
 
+#firebase_setup, user_management, assessment, diagnoses, intervention, utils
+
 def main():
     st.set_page_config(layout="wide")
 
