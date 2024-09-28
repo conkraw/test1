@@ -48,6 +48,8 @@ else:
             st.session_state.laboratory_features = [""] * 5
         if 'selected_buttons' not in st.session_state:
             st.session_state.selected_buttons = [False] * 5  # Track button visibility for each diagnosis
+        if 'temp_steps' not in st.session_state:
+            st.session_state.temp_steps = 0  # Track the number of steps to move the selected diagnosis
 
         # Load diagnoses from file after Firebase initialization
         dx_options = read_diagnoses_from_file()
@@ -87,9 +89,9 @@ else:
                             st.session_state.selected_buttons[i] = True  # Mark as selected
                             st.rerun()  # Refresh the app
 
-            # Display selected diagnosis only if it hasn't been selected
-            if st.session_state.selected_buttons[i]:
-                st.markdown(f"**Selected:** {st.session_state.diagnoses[i]}")
+                # Display selected diagnosis only if it has been selected
+                if st.session_state.selected_buttons[i]:
+                    st.markdown(f"**Selected:** {st.session_state.diagnoses[i]}")
 
             # Button to submit the diagnoses
             if st.button("Submit Diagnoses"):
@@ -115,7 +117,7 @@ else:
             with st.sidebar:
                 st.subheader("Reorder Diagnoses")
 
-                # Update reorder options based on current diagnoses
+                # Track diagnosis and its intended direction
                 selected_diagnosis = st.selectbox(
                     "Select a diagnosis to move",
                     options=st.session_state.diagnoses,
@@ -125,12 +127,28 @@ else:
 
                 move_direction = st.radio("Adjust Priority:", options=["Higher Priority", "Lower Priority"], key="move_direction")
 
-                if st.button("Adjust Priority"):
+                if st.button("Set Adjustment"):
                     idx = st.session_state.diagnoses.index(selected_diagnosis)
-                    if move_direction == "Higher Priority" and idx > 0:
-                        st.session_state.diagnoses[idx], st.session_state.diagnoses[idx - 1] = st.session_state.diagnoses[idx - 1], st.session_state.diagnoses[idx]
-                    elif move_direction == "Lower Priority" and idx < len(st.session_state.diagnoses) - 1:
-                        st.session_state.diagnoses[idx], st.session_state.diagnoses[idx + 1] = st.session_state.diagnoses[idx + 1], st.session_state.diagnoses[idx]
+                    if move_direction == "Higher Priority":
+                        st.session_state.temp_steps -= 1  # Move up
+                    else:
+                        st.session_state.temp_steps += 1  # Move down
+
+                if st.button("Apply Adjustments"):
+                    idx = st.session_state.diagnoses.index(selected_diagnosis)
+                    new_index = idx + st.session_state.temp_steps
+
+                    # Ensure new_index is within bounds
+                    new_index = max(0, min(new_index, len(st.session_state.diagnoses) - 1))
+
+                    # Swap if new index is different
+                    if new_index != idx:
+                        st.session_state.diagnoses[idx], st.session_state.diagnoses[new_index] = (
+                            st.session_state.diagnoses[new_index], st.session_state.diagnoses[idx]
+                        )
+
+                    # Reset temp steps after applying adjustments
+                    st.session_state.temp_steps = 0
 
                 # Change a diagnosis section
                 st.subheader("Change a Diagnosis")
