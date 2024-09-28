@@ -115,7 +115,7 @@ else:
             with st.sidebar:
                 st.subheader("Reorder Diagnoses")
 
-                # Select diagnosis to move
+                # Update reorder options based on current diagnoses
                 selected_diagnosis = st.selectbox(
                     "Select a diagnosis to move",
                     options=st.session_state.diagnoses,
@@ -125,16 +125,13 @@ else:
 
                 move_direction = st.radio("Adjust Priority:", options=["Higher Priority", "Lower Priority"], key="move_direction")
 
-                # Adjust Priority Button
                 if st.button("Adjust Priority"):
                     idx = st.session_state.diagnoses.index(selected_diagnosis)
                     if move_direction == "Higher Priority" and idx > 0:
-                        # Move up
                         st.session_state.diagnoses[idx], st.session_state.diagnoses[idx - 1] = (
                             st.session_state.diagnoses[idx - 1], st.session_state.diagnoses[idx]
                         )
                     elif move_direction == "Lower Priority" and idx < len(st.session_state.diagnoses) - 1:
-                        # Move down
                         st.session_state.diagnoses[idx], st.session_state.diagnoses[idx + 1] = (
                             st.session_state.diagnoses[idx + 1], st.session_state.diagnoses[idx]
                         )
@@ -207,5 +204,4 @@ else:
 
     except Exception as e:
         st.error(f"Error initializing Firebase: {e}")
-
 
