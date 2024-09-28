@@ -73,7 +73,7 @@ else:
             # Load user data
             users = load_users()
 
-            # Initialize session state for the necessary variables
+            # Initialize session state for page if not already done
             if "page" not in st.session_state:
                 st.session_state.page = "welcome"  # Start on the welcome page
             if "user_name" not in st.session_state:
@@ -93,7 +93,7 @@ else:
             elif st.session_state.page == "login":
                 login_page(users)
             elif st.session_state.page == "diagnoses":
-                display_diagnoses()
+                display_diagnoses()  # Call the new diagnoses page
 
         # Welcome page function
         def welcome_page():
@@ -144,21 +144,12 @@ else:
 
             # Check if vital_signs is not empty before creating checkboxes
             if vital_signs:
-                # Vital Signs Title
-                title_html = """
-                <h2 style="font-family: 'DejaVu Sans'; font-size: 24px; margin-bottom: 0; color: #2c3e50;">
-                    Vital Signs:</h2>
-                """
-                st.markdown(title_html, unsafe_allow_html=True)
-
-                # Adjust subheader to match font and size, and reduce spacing
-                st.markdown("<h4 style='font-family: \"DejaVu Sans\"; font-size: 16px; margin: -20px 0 0 0;'>&nbsp;Of the following vital signs within the intake form, check the vital signs that are abnormal.</h4>", unsafe_allow_html=True)
-                #st.markdown("<h2>Vital Signs: Please select </h2>", unsafe_allow_html=True)
+                st.markdown("<h2>Vital Signs:</h2>", unsafe_allow_html=True)
                 for key, value in vital_signs.items():
                     st.checkbox(f"{key.upper()}: {value}", key=f"{key}_checkbox")
 
                 # Button to upload data to Firebase
-                if st.button("Submit"):
+                if st.button("Submit Assessment"):
                     entry = {
                         'unique_code': st.session_state.unique_code,  # Use the stored unique code
                         **{f"{key}_checkbox": st.session_state.get(f"{key}_checkbox", False) for key in vital_signs.keys()}
@@ -224,6 +215,5 @@ else:
 
     except Exception as e:
         st.error(f"Error initializing Firebase: {e}")
-
 
 
