@@ -276,5 +276,7 @@ else:
         # Run the main function
         if __name__ == "__main__":
             main()
+    except Exception as e:
+        st.error(f"Error initializing Firebase: {e}")
 
 
