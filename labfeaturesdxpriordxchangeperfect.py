@@ -79,7 +79,7 @@ else:
                 if filtered_options:
                     st.write("**Suggestions:**")
                     for option in filtered_options[:5]:  # Show a maximum of 5 options
-                        if st.button(f"Select {option}", key=f"select_option_{i}_{option}"):
+                        if st.button(f"{option}", key=f"select_option_{i}_{option}"):
                             st.session_state.diagnoses[i] = option
                             st.rerun()  # Use st.rerun() to refresh the app
 
