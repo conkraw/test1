@@ -48,6 +48,8 @@ else:
             st.session_state.laboratory_features = [""] * 5
         if 'selected_buttons' not in st.session_state:
             st.session_state.selected_buttons = [False] * 5  # Track button visibility for each diagnosis
+        if 'selected_moving_diagnosis' not in st.session_state:
+            st.session_state.selected_moving_diagnosis = ""  # Initialize selected moving diagnosis
 
         # Load diagnoses from file after Firebase initialization
         dx_options = read_diagnoses_from_file()
@@ -207,6 +209,5 @@ else:
 
     except Exception as e:
         st.error(f"Error initializing Firebase: {e}")
-
 
 
