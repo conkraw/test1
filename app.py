@@ -48,6 +48,8 @@ else:
             st.session_state.laboratory_features = [""] * 5
         if 'selected_buttons' not in st.session_state:
             st.session_state.selected_buttons = [False] * 5  # Track button visibility for each diagnosis
+        if 'adjust_count' not in st.session_state:
+            st.session_state.adjust_count = 0  # Track the number of adjustments
 
         # Load diagnoses from file after Firebase initialization
         dx_options = read_diagnoses_from_file()
@@ -128,13 +130,22 @@ else:
                 if st.button("Adjust Priority"):
                     idx = st.session_state.diagnoses.index(selected_diagnosis)
                     if move_direction == "Higher Priority" and idx > 0:
-                        st.session_state.diagnoses[idx], st.session_state.diagnoses[idx - 1] = (
-                            st.session_state.diagnoses[idx - 1], st.session_state.diagnoses[idx]
-                        )
+                        # Move up multiple positions
+                        moves = min(idx, 4)  # Can't move more than 4 positions up
+                        for _ in range(moves):
+                            st.session_state.diagnoses[idx], st.session_state.diagnoses[idx - 1] = (
+                                st.session_state.diagnoses[idx - 1], st.session_state.diagnoses[idx]
+                            )
+                            idx -= 1  # Move the index up
+
                     elif move_direction == "Lower Priority" and idx < len(st.session_state.diagnoses) - 1:
-                        st.session_state.diagnoses[idx], st.session_state.diagnoses[idx + 1] = (
-                            st.session_state.diagnoses[idx + 1], st.session_state.diagnoses[idx]
-                        )
+                        # Move down multiple positions
+                        moves = min(len(st.session_state.diagnoses) - 1 - idx, 4)  # Can't move more than 4 positions down
+                        for _ in range(moves):
+                            st.session_state.diagnoses[idx], st.session_state.diagnoses[idx + 1] = (
+                                st.session_state.diagnoses[idx + 1], st.session_state.diagnoses[idx]
+                            )
+                            idx += 1  # Move the index down
 
                 # Change a diagnosis section
                 st.subheader("Change a Diagnosis")
@@ -204,4 +215,5 @@ else:
 
     except Exception as e:
         st.error(f"Error initializing Firebase: {e}")
+
 
