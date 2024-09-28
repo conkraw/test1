@@ -25,7 +25,7 @@ else:
 
         # Function to upload data to Firebase
         def upload_to_firebase(entry):
-            db.collection('your_collection_name').add(entry)
+            db.collection('your_collection_name').add(entry)  # Change 'your_collection_name' to your collection name
             return "Data uploaded to Firebase."
 
         # Set page layout to wide
@@ -56,8 +56,8 @@ else:
                     for line in file:
                         parts = line.strip().split(',')
                         if len(parts) == 2:
-                            key = parts[0].strip()  
-                            value = parts[1].strip()  
+                            key = parts[0].strip()  # Get type (e.g., heart_rate)
+                            value = parts[1].strip()  # Get vital sign description
                             vital_signs[key] = value
             except FileNotFoundError:
                 st.error(f"File not found: {vital_signs_file}. Please check the file path.")
@@ -66,9 +66,6 @@ else:
 
             return vital_signs
 
-        # Initialize the diagnosis options
-        dx_options = ["Diagnosis 1", "Diagnosis 2", "Diagnosis 3", "Diagnosis 4", "Diagnosis 5"]  # Example options
-
         # Main app function
         def main():
             st.title("Pediatric Clerkship Virtual Clinical Reasoning Assessment")
@@ -76,23 +73,13 @@ else:
             # Load user data
             users = load_users()
 
-            # Initialize session state
+            # Initialize session state for page if not already done
             if "page" not in st.session_state:
-                st.session_state.page = "welcome" 
-            if "user_name" not in st.session_state:
-                st.session_state.user_name = ""
-            if "unique_code" not in st.session_state:
-                st.session_state.unique_code = None
-            if "diagnoses" not in st.session_state:
-                st.session_state.diagnoses = [""] * 5  # Placeholder for 5 diagnoses
-            if "selected_buttons" not in st.session_state:
-                st.session_state.selected_buttons = [False] * 5  # Track if a button is selected
+                st.session_state.page = "welcome"  # Start on the welcome page
 
             # Check which page to display
             if st.session_state.page == "assessment":
                 display_assessment()
-            elif st.session_state.page == "diagnoses":
-                display_diagnoses()
             elif st.session_state.page == "welcome":
                 welcome_page()
             elif st.session_state.page == "login":
@@ -100,18 +87,18 @@ else:
 
         # Welcome page function
         def welcome_page():
-            st.markdown("<h3>Welcome to the Pediatric Clerkship Assessment!</h3>", unsafe_allow_html=True)
-            st.markdown("<p>This assessment is designed to evaluate your clinical reasoning skills.</p>", unsafe_allow_html=True)
-            st.markdown("<h4>Instructions:</h4>", unsafe_allow_html=True)
-            st.markdown("<p>1. Please enter your unique code on the next page.<br>2. Follow the prompts to complete the assessment.</p>", unsafe_allow_html=True)
+            st.markdown("<h3 style='font-family: \"DejaVu Sans\";'>Welcome to the Pediatric Clerkship Assessment!</h3>", unsafe_allow_html=True)
+            st.markdown("<p style='font-family: \"DejaVu Sans\";'>This assessment is designed to evaluate your clinical reasoning skills.</p>", unsafe_allow_html=True)
+            st.markdown("<h4 style='font-family: \"DejaVu Sans\";'>Instructions:</h4>", unsafe_allow_html=True)
+            st.markdown("<p style='font-family: \"DejaVu Sans\";'>1. Please enter your unique code on the next page.<br>2. Follow the prompts to complete the assessment.</p>", unsafe_allow_html=True)
 
             if st.button("Next"):
-                st.session_state.page = "login"
-                st.rerun()
+                st.session_state.page = "login"  # Change to login page
+                st.rerun()  # Rerun to refresh the view
 
         # Login page function
         def login_page(users):
-            st.markdown("<p>Please enter your unique code to access the assessment.</p>", unsafe_allow_html=True)
+            st.markdown("<p style='font-family: \"DejaVu Sans\";'>Please enter your unique code to access the assessment.</p>", unsafe_allow_html=True)
             unique_code = st.text_input("Unique Code:")
 
             if st.button("Submit"):
@@ -120,9 +107,9 @@ else:
                         unique_code = int(unique_code.strip())
                         if unique_code in users['code'].values:
                             st.session_state.user_name = users.loc[users['code'] == unique_code, 'name'].values[0]
-                            st.session_state.unique_code = unique_code  
-                            st.session_state.page = "assessment"  
-                            st.rerun()
+                            st.session_state.unique_code = unique_code  # Store unique code in session state
+                            st.session_state.page = "assessment"  # Change to assessment page
+                            st.rerun()  # Rerun to refresh the view
                         else:
                             st.error("Invalid code. Please try again.")
                     except ValueError:
@@ -132,46 +119,99 @@ else:
 
         # Function to display the assessment page
         def display_assessment():
-            st.markdown(f"<h3>Welcome {st.session_state.user_name}! Here is the intake form.</h3>", unsafe_allow_html=True)
+            st.markdown(f"<h3 style='font-family: \"DejaVu Sans\";'>Welcome {st.session_state.user_name}! Here is the intake form.</h3>", unsafe_allow_html=True)
 
             # Read and display the text from ptinfo.txt
-            document_text = read_text_file("ptinfo.txt")
+            txt_file_path = "ptinfo.txt"
+            document_text = read_text_file(txt_file_path)
+
             if document_text:
-                st.markdown("<h2>Patient Information:</h2>", unsafe_allow_html=True)
-                st.markdown(f"<div>{document_text.replace('\n', '<br>')}</div>", unsafe_allow_html=True)
+                title_html = """
+                <h2 style="font-family: 'DejaVu Sans'; font-size: 24px; margin-bottom: 10px; color: #2c3e50;">
+                    Patient Information:
+                </h2>
+                """
+                st.markdown(title_html, unsafe_allow_html=True)
+
+                custom_html = f"""
+                <div style="font-family: 'DejaVu Sans'; font-size: 18px; line-height: 1.5; color: #34495e; background-color: #ecf0f1; padding: 15px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+                    {document_text.replace('\n', '<br>')}
+                </div>
+                """
+                st.markdown(custom_html, unsafe_allow_html=True)
             else:
                 st.write("No text found in the document.")
 
             # Load vital signs
-            vital_signs = load_vital_signs("vital_signs.txt")
-            if vital_signs:
-                st.markdown("<h2>Vital Signs:</h2>", unsafe_allow_html=True)
-                for key, value in vital_signs.items():
-                    st.checkbox(f"{key}: {value}")
+            vital_signs_file = "vital_signs.txt"
+            vital_signs = load_vital_signs(vital_signs_file)
 
+            # Check if vital_signs is not empty before creating checkboxes
+            if vital_signs:
+                # Vital Signs Title
+                title_html = """
+                <h2 style="font-family: 'DejaVu Sans'; font-size: 24px; margin-bottom: 0; color: #2c3e50;">
+                    Vital Signs:</h2>
+                """
+                st.markdown(title_html, unsafe_allow_html=True)
+
+                # Adjust subheader to match font and size, and reduce spacing
+                st.markdown("<h4 style='font-family: \"DejaVu Sans\"; font-size: 18px; margin: -20px 0 0 0;'>&nbsp;Of the following vital signs within the intake form, check the vital signs that are abnormal.</h4>", unsafe_allow_html=True)
+
+                # Patient Vital Signs Table
+                col1, col2 = st.columns([1, 2])  # Define two columns
+
+                with col2:
+                    # Indent labels and checkboxes
+                    st.markdown("<div style='margin-left: 20px;'>", unsafe_allow_html=True)  # Indent using a div
+
+                    # Checkboxes for vital signs
+                    heart_rate = vital_signs.get("heart_rate", "N/A")
+                    heart_rate_checkbox = st.checkbox(f"HEART RATE: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{heart_rate}", key='heart_rate_checkbox')
+
+                    respiratory_rate = vital_signs.get("respiratory_rate", "N/A")
+                    respiratory_rate_checkbox = st.checkbox(f"RESPIRATORY RATE: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{respiratory_rate}", key='respiratory_rate_checkbox')
+
+                    blood_pressure = vital_signs.get("blood_pressure", "N/A")
+                    blood_pressure_checkbox = st.checkbox(f"BLOOD PRESSURE: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{blood_pressure}", key='blood_pressure_checkbox')
+
+                    pulseox = vital_signs.get("pulseox", "N/A")
+                    pulseox_checkbox = st.checkbox(f"PULSE OXIMETRY: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{pulseox}", key='pulseox_checkbox')
+
+                    temperature = vital_signs.get("temperature", "N/A")
+                    temperature_checkbox = st.checkbox(f"TEMPERATURE: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{temperature}", key='temperature_checkbox')
+
+                    weight = vital_signs.get("weight", "N/A")
+                    weight_checkbox = st.checkbox(f"WEIGHT: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{weight}", key='weight_checkbox')
+
+                    st.markdown("</div>", unsafe_allow_html=True)  # Close the div
+
+                # Button to upload data to Firebase
                 if st.button("Submit Assessment"):
                     entry = {
-                        'unique_code': st.session_state.unique_code,  
-                        **{key: st.session_state[key] for key in vital_signs.keys()}
+                        'unique_code': st.session_state.unique_code,  # Use the stored unique code
+                        'heart_rate': heart_rate_checkbox,
+                        'respiratory_rate': respiratory_rate_checkbox,
+                        'blood_pressure': blood_pressure_checkbox,
+                        'pulseox': pulseox_checkbox,
+                        'temperature': temperature_checkbox,
+                        'weight': weight_checkbox,
                     }
                     result = upload_to_firebase(entry)
                     st.success(result)
-                    
-                    # Move to the diagnoses page after submitting the assessment
-                    st.session_state.page = "diagnoses"
-                    st.rerun()
             else:
                 st.error("No vital signs data available.")
 
-        # Function to display the Diagnoses page
-        def display_diagnoses():
-            st.markdown(""" 
+                
+       # Diagnoses Page
+        if st.session_state.current_page == "diagnoses":
+            st.markdown("""
                 ## DIFFERENTIAL DIAGNOSIS UPDATE
-                Based on the information that has been subsequently provided in the above case, please review your initial differential diagnosis list and update it as necessary.
+                Based on the information that has been subsequently provided in the above case, please review your initial differential diagnosis list and update it as necessary. 
             """)
 
             # Create columns for each diagnosis input
-            cols = st.columns(5)
+            cols = st.columns(5)  # Create 5 columns for 5 diagnoses
 
             for i, col in enumerate(cols):
                 current_diagnosis = st.session_state.diagnoses[i]
@@ -203,8 +243,7 @@ else:
                 # Check for empty diagnoses and duplicates
                 if all(diagnosis for diagnosis in diagnoses):
                     if len(diagnoses) == len(set(diagnoses)):
-                        # Here you can handle the submission to Firebase or navigate to the next step
-                        st.session_state.page = "next_page"  # Example placeholder for next step
+                        st.session_state.current_page = "laboratory_features"  # Move to Laboratory Features page
                         st.rerun()  # Rerun the app to refresh the page
                     else:
                         st.error("Please do not provide duplicate diagnoses.")
@@ -216,6 +255,7 @@ else:
 
     except Exception as e:
         st.error(f"Error initializing Firebase: {e}")
+
 
 
 
