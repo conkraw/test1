@@ -90,8 +90,8 @@ else:
                             st.rerun()  # Refresh the app
 
                 # Display selected diagnosis only if it has been selected
-                if st.session_state.selected_buttons[i]:
-                    st.markdown(f"**Selected:** {st.session_state.diagnoses[i]}")
+                #if st.session_state.selected_buttons[i]:
+                #    st.markdown(f"**Selected:** {st.session_state.diagnoses[i]}")
 
             # Button to submit the diagnoses
             if st.button("Submit Diagnoses"):
