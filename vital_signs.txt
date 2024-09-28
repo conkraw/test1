@@ -1,3 +1,4 @@
+type, vital_signs
 Heart Rate:,100 beats per minute
 Blood Pressure:,100 over 100 mm Hg
 Respiratory Rate:, 20 breaths per minute
