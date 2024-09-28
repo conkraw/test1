@@ -66,7 +66,7 @@ else:
 
             return vital_signs
 
-        # Function to read diagnoses from file
+        # Function to read diagnoses from a file
         def read_diagnoses_from_file():
             try:
                 with open('dx_list.txt', 'r') as file:
@@ -87,7 +87,7 @@ else:
             if "page" not in st.session_state:
                 st.session_state.page = "welcome"  # Start on the welcome page
                 st.session_state.diagnoses = [""] * 5  # Initialize empty diagnoses
-                st.session_state.selected_buttons = [False] * 5  # Track selection status
+                st.session_state.selected_buttons = [False] * 5  # Track button selections
                 st.session_state.assessment_data = {}  # Store assessment data
 
             # Check which page to display
@@ -99,8 +99,8 @@ else:
                 login_page(users)
             elif st.session_state.page == "diagnoses":
                 display_diagnoses()
-            elif st.session_state.page == "intervention":  # New page for interventions
-                upload_intervention()
+            elif st.session_state.page == "intervention":
+                display_intervention()
 
         # Welcome page function
         def welcome_page():
@@ -184,42 +184,23 @@ else:
 
                     # Checkboxes for vital signs
                     heart_rate = vital_signs.get("heart_rate", "N/A")
-                    heart_rate_checkbox = st.checkbox(f"HEART RATE: {heart_rate}", key='heart_rate_checkbox')
+                    heart_rate_checkbox = st.checkbox(f"HEART RATE: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{heart_rate}", key='heart_rate_checkbox')
 
                     respiratory_rate = vital_signs.get("respiratory_rate", "N/A")
-                    respiratory_rate_checkbox = st.checkbox(f"RESPIRATORY RATE: {respiratory_rate}", key='respiratory_rate_checkbox')
+                    respiratory_rate_checkbox = st.checkbox(f"RESPIRATORY RATE: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{respiratory_rate}", key='respiratory_rate_checkbox')
 
                     blood_pressure = vital_signs.get("blood_pressure", "N/A")
-                    blood_pressure_checkbox = st.checkbox(f"BLOOD PRESSURE: {blood_pressure}", key='blood_pressure_checkbox')
+                    blood_pressure_checkbox = st.checkbox(f"BLOOD PRESSURE: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{blood_pressure}", key='blood_pressure_checkbox')
 
-                    pulseox = vital_signs.get("pulseox", "N/A")
-                    pulseox_checkbox = st.checkbox(f"PULSE OXIMETRY: {pulseox}", key='pulseox_checkbox')
+                    pulse_oximetry = vital_signs.get("pulse_oximetry", "N/A")
+                    pulse_oximetry_checkbox = st.checkbox(f"PULSE OXIMETRY: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{pulse_oximetry}", key='pulse_oximetry_checkbox')
 
-                    temperature = vital_signs.get("temperature", "N/A")
-                    temperature_checkbox = st.checkbox(f"TEMPERATURE: {temperature}", key='temperature_checkbox')
+                    st.markdown("</div>", unsafe_allow_html=True)  # End indentation div
 
-                    weight = vital_signs.get("weight", "N/A")
-                    weight_checkbox = st.checkbox(f"WEIGHT: {weight}", key='weight_checkbox')
-
-                    st.markdown("</div>", unsafe_allow_html=True)  # Close the div
-
-                # Button to proceed to the diagnoses page
-                if st.button("Next to Diagnoses"):
-                    # Store the assessment data in the session state
-                    st.session_state.assessment_data = {
-                        'unique_code': st.session_state.unique_code,
-                        'heart_rate': heart_rate_checkbox,
-                        'respiratory_rate': respiratory_rate_checkbox,
-                        'blood_pressure': blood_pressure_checkbox,
-                        'pulseox': pulseox_checkbox,
-                        'temperature': temperature_checkbox,
-                        'weight': weight_checkbox,
-                    }
-                    st.session_state.page = "diagnoses"  # Move to Diagnoses page
-                    st.rerun()  # Rerun the app to refresh the page
-
-            else:
-                st.error("No vital signs data available.")
+            # Button to proceed to diagnoses
+            if st.button("Next"):
+                st.session_state.page = "diagnoses"  # Move to Diagnoses page
+                st.rerun()  # Rerun the app to refresh the page
 
         # Diagnoses Page function
         def display_diagnoses():
@@ -277,15 +258,15 @@ else:
                         result = upload_to_firebase(complete_entry)  # Upload the complete data to Firebase
                         st.success(result)  # Show success message
 
-                        st.session_state.page = "laboratory_features"  # Move to Laboratory Features page
+                        st.session_state.page = "intervention"  # Move to Intervention page
                         st.rerun()  # Rerun the app to refresh the page
                     else:
                         st.error("Please do not provide duplicate diagnoses.")
                 else:
                     st.error("Please select all 5 diagnoses.")
 
-        # New page for uploading interventions
-        def upload_intervention():
+        # Intervention Page function
+        def display_intervention():
             st.title("Intervention Description Entry")
 
             # Prompt for user input
@@ -302,11 +283,8 @@ else:
                 else:
                     st.error("Please enter a description of the interventions.")
 
-        if __name__ == "__main__":
-            main()
-
-    except Exception as e:
-        st.error(f"Error initializing Firebase: {e}")
+        # Run the main function
+        main()
 
 
 
