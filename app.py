@@ -138,7 +138,7 @@ else:
                     if new_filtered_options:
                         st.write("**Available Options:**")
                         for option in new_filtered_options:
-                            if st.button(f"Select {option}", key=f"select_new_{option}"):
+                            if st.button(f"{option}", key=f"select_new_{option}"):
                                 # Change selected diagnosis to the new one
                                 index_to_change = st.session_state.diagnoses.index(change_diagnosis)
                                 st.session_state.diagnoses[index_to_change] = option
