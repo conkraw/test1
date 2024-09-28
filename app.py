@@ -238,7 +238,7 @@ def display_diagnoses():
 def read_diagnoses_from_file():
     diagnoses = []
     try:
-        with open("diagnoses.txt", 'r') as file:
+        with open("dx_list.txt", 'r') as file:
             diagnoses = [line.strip() for line in file]
     except FileNotFoundError:
         st.error("Diagnoses file not found. Please check the file path.")
