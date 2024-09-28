@@ -231,8 +231,8 @@ else:
             dx_options = read_diagnoses_from_file()  # Load diagnosis options from the file
 
             st.markdown("""
-                ## DIFFERENTIAL DIAGNOSIS UPDATE
-                Based on the information that has been subsequently provided in the above case, please review your initial differential diagnosis list and update it as necessary. 
+                ## DIFFERENTIAL DIAGNOSIS
+                Based on the information that has been provided in the above case, please formulate a differential diagnosis list. During the case, you will be permitted to update as necessary.  
             """)
 
             # Create columns for each diagnosis input
