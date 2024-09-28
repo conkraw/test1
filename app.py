@@ -33,16 +33,17 @@ def main():
     elif st.session_state.page == "diagnoses":
         display_diagnoses()
     elif st.session_state.page == "intervention":
-        upload_intervention()  # Just collects data, does not upload yet
+        upload_intervention()  # Collects data but does not navigate yet
     elif st.session_state.page == "virtual_patient":
         run_virtual_patient_app()
 
-    # At the end of the app or when navigating to a new page, upload the intervention data
+    # Finalize the upload of intervention data
     if st.button("Finalize Intervention"):
         if st.session_state.intervention_entry:
             result = upload_to_firebase(st.session_state.intervention_entry)
             if result:  # Assuming upload_to_firebase returns a success condition
                 st.success("Intervention data uploaded successfully!")
+                st.session_state.page = "virtual_patient"  # Navigate to virtual patient page
                 st.session_state.intervention_entry = None  # Clear the entry after upload
             else:
                 st.error("Failed to upload intervention data.")
