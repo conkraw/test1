@@ -4,7 +4,7 @@ from user_management import load_users, welcome_page, login_page
 from assessment import display_assessment
 from diagnoses import display_diagnoses
 from intervention import upload_intervention
-from history import 
+from history import run_virtual_patient_app
 
 #firebase_setup, user_management, assessment, diagnoses, intervention, utils
 
