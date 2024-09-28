@@ -117,16 +117,13 @@ else:
             with st.sidebar:
                 st.subheader("Reorder Diagnoses")
 
-                # Update reorder options based on current diagnoses
-                if st.session_state.selected_moving_diagnosis:
-                    selected_diagnosis = st.session_state.selected_moving_diagnosis
-                else:
-                    selected_diagnosis = st.selectbox(
-                        "Select a diagnosis to move",
-                        options=st.session_state.diagnoses,
-                        index=0,  # Default to the first diagnosis
-                        key="move_diagnosis"
-                    )
+                # Default to the currently selected diagnosis or the first one if none is selected
+                selected_diagnosis = st.selectbox(
+                    "Select a diagnosis to move",
+                    options=st.session_state.diagnoses,
+                    index=st.session_state.diagnoses.index(st.session_state.selected_moving_diagnosis) if st.session_state.selected_moving_diagnosis in st.session_state.diagnoses else 0,
+                    key="move_diagnosis"
+                )
 
                 move_direction = st.radio("Adjust Priority:", options=["Higher Priority", "Lower Priority"], key="move_direction")
 
@@ -213,4 +210,3 @@ else:
 
     except Exception as e:
         st.error(f"Error initializing Firebase: {e}")
-
