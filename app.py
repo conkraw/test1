@@ -48,6 +48,8 @@ else:
             st.session_state.laboratory_features = [""] * 5
         if 'selected_buttons' not in st.session_state:
             st.session_state.selected_buttons = [False] * 5  # Track button visibility for each diagnosis
+        if 'shown_suggestions' not in st.session_state:
+            st.session_state.shown_suggestions = [True] * 5  # Track suggestions visibility
 
         # Load diagnoses from file after Firebase initialization
         dx_options = read_diagnoses_from_file()
@@ -78,17 +80,19 @@ else:
                 filtered_options = [dx for dx in dx_options if search_input.lower() in dx.lower()] if search_input else []
 
                 # Display filtered options
-                if filtered_options:
+                if filtered_options and not st.session_state.selected_buttons[i]:
                     st.write("**Suggestions:**")
                     for option in filtered_options[:5]:  # Show a maximum of 5 options
                         button_key = f"select_option_{i}_{option}"
-                        if st.session_state.selected_buttons[i]:  # If already selected, don't show the button
-                            st.markdown(f"**Selected:** {st.session_state.diagnoses[i]}")
-                        else:
-                            if st.button(f"{option}", key=button_key):
-                                st.session_state.diagnoses[i] = option
-                                st.session_state.selected_buttons[i] = True  # Mark as selected
-                                st.rerun()  # Use st.rerun() to refresh the app
+                        if st.button(f"{option}", key=button_key):
+                            st.session_state.diagnoses[i] = option
+                            st.session_state.selected_buttons[i] = True  # Mark as selected
+                            st.session_state.shown_suggestions[i] = False  # Hide suggestions
+                            st.rerun()  # Use st.rerun() to refresh the app
+
+                # Display selected diagnosis if a selection was made
+                if st.session_state.selected_buttons[i]:
+                    st.markdown(f"**Selected:** {st.session_state.diagnoses[i]}")
 
             # Button to submit the diagnoses
             if st.button("Submit Diagnoses"):
