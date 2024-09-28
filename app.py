@@ -4,12 +4,7 @@ import firebase_admin
 from firebase_admin import credentials, firestore
 import os
 import json
-import firebase_admin
-from firebase_admin import credentials, firestore
-import streamlit as st
-import json
 import openai
-from docx import Document
 import time
 
 # Load Firebase credentials from environment variable
@@ -108,6 +103,8 @@ else:
                 display_diagnoses()
             elif st.session_state.page == "intervention":
                 upload_intervention()  # New intervention page
+            elif st.session_state.page == "chat":
+                chat_with_virtual_patient()  # Chat with virtual patient page
 
         # Welcome page function
         def welcome_page():
@@ -239,7 +236,7 @@ else:
 
             st.markdown("""
                 ## DIFFERENTIAL DIAGNOSIS
-                Based on the information that has been provided in the above case, please formulate a differential diagnosis list. During the case, you will be permitted to update as necessary.  
+                Based on the information that has been provided in the above case, please formulate a differential diagnosis list. During the case, you will be permitted to update as necessary.
             """)
 
             # Create columns for each diagnosis input
@@ -288,8 +285,35 @@ else:
                         st.error("Please do not provide duplicate diagnoses.")
                 else:
                     st.error("Please select all 5 diagnoses.")
-               # Function to read the croup document
+
+        # New function to upload intervention
+        def upload_intervention():
+            st.title("Intervention Description Entry")
+
+            # Prompt for user input
+            st.header("Describe any interventions that you would currently perform.")
+            interventions = st.text_area("Interventions Description", height=200)
+
+            # Button to upload to Firebase
+            if st.button("Upload Intervention"):
+                if interventions:
+                    entry = {
+                        'interventions': interventions,
+                        'unique_code': st.session_state.unique_code,
+                        'assessment_data': st.session_state.assessment_data,
+                        'diagnoses': st.session_state.diagnoses
+                    }
+                    # Immediately upload to Firebase
+                    result = upload_to_firebase(entry)
+                    st.success("Your interventions have been accepted and are under review.")
+                    st.session_state.page = "chat"  # Move to chat with virtual patient
+                    st.rerun()  # Rerun to refresh the page
+                else:
+                    st.error("Please enter a description of the interventions.")
+
+        # Function to load the croup document content
         def read_croup_doc():
+            from docx import Document
             doc = Document("croup.docx")
             content = []
             for para in doc.paragraphs:
@@ -327,78 +351,47 @@ else:
                 )
                 return response['choices'][0]['message']['content']
 
-        # Function to upload data to Firebase
-        def upload_to_firebase(question, response):
-            entry = {'question': question, 'response': response}
-            db.collection('virtual_patient_sessions').add(entry)  # Change to your collection name
+        # Function to chat with the virtual patient
+        def chat_with_virtual_patient():
+            st.title("Virtual Patient Chat")
 
-        # Streamlit app layout
-        #st.title("Virtual Patient: Case #1")
+            # Instructions for the user
+            st.info(
+                "You will have the opportunity to perform a history and ask for important physical examination details using a virtual patient/parent. "
+                "When you are ready, please start asking questions. You will be limited to 15 minutes. "
+                "Alternatively, you may end the session if you click end."
+            )
 
-        # Instructions for the user
-        st.info(
-            "You will have the opportunity to perform a history and ask for important physical examination details using a virtual patient/parent. "
-            "When you are ready, please start asking questions. You will be limited to 15 minutes. "
-            "Alternatively, you may end the session if you click end."
-        )
+            # Session state to track time and session status
+            if 'start_time' not in st.session_state:
+                st.session_state.start_time = time.time()
 
-        # Session state to track time and session status
-        if 'start_time' not in st.session_state:
-            st.session_state.start_time = time.time()
+            # Calculate elapsed time
+            elapsed_time = (time.time() - st.session_state.start_time) / 60  # Convert to minutes
 
-        # Calculate elapsed time
-        elapsed_time = (time.time() - st.session_state.start_time) / 60  # Convert to minutes
+            # Display patient information
+            if elapsed_time < 15:
+                with st.form("question_form"):
+                    user_input = st.text_input("Ask the virtual patient a question about their symptoms:")
+                    submit_button = st.form_submit_button("Submit")
 
-        # Display patient information
-        if elapsed_time < 15:
-            with st.form("question_form"):
-                user_input = st.text_input("Ask the virtual patient a question about their symptoms:")
-                submit_button = st.form_submit_button("Submit")
+                    if submit_button and user_input:
+                        virtual_patient_response = get_chatgpt_response(user_input)
+                        st.write(f"Virtual Patient: {virtual_patient_response}")
 
-                if submit_button and user_input:
-                    virtual_patient_response = get_chatgpt_response(user_input)
-                    st.write(f"Virtual Patient: {virtual_patient_response}")
+                        # Upload the question and response to Firebase without announcement
+                        upload_to_firebase({'question': user_input, 'response': virtual_patient_response})
 
-                    # Upload the question and response to Firebase without announcement
-                    upload_to_firebase(user_input, virtual_patient_response)
-
-        else:
-            st.warning("Session time is up. Please end the session.")
-            if st.button("End Session"):
-                st.session_state.start_time = None
-                st.success("Session ended. You can start a new session.")
-
-        # Option to move to a new screen
-        if st.button("Go to New Screen"):
-            st.session_state.start_time = None
-            st.write("Redirecting to a new screen...")
-
-        # New function to upload intervention
-        def upload_intervention():
-            st.title("Intervention Description Entry")
-
-            # Prompt for user input
-            st.header("Describe any interventions that you would currently perform.")
-            interventions = st.text_area("Interventions Description", height=200)
-
-            # Button to upload to Firebase
-            if st.button("Upload Intervention"):
-                if interventions:
-                    entry = {
-                        'interventions': interventions,
-                        'unique_code': st.session_state.unique_code,
-                        'assessment_data': st.session_state.assessment_data,
-                        'diagnoses': st.session_state.diagnoses
-                    }
-                    # Immediately upload to Firebase
-                    result = upload_to_firebase(entry)
-                    st.success("Your interventions have been accepted and are under review.")
-                else:
-                    st.error("Please enter a description of the interventions.")
+            else:
+                st.warning("Session time is up. Please end the session.")
+                if st.button("End Session"):
+                    st.session_state.start_time = None
+                    st.success("Session ended. You can start a new session.")
 
         if __name__ == "__main__":
             main()
 
     except Exception as e:
         st.error(f"Error initializing Firebase: {e}")
+
 
