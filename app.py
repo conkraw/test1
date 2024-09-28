@@ -88,6 +88,7 @@ else:
                 st.session_state.page = "welcome"  # Start on the welcome page
                 st.session_state.diagnoses = [""] * 5  # Initialize empty diagnoses
                 st.session_state.selected_buttons = [False] * 5  # Track selection status
+                st.session_state.data_uploaded = False  # Flag to track data upload status
 
             # Check which page to display
             if st.session_state.page == "assessment":
@@ -187,16 +188,16 @@ else:
                     respiratory_rate_checkbox = st.checkbox(f"RESPIRATORY RATE: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{respiratory_rate}", key='respiratory_rate_checkbox')
 
                     blood_pressure = vital_signs.get("blood_pressure", "N/A")
-                    blood_pressure_checkbox = st.checkbox(f"BLOOD PRESSURE: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{blood_pressure}", key='blood_pressure_checkbox')
+                    blood_pressure_checkbox = st.checkbox(f"BLOOD PRESSURE: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{blood_pressure}", key='blood_pressure_checkbox')
 
                     pulseox = vital_signs.get("pulseox", "N/A")
-                    pulseox_checkbox = st.checkbox(f"PULSE OXIMETRY: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{pulseox}", key='pulseox_checkbox')
+                    pulseox_checkbox = st.checkbox(f"PULSE OXIMETRY: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{pulseox}", key='pulseox_checkbox')
 
                     temperature = vital_signs.get("temperature", "N/A")
-                    temperature_checkbox = st.checkbox(f"TEMPERATURE: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{temperature}", key='temperature_checkbox')
+                    temperature_checkbox = st.checkbox(f"TEMPERATURE: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{temperature}", key='temperature_checkbox')
 
                     weight = vital_signs.get("weight", "N/A")
-                    weight_checkbox = st.checkbox(f"WEIGHT: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{weight}", key='weight_checkbox')
+                    weight_checkbox = st.checkbox(f"WEIGHT: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{weight}", key='weight_checkbox')
 
                     st.markdown("</div>", unsafe_allow_html=True)  # Close the div
 
@@ -213,6 +214,7 @@ else:
                     }
                     result = upload_to_firebase(entry)
                     st.success(result)
+                    st.session_state.data_uploaded = True  # Set upload flag to True
                     st.session_state.page = "diagnoses"  # Move to Diagnoses page
                     st.rerun()  # Rerun to refresh the page
             else:
@@ -220,6 +222,10 @@ else:
 
         # Diagnoses Page function
         def display_diagnoses():
+            if not st.session_state.data_uploaded:
+                st.error("Please complete the assessment before updating diagnoses.")
+                return
+
             dx_options = read_diagnoses_from_file()  # Load diagnosis options from the file
 
             st.markdown("""
