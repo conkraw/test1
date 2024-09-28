@@ -4,13 +4,10 @@ import firebase_admin
 from firebase_admin import credentials, firestore
 import os
 import json
-import firebase_admin
-from firebase_admin import credentials, firestore
-import streamlit as st
-import json
 import openai
 from docx import Document
 import time
+from intervention import upload_intervention  # Importing the function
 
 # Load Firebase credentials from environment variable
 FIREBASE_KEY_JSON = os.getenv('FIREBASE_KEY')
@@ -107,7 +104,7 @@ else:
             elif st.session_state.page == "diagnoses":
                 display_diagnoses()
             elif st.session_state.page == "intervention":
-                upload_intervention()  # New intervention page
+                upload_intervention()  # Call the imported function
 
         # Welcome page function
         def welcome_page():
