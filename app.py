@@ -54,12 +54,16 @@ else:
         # Title of the app
         st.title("")
 
-        # Left Sidebar: Outline
+        # Left Sidebar: Outline with Navigation
         with st.sidebar:
             st.subheader("Outline")
-            st.write("1. Update Diagnoses")
-            st.write("2. Laboratory Features")
-        
+            if st.button("Update Diagnoses"):
+                st.session_state.current_page = "diagnoses"
+                st.experimental_rerun()
+            if st.button("Laboratory Features"):
+                st.session_state.current_page = "laboratory_features"
+                st.experimental_rerun()
+
         # Diagnoses Page
         if st.session_state.current_page == "diagnoses":
             st.markdown("""
@@ -96,7 +100,7 @@ else:
                 if all(diagnosis for diagnosis in diagnoses):
                     if len(diagnoses) == len(set(diagnoses)):
                         st.session_state.current_page = "laboratory_features"  # Move to Laboratory Features page
-                        st.rerun()  # Rerun the app to refresh the page
+                        st.experimental_rerun()  # Rerun the app to refresh the page
                     else:
                         st.error("Please do not provide duplicate diagnoses.")
                 else:
@@ -155,10 +159,11 @@ else:
                 result = upload_to_firebase(entry)
                 st.success(result)
 
-            # Right Sidebar: Diagnosis Changes and Prioritization
+        # Right Sidebar: Diagnosis Changes and Prioritization
+        if st.session_state.current_page == "laboratory_features":
             with st.sidebar:
                 st.subheader("Adjust Diagnoses")
-                
+
                 # Reorder section
                 selected_diagnosis = st.selectbox(
                     "Select a diagnosis to move",
@@ -194,7 +199,7 @@ else:
                                 # Change selected diagnosis to the new one
                                 index_to_change = st.session_state.diagnoses.index(change_diagnosis)
                                 st.session_state.diagnoses[index_to_change] = option
-                                st.rerun()  # Rerun to update the displayed diagnoses
+                                st.experimental_rerun()  # Rerun to update the displayed diagnoses
 
     except Exception as e:
         st.error(f"Error initializing Firebase: {e}")
