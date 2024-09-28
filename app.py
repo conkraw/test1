@@ -114,11 +114,11 @@ else:
             with st.sidebar:
                 st.subheader("Reorder Diagnoses")
 
-                # Update reorder options based on current diagnoses
+                # Default to the currently selected diagnosis or the first one if none is selected
                 selected_diagnosis = st.selectbox(
                     "Select a diagnosis to move",
                     options=st.session_state.diagnoses,
-                    index=0,  # Default to the first diagnosis
+                    index=st.session_state.diagnoses.index(st.session_state.selected_moving_diagnosis) if st.session_state.selected_moving_diagnosis in st.session_state.diagnoses else 0,
                     key="move_diagnosis"
                 )
 
@@ -127,9 +127,17 @@ else:
                 if st.button("Adjust Priority"):
                     idx = st.session_state.diagnoses.index(selected_diagnosis)
                     if move_direction == "Higher Priority" and idx > 0:
-                        st.session_state.diagnoses[idx], st.session_state.diagnoses[idx - 1] = st.session_state.diagnoses[idx - 1], st.session_state.diagnoses[idx]
+                        # Move up by one position
+                        st.session_state.diagnoses[idx], st.session_state.diagnoses[idx - 1] = (
+                            st.session_state.diagnoses[idx - 1], st.session_state.diagnoses[idx]
+                        )
+                        st.session_state.selected_moving_diagnosis = st.session_state.diagnoses[idx - 1]  # Update selected diagnosis
                     elif move_direction == "Lower Priority" and idx < len(st.session_state.diagnoses) - 1:
-                        st.session_state.diagnoses[idx], st.session_state.diagnoses[idx + 1] = st.session_state.diagnoses[idx + 1], st.session_state.diagnoses[idx]
+                        # Move down by one position
+                        st.session_state.diagnoses[idx], st.session_state.diagnoses[idx + 1] = (
+                            st.session_state.diagnoses[idx + 1], st.session_state.diagnoses[idx]
+                        )
+                        st.session_state.selected_moving_diagnosis = st.session_state.diagnoses[idx + 1]  # Update selected diagnosis
 
                 # Change a diagnosis section
                 st.subheader("Change a Diagnosis")
@@ -199,5 +207,6 @@ else:
 
     except Exception as e:
         st.error(f"Error initializing Firebase: {e}")
+
 
 
