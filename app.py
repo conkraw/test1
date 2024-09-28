@@ -153,7 +153,7 @@ else:
 
                 # Adjust subheader to match font and size, and reduce spacing
                 st.markdown("<h4 style='font-family: \"DejaVu Sans\"; font-size: 18px; margin: -20px 0 0 0;'>&nbsp;Of the following vital signs within the intake form, check the vital signs that are abnormal.</h4>", unsafe_allow_html=True)
-                st.markdown("<h2>Vital Signs: Please select </h2>", unsafe_allow_html=True)
+                #st.markdown("<h2>Vital Signs: Please select </h2>", unsafe_allow_html=True)
                 for key, value in vital_signs.items():
                     st.checkbox(f"{key.upper()}: {value}", key=f"{key}_checkbox")
 
