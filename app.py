@@ -202,9 +202,10 @@ else:
                     temperature = vital_signs.get("temperature", "N/A")
                     temperature_checkbox = st.checkbox(f"TEMPERATURE: {temperature}", key='temperature_checkbox')
 
-                    st.markdown("</div>", unsafe_allow_html=True)  # Close div
+                    # Close the indentation div
+                    st.markdown("</div>", unsafe_allow_html=True)
 
-                # Proceed to diagnosis selection
+                # Button to proceed to diagnosis selection
                 if st.button("Next"):
                     st.session_state.page = "diagnoses"  # Change to diagnoses page
                     st.rerun()  # Rerun to refresh the view
@@ -216,95 +217,64 @@ else:
             # Load diagnoses from file
             diagnoses = read_diagnoses_from_file()
             if diagnoses:
-                for i, diagnosis in enumerate(diagnoses):
-                    if st.checkbox(diagnosis, key=f"diagnosis_{i}"):
-                        st.session_state.diagnoses[i] = diagnosis  # Store selected diagnosis
-                        st.session_state.selected_buttons[i] = True
+                # Create a multi-select box for diagnosis selection
+                selected_diagnoses = st.multiselect(
+                    "Choose diagnoses:",
+                    options=diagnoses,
+                    max_selections=5  # Limit to 5 selections
+                )
 
+                # Button to submit the selected diagnoses
                 if st.button("Submit Diagnoses"):
-                    # Collect selected diagnoses
-                    selected_diagnoses = [d for d, selected in zip(diagnoses, st.session_state.selected_buttons) if selected]
-                    st.session_state.assessment_data['diagnoses'] = selected_diagnoses
-                    st.session_state.page = "intervention"  # Move to intervention page
-                    st.rerun()
+                    if selected_diagnoses:
+                        st.session_state.assessment_data['diagnoses'] = selected_diagnoses
+                        st.session_state.page = "intervention"  # Move to intervention page
+                        st.rerun()
+                    else:
+                        st.error("Please select at least one diagnosis.")
 
             else:
                 st.error("No diagnoses found.")
 
-        # Function to handle intervention page
+        # Function to upload intervention data
         def upload_intervention():
             st.markdown("<h3 style='font-family: \"DejaVu Sans\";'>Intervention Page</h3>", unsafe_allow_html=True)
-            st.write("Upload intervention details here.")
 
-            # Handle file upload or other input for interventions
-            intervention_details = st.text_area("Enter intervention details:")
-            if st.button("Submit Intervention"):
-                st.session_state.assessment_data['intervention'] = intervention_details
-                st.success("Intervention details submitted.")
+            # Assuming some intervention data, just for demonstration
+            intervention_data = {
+                "user_name": st.session_state.user_name,
+                "unique_code": st.session_state.unique_code,
+                "diagnoses": st.session_state.assessment_data.get('diagnoses', [])
+                # Add other fields as necessary
+            }
 
-                # You can also upload the data to Firebase here if needed
-                upload_to_firebase(st.session_state.assessment_data)
+            if st.button("Upload Intervention Data"):
+                upload_status = upload_to_firebase(intervention_data)
+                st.success(upload_status)
 
-                st.session_state.page = "chat"  # Move to chat page
+            if st.button("Chat with Virtual Patient"):
+                st.session_state.page = "chat"
                 st.rerun()
 
-        # Function to chat with the virtual patient
+        # Function to chat with virtual patient
         def chat_with_virtual_patient():
-            st.title("Virtual Patient Chat")
+            st.markdown("<h3 style='font-family: \"DejaVu Sans\";'>Chat with Virtual Patient</h3>", unsafe_allow_html=True)
 
-            # Instructions for the user
-            st.info(
-                "You will have the opportunity to perform a history and ask for important physical examination details using a virtual patient/parent. "
-                "When you are ready, please start asking questions. You will be limited to 15 minutes. "
-                "Alternatively, you may end the session if you click 'End Session'."
-            )
+            chat_input = st.text_input("Ask your question to the virtual patient:")
 
-            # Session state to track time and session status
-            if 'start_time' not in st.session_state:
-                st.session_state.start_time = time.time()
-                st.session_state.questions_responses = []  # Initialize a list to store questions and responses
+            if st.button("Send"):
+                # Simulate sending the input to an AI model and getting a response
+                st.write("You: ", chat_input)
+                # Example of a hardcoded response
+                response = "I'm doing well, thank you!"
+                st.write("Virtual Patient: ", response)
 
-            # Calculate elapsed time
-            elapsed_time = (time.time() - st.session_state.start_time) / 60  # Convert to minutes
-
-            # Display patient information
-            if elapsed_time < 15:
-                with st.form("question_form"):
-                    user_input = st.text_input("Ask the virtual patient a question about their symptoms:")
-                    submit_button = st.form_submit_button("Submit")
-
-                    if submit_button and user_input:
-                        virtual_patient_response = get_chatgpt_response(user_input)  # Assume this function exists
-                        st.write(f"Virtual Patient: {virtual_patient_response}")
-
-                        # Store the question and response
-                        st.session_state.questions_responses.append({'question': user_input, 'response': virtual_patient_response})
-
-                # End session button
-                if st.button("End Session"):
-                    end_session()  # Assume this function exists
-
-            else:
-                st.warning("Session time is up. Please end the session.")
-                if st.button("End Session"):
-                    end_session()  # Assume this function exists
-
-        # Function to get response from ChatGPT
-        def get_chatgpt_response(question):
-            # Placeholder for ChatGPT API call
-            return "This is a sample response from the virtual patient."
-
-        # Function to end the session
-        def end_session():
-            st.session_state.page = "welcome"  # Reset to welcome page
-            st.session_state.clear()  # Clear session state
-            st.success("Session ended successfully.")
+            if st.button("Back to Intervention"):
+                st.session_state.page = "intervention"
+                st.rerun()
 
         # Run the main function
         if __name__ == "__main__":
             main()
-
-    except Exception as e:
-        st.error(f"Error initializing Firebase: {e}")
 
 
