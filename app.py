@@ -88,9 +88,8 @@ else:
                             st.rerun()  # Refresh the app
 
             # Display selected diagnosis only if it hasn't been selected
-            for i in range(5):
-                if st.session_state.selected_buttons[i]:
-                    st.markdown(f"**Selected:** {st.session_state.diagnoses[i]}")
+            if st.session_state.selected_buttons[i]:
+                st.markdown(f"**Selected:** {st.session_state.diagnoses[i]}")
 
             # Button to submit the diagnoses
             if st.button("Submit Diagnoses"):
@@ -116,60 +115,42 @@ else:
             with st.sidebar:
                 st.subheader("Reorder Diagnoses")
 
-                # Track diagnosis and its intended direction
-                if 'temp_diagnosis' not in st.session_state:
-                    st.session_state.temp_diagnosis = st.session_state.diagnoses[0]
-                    st.session_state.temp_direction = None
-
+                # Update reorder options based on current diagnoses
                 selected_diagnosis = st.selectbox(
                     "Select a diagnosis to move",
                     options=st.session_state.diagnoses,
-                    index=st.session_state.diagnoses.index(st.session_state.temp_diagnosis),
+                    index=0,  # Default to the first diagnosis
                     key="move_diagnosis"
                 )
 
                 move_direction = st.radio("Adjust Priority:", options=["Higher Priority", "Lower Priority"], key="move_direction")
 
-                if st.button("Set Adjustment"):
-                    st.session_state.temp_diagnosis = selected_diagnosis
-                    st.session_state.temp_direction = move_direction
-
-                if st.button("Apply Adjustments"):
-                    idx = st.session_state.diagnoses.index(st.session_state.temp_diagnosis)
-                    if st.session_state.temp_direction == "Higher Priority" and idx > 0:
+                if st.button("Adjust Priority"):
+                    idx = st.session_state.diagnoses.index(selected_diagnosis)
+                    if move_direction == "Higher Priority" and idx > 0:
                         st.session_state.diagnoses[idx], st.session_state.diagnoses[idx - 1] = st.session_state.diagnoses[idx - 1], st.session_state.diagnoses[idx]
-                    elif st.session_state.temp_direction == "Lower Priority" and idx < len(st.session_state.diagnoses) - 1:
+                    elif move_direction == "Lower Priority" and idx < len(st.session_state.diagnoses) - 1:
                         st.session_state.diagnoses[idx], st.session_state.diagnoses[idx + 1] = st.session_state.diagnoses[idx + 1], st.session_state.diagnoses[idx]
 
-                # Display the updated list of diagnoses
-                st.write("Current Order of Diagnoses:")
-                for diagnosis in st.session_state.diagnoses:
-                    st.write(diagnosis)
+                # Change a diagnosis section
+                st.subheader("Change a Diagnosis")
+                change_diagnosis = st.selectbox(
+                    "Select a diagnosis to change",
+                    options=st.session_state.diagnoses,
+                    key="change_diagnosis"
+                )
 
-                # Clear temp selection
-                if st.button("Reset Adjustment"):
-                    st.session_state.temp_diagnosis = st.session_state.diagnoses[0]
-                    st.session_state.temp_direction = None
-
-            # Change a diagnosis section
-            st.subheader("Change a Diagnosis")
-            change_diagnosis = st.selectbox(
-                "Select a diagnosis to change",
-                options=st.session_state.diagnoses,
-                key="change_diagnosis"
-            )
-
-            new_diagnosis_search = st.text_input("Search for a new diagnosis", "")
-            if new_diagnosis_search:
-                new_filtered_options = [dx for dx in dx_options if new_diagnosis_search.lower() in dx.lower() and dx not in st.session_state.diagnoses]
-                if new_filtered_options:
-                    st.write("**Available Options:**")
-                    for option in new_filtered_options:
-                        if st.button(f"{option}", key=f"select_new_{option}"):
-                            # Change selected diagnosis to the new one
-                            index_to_change = st.session_state.diagnoses.index(change_diagnosis)
-                            st.session_state.diagnoses[index_to_change] = option
-                            st.rerun()  # Rerun to update the displayed diagnoses
+                new_diagnosis_search = st.text_input("Search for a new diagnosis", "")
+                if new_diagnosis_search:
+                    new_filtered_options = [dx for dx in dx_options if new_diagnosis_search.lower() in dx.lower() and dx not in st.session_state.diagnoses]
+                    if new_filtered_options:
+                        st.write("**Available Options:**")
+                        for option in new_filtered_options:
+                            if st.button(f"{option}", key=f"select_new_{option}"):
+                                # Change selected diagnosis to the new one
+                                index_to_change = st.session_state.diagnoses.index(change_diagnosis)
+                                st.session_state.diagnoses[index_to_change] = option
+                                st.rerun()  # Rerun to update the displayed diagnoses
 
             # Create columns for each diagnosis input
             cols = st.columns(len(st.session_state.diagnoses) + 1)
