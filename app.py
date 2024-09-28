@@ -4,7 +4,12 @@ import firebase_admin
 from firebase_admin import credentials, firestore
 import os
 import json
+import firebase_admin
+from firebase_admin import credentials, firestore
+import streamlit as st
+import json
 import openai
+from docx import Document
 import time
 
 # Load Firebase credentials from environment variable
@@ -103,8 +108,6 @@ else:
                 display_diagnoses()
             elif st.session_state.page == "intervention":
                 upload_intervention()  # New intervention page
-            elif st.session_state.page == "chat":
-                chat_with_virtual_patient()  # Chat with virtual patient page
 
         # Welcome page function
         def welcome_page():
@@ -202,81 +205,200 @@ else:
                     temperature = vital_signs.get("temperature", "N/A")
                     temperature_checkbox = st.checkbox(f"TEMPERATURE: {temperature}", key='temperature_checkbox')
 
-                    # Close the indentation div
-                    st.markdown("</div>", unsafe_allow_html=True)
+                    weight = vital_signs.get("weight", "N/A")
+                    weight_checkbox = st.checkbox(f"WEIGHT: {weight}", key='weight_checkbox')
 
-                # Button to proceed to diagnosis selection
-                if st.button("Next"):
-                    st.session_state.page = "diagnoses"  # Change to diagnoses page
-                    st.rerun()  # Rerun to refresh the view
+                    st.markdown("</div>", unsafe_allow_html=True)  # Close the div
 
-        # Function to display diagnoses selection
-        def display_diagnoses():
-            st.markdown("<h3 style='font-family: \"DejaVu Sans\";'>Select up to 5 diagnoses:</h3>", unsafe_allow_html=True)
-
-            # Load diagnoses from file
-            diagnoses = read_diagnoses_from_file()
-            if diagnoses:
-                # Create a multi-select box for diagnosis selection
-                selected_diagnoses = st.multiselect(
-                    "Choose diagnoses:",
-                    options=diagnoses,
-                    max_selections=5  # Limit to 5 selections
-                )
-
-                # Button to submit the selected diagnoses
-                if st.button("Submit Diagnoses"):
-                    if selected_diagnoses:
-                        st.session_state.assessment_data['diagnoses'] = selected_diagnoses
-                        st.session_state.page = "intervention"  # Move to intervention page
-                        st.rerun()
-                    else:
-                        st.error("Please select at least one diagnosis.")
+                # Button to proceed to the diagnoses page
+                if st.button("Next to Diagnoses"):
+                    # Store the assessment data in the session state
+                    st.session_state.assessment_data = {
+                        'unique_code': st.session_state.unique_code,
+                        'heart_rate': heart_rate_checkbox,
+                        'respiratory_rate': respiratory_rate_checkbox,
+                        'blood_pressure': blood_pressure_checkbox,
+                        'pulseox': pulseox_checkbox,
+                        'temperature': temperature_checkbox,
+                        'weight': weight_checkbox,
+                    }
+                    st.session_state.page = "diagnoses"  # Move to Diagnoses page
+                    st.rerun()  # Rerun the app to refresh the page
 
             else:
-                st.error("No diagnoses found.")
+                st.error("No vital signs data available.")
 
-        # Function to upload intervention data
+        # Diagnoses Page function
+        def display_diagnoses():
+            # Check if assessment data exists
+            if not st.session_state.assessment_data:
+                st.error("Please complete the assessment before updating diagnoses.")
+                return
+
+            dx_options = read_diagnoses_from_file()  # Load diagnosis options from the file
+
+            st.markdown("""
+                ## DIFFERENTIAL DIAGNOSIS
+                Based on the information that has been provided in the above case, please formulate a differential diagnosis list. During the case, you will be permitted to update as necessary.  
+            """)
+
+            # Create columns for each diagnosis input
+            cols = st.columns(5)  # Create 5 columns for 5 diagnoses
+
+            for i, col in enumerate(cols):
+                current_diagnosis = st.session_state.diagnoses[i]
+
+                with col:
+                    # Search input for diagnosis
+                    search_input = st.text_input(
+                        f"Diagnosis {i + 1}",
+                        value=current_diagnosis,
+                        key=f"diagnosis_search_{i}"
+                    )
+
+                    # Filter options based on the search input
+                    filtered_options = [dx for dx in dx_options if search_input.lower() in dx.lower()] if search_input else []
+
+                    # Display filtered options
+                    if filtered_options and not st.session_state.selected_buttons[i]:
+                        st.write("**Suggestions:**")
+                        for option in filtered_options[:5]:  # Show a maximum of 5 options
+                            button_key = f"select_option_{i}_{option}"
+                            if st.button(f"{option}", key=button_key):
+                                st.session_state.diagnoses[i] = option
+                                st.session_state.selected_buttons[i] = True  # Mark as selected
+                                st.rerun()  # Refresh the app
+
+            # Button to submit the diagnoses
+            if st.button("Submit Diagnoses"):
+                diagnoses = [d.strip() for d in st.session_state.diagnoses]
+                # Check for empty diagnoses and duplicates
+                if all(diagnosis for diagnosis in diagnoses):
+                    if len(diagnoses) == len(set(diagnoses)):
+                        # Prepare the complete entry to upload to Firebase
+                        complete_entry = {
+                            'unique_code': st.session_state.unique_code,  # Use the stored unique code
+                            'assessment_data': st.session_state.assessment_data,  # Include assessment data
+                            'diagnoses': diagnoses  # Include diagnoses
+                        }
+                        st.session_state.complete_entry = complete_entry  # Save entry for later use
+                        st.session_state.page = "intervention"  # Move to Intervention page
+                        st.rerun()  # Rerun the app to refresh the page
+                    else:
+                        st.error("Please do not provide duplicate diagnoses.")
+                else:
+                    st.error("Please select all 5 diagnoses.")
+               # Function to read the croup document
+        def read_croup_doc():
+            doc = Document("croup.docx")
+            content = []
+            for para in doc.paragraphs:
+                content.append(para.text)
+            return "\n".join(content).lower()  # Convert to lower case for easier matching
+
+        # Load the document content
+        croup_info = read_croup_doc()
+
+        # Set up OpenAI API key from Streamlit secrets
+        openai.api_key = st.secrets["OPENAI_API_KEY"]
+
+        # Function to get response from ChatGPT
+        def get_chatgpt_response(user_input):
+            user_input_lower = user_input.lower()  # Normalize the user input to lower case
+
+            # Check if the question is a medical question based on croup_info
+            if user_input_lower in croup_info:
+                response = openai.ChatCompletion.create(
+                    model="gpt-3.5-turbo",
+                    messages=[
+                        {"role": "user", "content": user_input},
+                        {"role": "assistant", "content": "Role play a parent whose child is experiencing croup. Answer medical inquiries based on the croup document."}
+                    ]
+                )
+                return response['choices'][0]['message']['content']
+            else:
+                # Handle unknown medical inquiries naturally
+                response = openai.ChatCompletion.create(
+                    model="gpt-3.5-turbo",
+                    messages=[
+                        {"role": "user", "content": user_input},
+                        {"role": "assistant", "content": "If you cannot answer the medical inquiry from the croup document, please respond naturally as a concerned parent."}
+                    ]
+                )
+                return response['choices'][0]['message']['content']
+
+        # Function to upload data to Firebase
+        def upload_to_firebase(question, response):
+            entry = {'question': question, 'response': response}
+            db.collection('virtual_patient_sessions').add(entry)  # Change to your collection name
+
+        # Streamlit app layout
+        #st.title("Virtual Patient: Case #1")
+
+        # Instructions for the user
+        st.info(
+            "You will have the opportunity to perform a history and ask for important physical examination details using a virtual patient/parent. "
+            "When you are ready, please start asking questions. You will be limited to 15 minutes. "
+            "Alternatively, you may end the session if you click end."
+        )
+
+        # Session state to track time and session status
+        if 'start_time' not in st.session_state:
+            st.session_state.start_time = time.time()
+
+        # Calculate elapsed time
+        elapsed_time = (time.time() - st.session_state.start_time) / 60  # Convert to minutes
+
+        # Display patient information
+        if elapsed_time < 15:
+            with st.form("question_form"):
+                user_input = st.text_input("Ask the virtual patient a question about their symptoms:")
+                submit_button = st.form_submit_button("Submit")
+
+                if submit_button and user_input:
+                    virtual_patient_response = get_chatgpt_response(user_input)
+                    st.write(f"Virtual Patient: {virtual_patient_response}")
+
+                    # Upload the question and response to Firebase without announcement
+                    upload_to_firebase(user_input, virtual_patient_response)
+
+        else:
+            st.warning("Session time is up. Please end the session.")
+            if st.button("End Session"):
+                st.session_state.start_time = None
+                st.success("Session ended. You can start a new session.")
+
+        # Option to move to a new screen
+        if st.button("Go to New Screen"):
+            st.session_state.start_time = None
+            st.write("Redirecting to a new screen...")
+
+        # New function to upload intervention
         def upload_intervention():
-            st.markdown("<h3 style='font-family: \"DejaVu Sans\";'>Intervention Page</h3>", unsafe_allow_html=True)
+            st.title("Intervention Description Entry")
 
-            # Assuming some intervention data, just for demonstration
-            intervention_data = {
-                "user_name": st.session_state.user_name,
-                "unique_code": st.session_state.unique_code,
-                "diagnoses": st.session_state.assessment_data.get('diagnoses', [])
-                # Add other fields as necessary
-            }
+            # Prompt for user input
+            st.header("Describe any interventions that you would currently perform.")
+            interventions = st.text_area("Interventions Description", height=200)
 
-            if st.button("Upload Intervention Data"):
-                upload_status = upload_to_firebase(intervention_data)
-                st.success(upload_status)
+            # Button to upload to Firebase
+            if st.button("Upload Intervention"):
+                if interventions:
+                    entry = {
+                        'interventions': interventions,
+                        'unique_code': st.session_state.unique_code,
+                        'assessment_data': st.session_state.assessment_data,
+                        'diagnoses': st.session_state.diagnoses
+                    }
+                    # Immediately upload to Firebase
+                    result = upload_to_firebase(entry)
+                    st.success("Your interventions have been accepted and are under review.")
+                else:
+                    st.error("Please enter a description of the interventions.")
 
-            if st.button("Chat with Virtual Patient"):
-                st.session_state.page = "chat"
-                st.rerun()
-
-        # Function to chat with virtual patient
-        def chat_with_virtual_patient():
-            st.markdown("<h3 style='font-family: \"DejaVu Sans\";'>Chat with Virtual Patient</h3>", unsafe_allow_html=True)
-
-            chat_input = st.text_input("Ask your question to the virtual patient:")
-
-            if st.button("Send"):
-                # Simulate sending the input to an AI model and getting a response
-                st.write("You: ", chat_input)
-                # Example of a hardcoded response
-                response = "I'm doing well, thank you!"
-                st.write("Virtual Patient: ", response)
-
-            if st.button("Back to Intervention"):
-                st.session_state.page = "intervention"
-                st.rerun()
-
-        # Run the main function
         if __name__ == "__main__":
             main()
+
     except Exception as e:
         st.error(f"Error initializing Firebase: {e}")
-
 
