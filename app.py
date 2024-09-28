@@ -134,6 +134,7 @@ else:
         def display_assessment():
             st.markdown(f"<h3>Welcome {st.session_state.user_name}! Here is the intake form.</h3>", unsafe_allow_html=True)
 
+            # Read and display the text from ptinfo.txt
             document_text = read_text_file("ptinfo.txt")
             if document_text:
                 st.markdown("<h2>Patient Information:</h2>", unsafe_allow_html=True)
@@ -141,14 +142,23 @@ else:
             else:
                 st.write("No text found in the document.")
 
+            # Load vital signs
             vital_signs = load_vital_signs("vital_signs.txt")
             if vital_signs:
                 st.markdown("<h2>Vital Signs:</h2>", unsafe_allow_html=True)
                 for key, value in vital_signs.items():
                     st.checkbox(f"{key}: {value}")
 
-                if st.button("Proceed to Diagnoses"):
-                    st.session_state.page = "diagnoses"  # Move to Diagnoses page
+                if st.button("Submit Assessment"):
+                    entry = {
+                        'unique_code': st.session_state.unique_code,  
+                        **{key: st.session_state[key] for key in vital_signs.keys()}
+                    }
+                    result = upload_to_firebase(entry)
+                    st.success(result)
+                    
+                    # Move to the diagnoses page after submitting the assessment
+                    st.session_state.page = "diagnoses"
                     st.rerun()
             else:
                 st.error("No vital signs data available.")
@@ -180,20 +190,22 @@ else:
                     # Display filtered options
                     if filtered_options and not st.session_state.selected_buttons[i]:
                         st.write("**Suggestions:**")
-                        for option in filtered_options[:5]:
+                        for option in filtered_options[:5]:  # Show a maximum of 5 options
                             button_key = f"select_option_{i}_{option}"
                             if st.button(f"{option}", key=button_key):
                                 st.session_state.diagnoses[i] = option
-                                st.session_state.selected_buttons[i] = True
+                                st.session_state.selected_buttons[i] = True  # Mark as selected
                                 st.rerun()  # Refresh the app
 
             # Button to submit the diagnoses
             if st.button("Submit Diagnoses"):
                 diagnoses = [d.strip() for d in st.session_state.diagnoses]
+                # Check for empty diagnoses and duplicates
                 if all(diagnosis for diagnosis in diagnoses):
                     if len(diagnoses) == len(set(diagnoses)):
-                        st.session_state.current_page = "laboratory_features"  # Move to Laboratory Features page
-                        st.rerun()
+                        # Here you can handle the submission to Firebase or navigate to the next step
+                        st.session_state.page = "next_page"  # Example placeholder for next step
+                        st.rerun()  # Rerun the app to refresh the page
                     else:
                         st.error("Please do not provide duplicate diagnoses.")
                 else:
@@ -204,5 +216,6 @@ else:
 
     except Exception as e:
         st.error(f"Error initializing Firebase: {e}")
+
 
 
