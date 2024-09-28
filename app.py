@@ -352,41 +352,65 @@ else:
                 return response['choices'][0]['message']['content']
 
         # Function to chat with the virtual patient
-        def chat_with_virtual_patient():
-            st.title("Virtual Patient Chat")
+def chat_with_virtual_patient():
+    st.title("Virtual Patient Chat")
 
-            # Instructions for the user
-            st.info(
-                "You will have the opportunity to perform a history and ask for important physical examination details using a virtual patient/parent. "
-                "When you are ready, please start asking questions. You will be limited to 15 minutes. "
-                "Alternatively, you may end the session if you click end."
-            )
+    # Instructions for the user
+    st.info(
+        "You will have the opportunity to perform a history and ask for important physical examination details using a virtual patient/parent. "
+        "When you are ready, please start asking questions. You will be limited to 15 minutes. "
+        "Alternatively, you may end the session if you click 'End Session'."
+    )
 
-            # Session state to track time and session status
-            if 'start_time' not in st.session_state:
-                st.session_state.start_time = time.time()
+    # Session state to track time and session status
+    if 'start_time' not in st.session_state:
+        st.session_state.start_time = time.time()
+        st.session_state.questions_responses = []  # Initialize a list to store questions and responses
 
-            # Calculate elapsed time
-            elapsed_time = (time.time() - st.session_state.start_time) / 60  # Convert to minutes
+    # Calculate elapsed time
+    elapsed_time = (time.time() - st.session_state.start_time) / 60  # Convert to minutes
 
-            # Display patient information
-            if elapsed_time < 15:
-                with st.form("question_form"):
-                    user_input = st.text_input("Ask the virtual patient a question about their symptoms:")
-                    submit_button = st.form_submit_button("Submit")
+    # Display patient information
+    if elapsed_time < 15:
+        with st.form("question_form"):
+            user_input = st.text_input("Ask the virtual patient a question about their symptoms:")
+            submit_button = st.form_submit_button("Submit")
 
-                    if submit_button and user_input:
-                        virtual_patient_response = get_chatgpt_response(user_input)
-                        st.write(f"Virtual Patient: {virtual_patient_response}")
+            if submit_button and user_input:
+                virtual_patient_response = get_chatgpt_response(user_input)
+                st.write(f"Virtual Patient: {virtual_patient_response}")
 
-                        # Upload the question and response to Firebase without announcement
-                        upload_to_firebase({'question': user_input, 'response': virtual_patient_response})
+                # Store the question and response
+                st.session_state.questions_responses.append({'question': user_input, 'response': virtual_patient_response})
 
-            else:
-                st.warning("Session time is up. Please end the session.")
-                if st.button("End Session"):
-                    st.session_state.start_time = None
-                    st.success("Session ended. You can start a new session.")
+                # Upload the question and response to Firebase (if you want to do it instantly)
+                # upload_to_firebase({'question': user_input, 'response': virtual_patient_response})
+
+        # End session button
+        if st.button("End Session"):
+            end_session()
+
+    else:
+        st.warning("Session time is up. Please end the session.")
+        if st.button("End Session"):
+            end_session()
+
+def end_session():
+    # Upload all questions and responses along with other data to Firebase
+    complete_entry = {
+        'unique_code': st.session_state.unique_code,
+        'assessment_data': st.session_state.assessment_data,
+        'diagnoses': st.session_state.diagnoses,
+        'questions_responses': st.session_state.questions_responses  # Include questions and responses
+    }
+    
+    # Upload the complete entry to Firebase
+    upload_to_firebase(complete_entry)
+    st.success("Session ended. Your data has been uploaded.")
+    
+    # Reset session state for a new session
+    st.session_state.start_time = None
+    st.session_state.questions_responses = []  # Reset questions and responses list
 
         if __name__ == "__main__":
             main()
