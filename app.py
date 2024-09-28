@@ -1,11 +1,16 @@
 import streamlit as st
 import pandas as pd
-from firebase_setup import upload_to_firebase  # Import upload function
-from intervention_module import upload_intervention  # Import the upload_intervention function
+import firebase_admin
+from firebase_admin import credentials, firestore
 import os
 import json
 import firebase_admin
 from firebase_admin import credentials, firestore
+import streamlit as st
+import json
+import openai
+from docx import Document
+import time
 
 # Load Firebase credentials from environment variable
 FIREBASE_KEY_JSON = os.getenv('FIREBASE_KEY')
@@ -102,7 +107,7 @@ else:
             elif st.session_state.page == "diagnoses":
                 display_diagnoses()
             elif st.session_state.page == "intervention":
-                upload_intervention()  # Call the upload_intervention function
+                upload_intervention()  # New intervention page
 
         # Welcome page function
         def welcome_page():
@@ -284,8 +289,32 @@ else:
                 else:
                     st.error("Please select all 5 diagnoses.")
 
+        # New function to upload intervention
+        def upload_intervention():
+            st.title("Intervention Description Entry")
+
+            # Prompt for user input
+            st.header("Describe any interventions that you would currently perform.")
+            interventions = st.text_area("Interventions Description", height=200)
+
+            # Button to upload to Firebase
+            if st.button("Upload Intervention"):
+                if interventions:
+                    entry = {
+                        'interventions': interventions,
+                        'unique_code': st.session_state.unique_code,
+                        'assessment_data': st.session_state.assessment_data,
+                        'diagnoses': st.session_state.diagnoses
+                    }
+                    # Immediately upload to Firebase
+                    result = upload_to_firebase(entry)
+                    st.success("Your interventions have been accepted and are under review.")
+                else:
+                    st.error("Please enter a description of the interventions.")
+
         if __name__ == "__main__":
             main()
 
     except Exception as e:
         st.error(f"Error initializing Firebase: {e}")
+
