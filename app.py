@@ -1,27 +1,15 @@
+import streamlit as st
+import pandas as pd
 import firebase_admin
 from firebase_admin import credentials, firestore
-import streamlit as st
 import os
 import json
-
-# Function to read diagnoses from a file
-def read_diagnoses_from_file():
-    try:
-        with open('dx_list.txt', 'r') as file:
-            diagnoses = [line.strip() for line in file.readlines() if line.strip()]
-        return diagnoses
-    except Exception as e:
-        st.error(f"Error reading dx_list.txt: {e}")
-        return []
-
-# Set the page config to normal
-st.set_page_config(layout="wide")
 
 # Load Firebase credentials from environment variable
 FIREBASE_KEY_JSON = os.getenv('FIREBASE_KEY')
 
-if FIREBASE_KEY_JSON is None or FIREBASE_KEY_JSON == "":
-    st.error("FIREBASE_KEY environment variable not set or is empty.")
+if FIREBASE_KEY_JSON is None:
+    st.error("FIREBASE_KEY environment variable not set.")
 else:
     try:
         # Parse the JSON string into a dictionary
@@ -35,38 +23,145 @@ else:
         # Get Firestore client
         db = firestore.client()
 
+        # Function to upload data to Firebase
         def upload_to_firebase(entry):
             db.collection('your_collection_name').add(entry)
             return "Data uploaded to Firebase."
 
-        # Initialize session state
-        if 'current_page' not in st.session_state:
-            st.session_state.current_page = "diagnoses"
-        if 'diagnoses' not in st.session_state:
-            st.session_state.diagnoses = [""] * 5
-        if 'laboratory_features' not in st.session_state:
-            st.session_state.laboratory_features = [""] * 5
-        if 'selected_buttons' not in st.session_state:
-            st.session_state.selected_buttons = [False] * 5  # Track button visibility for each diagnosis
-        if 'selected_moving_diagnosis' not in st.session_state:
-            st.session_state.selected_moving_diagnosis = ""  # Initialize selected moving diagnosis
+        # Set page layout to wide
+        st.set_page_config(layout="wide")
 
-        # Load diagnoses from file after Firebase initialization
-        dx_options = read_diagnoses_from_file()
-        dx_options.insert(0, "")  # Add a blank option at the beginning
+        # Cache loading of users from CSV
+        @st.cache_data
+        def load_users():
+            return pd.read_csv('users.csv')
 
-        # Title of the app
-        st.title("")
+        # Function to read text from a TXT file
+        def read_text_file(txt_file_path):
+            try:
+                with open(txt_file_path, 'r') as file:
+                    return file.read()
+            except FileNotFoundError:
+                st.error(f"File not found: {txt_file_path}. Please check the file path.")
+                return ""
+            except Exception as e:
+                st.error(f"An error occurred: {e}")
+                return ""
 
-        # Diagnoses Page
-        if st.session_state.current_page == "diagnoses":
-            st.markdown("""
+        # Function to load vital signs from a TXT file
+        def load_vital_signs(vital_signs_file):
+            vital_signs = {}
+            try:
+                with open(vital_signs_file, 'r') as file:
+                    for line in file:
+                        parts = line.strip().split(',')
+                        if len(parts) == 2:
+                            key = parts[0].strip()  
+                            value = parts[1].strip()  
+                            vital_signs[key] = value
+            except FileNotFoundError:
+                st.error(f"File not found: {vital_signs_file}. Please check the file path.")
+            except Exception as e:
+                st.error(f"An error occurred: {e}")
+
+            return vital_signs
+
+        # Initialize the diagnosis options
+        dx_options = ["Diagnosis 1", "Diagnosis 2", "Diagnosis 3", "Diagnosis 4", "Diagnosis 5"]  # Example options
+
+        # Main app function
+        def main():
+            st.title("Pediatric Clerkship Virtual Clinical Reasoning Assessment")
+
+            # Load user data
+            users = load_users()
+
+            # Initialize session state
+            if "page" not in st.session_state:
+                st.session_state.page = "welcome" 
+            if "user_name" not in st.session_state:
+                st.session_state.user_name = ""
+            if "unique_code" not in st.session_state:
+                st.session_state.unique_code = None
+            if "diagnoses" not in st.session_state:
+                st.session_state.diagnoses = [""] * 5  # Placeholder for 5 diagnoses
+            if "selected_buttons" not in st.session_state:
+                st.session_state.selected_buttons = [False] * 5  # Track if a button is selected
+
+            # Check which page to display
+            if st.session_state.page == "assessment":
+                display_assessment()
+            elif st.session_state.page == "diagnoses":
+                display_diagnoses()
+            elif st.session_state.page == "welcome":
+                welcome_page()
+            elif st.session_state.page == "login":
+                login_page(users)
+
+        # Welcome page function
+        def welcome_page():
+            st.markdown("<h3>Welcome to the Pediatric Clerkship Assessment!</h3>", unsafe_allow_html=True)
+            st.markdown("<p>This assessment is designed to evaluate your clinical reasoning skills.</p>", unsafe_allow_html=True)
+            st.markdown("<h4>Instructions:</h4>", unsafe_allow_html=True)
+            st.markdown("<p>1. Please enter your unique code on the next page.<br>2. Follow the prompts to complete the assessment.</p>", unsafe_allow_html=True)
+
+            if st.button("Next"):
+                st.session_state.page = "login"
+                st.rerun()
+
+        # Login page function
+        def login_page(users):
+            st.markdown("<p>Please enter your unique code to access the assessment.</p>", unsafe_allow_html=True)
+            unique_code = st.text_input("Unique Code:")
+
+            if st.button("Submit"):
+                if unique_code:
+                    try:
+                        unique_code = int(unique_code.strip())
+                        if unique_code in users['code'].values:
+                            st.session_state.user_name = users.loc[users['code'] == unique_code, 'name'].values[0]
+                            st.session_state.unique_code = unique_code  
+                            st.session_state.page = "assessment"  
+                            st.rerun()
+                        else:
+                            st.error("Invalid code. Please try again.")
+                    except ValueError:
+                        st.error("Please enter a valid code.")
+                else:
+                    st.error("Please enter a code.")
+
+        # Function to display the assessment page
+        def display_assessment():
+            st.markdown(f"<h3>Welcome {st.session_state.user_name}! Here is the intake form.</h3>", unsafe_allow_html=True)
+
+            document_text = read_text_file("ptinfo.txt")
+            if document_text:
+                st.markdown("<h2>Patient Information:</h2>", unsafe_allow_html=True)
+                st.markdown(f"<div>{document_text.replace('\n', '<br>')}</div>", unsafe_allow_html=True)
+            else:
+                st.write("No text found in the document.")
+
+            vital_signs = load_vital_signs("vital_signs.txt")
+            if vital_signs:
+                st.markdown("<h2>Vital Signs:</h2>", unsafe_allow_html=True)
+                for key, value in vital_signs.items():
+                    st.checkbox(f"{key}: {value}")
+
+                if st.button("Proceed to Diagnoses"):
+                    st.session_state.page = "diagnoses"  # Move to Diagnoses page
+                    st.rerun()
+            else:
+                st.error("No vital signs data available.")
+
+        # Function to display the Diagnoses page
+        def display_diagnoses():
+            st.markdown(""" 
                 ## DIFFERENTIAL DIAGNOSIS UPDATE
-                Based on the information that has been subsequently provided in the above case, please review your initial differential diagnosis list and update it as necessary. 
+                Based on the information that has been subsequently provided in the above case, please review your initial differential diagnosis list and update it as necessary.
             """)
 
             # Create columns for each diagnosis input
-            cols = st.columns(5)  # Create 5 columns for 5 diagnoses
+            cols = st.columns(5)
 
             for i, col in enumerate(cols):
                 current_diagnosis = st.session_state.diagnoses[i]
@@ -85,127 +180,27 @@ else:
                     # Display filtered options
                     if filtered_options and not st.session_state.selected_buttons[i]:
                         st.write("**Suggestions:**")
-                        for option in filtered_options[:5]:  # Show a maximum of 5 options
+                        for option in filtered_options[:5]:
                             button_key = f"select_option_{i}_{option}"
                             if st.button(f"{option}", key=button_key):
                                 st.session_state.diagnoses[i] = option
-                                st.session_state.selected_buttons[i] = True  # Mark as selected
+                                st.session_state.selected_buttons[i] = True
                                 st.rerun()  # Refresh the app
 
             # Button to submit the diagnoses
             if st.button("Submit Diagnoses"):
                 diagnoses = [d.strip() for d in st.session_state.diagnoses]
-                # Check for empty diagnoses and duplicates
                 if all(diagnosis for diagnosis in diagnoses):
                     if len(diagnoses) == len(set(diagnoses)):
                         st.session_state.current_page = "laboratory_features"  # Move to Laboratory Features page
-                        st.rerun()  # Rerun the app to refresh the page
+                        st.rerun()
                     else:
                         st.error("Please do not provide duplicate diagnoses.")
                 else:
                     st.error("Please select all 5 diagnoses.")
 
-        # Laboratory Features Page
-        elif st.session_state.current_page == "laboratory_features":
-            st.markdown("""
-                ### LABORATORY FEATURES
-                Please provide up to 5 laboratory features that influence the differential diagnosis.
-            """)
-
-            # Reorder section in the sidebar
-            with st.sidebar:
-                st.subheader("Reorder Diagnoses")
-
-                # Default to the currently selected diagnosis or the first one if none is selected
-                selected_diagnosis = st.selectbox(
-                    "Select a diagnosis to move",
-                    options=st.session_state.diagnoses,
-                    index=st.session_state.diagnoses.index(st.session_state.selected_moving_diagnosis) if st.session_state.selected_moving_diagnosis in st.session_state.diagnoses else 0,
-                    key="move_diagnosis"
-                )
-
-                move_direction = st.radio("Adjust Priority:", options=["Higher Priority", "Lower Priority"], key="move_direction")
-
-                if st.button("Adjust Priority"):
-                    idx = st.session_state.diagnoses.index(selected_diagnosis)
-                    if move_direction == "Higher Priority" and idx > 0:
-                        # Move up by one position
-                        st.session_state.diagnoses[idx], st.session_state.diagnoses[idx - 1] = (
-                            st.session_state.diagnoses[idx - 1], st.session_state.diagnoses[idx]
-                        )
-                        st.session_state.selected_moving_diagnosis = st.session_state.diagnoses[idx - 1]  # Update selected diagnosis
-                    elif move_direction == "Lower Priority" and idx < len(st.session_state.diagnoses) - 1:
-                        # Move down by one position
-                        st.session_state.diagnoses[idx], st.session_state.diagnoses[idx + 1] = (
-                            st.session_state.diagnoses[idx + 1], st.session_state.diagnoses[idx]
-                        )
-                        st.session_state.selected_moving_diagnosis = st.session_state.diagnoses[idx + 1]  # Update selected diagnosis
-
-                # Change a diagnosis section
-                st.subheader("Change a Diagnosis")
-                change_diagnosis = st.selectbox(
-                    "Select a diagnosis to change",
-                    options=st.session_state.diagnoses,
-                    key="change_diagnosis"
-                )
-
-                new_diagnosis_search = st.text_input("Search for a new diagnosis", "")
-                if new_diagnosis_search:
-                    new_filtered_options = [dx for dx in dx_options if new_diagnosis_search.lower() in dx.lower() and dx not in st.session_state.diagnoses]
-                    if new_filtered_options:
-                        st.write("**Available Options:**")
-                        for option in new_filtered_options:
-                            if st.button(f"{option}", key=f"select_new_{option}"):
-                                # Change selected diagnosis to the new one
-                                index_to_change = st.session_state.diagnoses.index(change_diagnosis)
-                                st.session_state.diagnoses[index_to_change] = option
-                                st.rerun()  # Rerun to update the displayed diagnoses
-
-            # Create columns for each diagnosis input
-            cols = st.columns(len(st.session_state.diagnoses) + 1)
-            with cols[0]:
-                st.markdown("Laboratory Features")
-
-            for diagnosis, col in zip(st.session_state.diagnoses, cols[1:]):
-                with col:
-                    st.markdown(diagnosis)
-
-            for i in range(5):
-                cols = st.columns(len(st.session_state.diagnoses) + 1)
-                with cols[0]:
-                    st.session_state.laboratory_features[i] = st.text_input("", key=f"lab_row_{i}", label_visibility="collapsed")
-
-                for diagnosis, col in zip(st.session_state.diagnoses, cols[1:]):
-                    with col:
-                        st.selectbox(
-                            "",
-                            options=["", "Supports", "Does not support"],
-                            key=f"select_{i}_{diagnosis}_lab",
-                            label_visibility="collapsed"
-                        )
-
-            # Submit button for laboratory features
-            if st.button("Submit Laboratory Features"):
-                assessments = {}
-                for i in range(5):
-                    for diagnosis in st.session_state.diagnoses:
-                        assessment = st.session_state[f"select_{i}_{diagnosis}_lab"]
-                        if diagnosis not in assessments:
-                            assessments[diagnosis] = []
-                        assessments[diagnosis].append({
-                            'laboratory_feature': st.session_state.laboratory_features[i],
-                            'assessment': assessment
-                        })
-
-                # Prepare the entry for Firebase
-                entry = {
-                    'updated_diagnoses': st.session_state.diagnoses,
-                    'laboratory_features': st.session_state.laboratory_features,
-                    'lab_assessments': assessments
-                }
-
-                result = upload_to_firebase(entry)
-                st.success(result)
+        if __name__ == "__main__":
+            main()
 
     except Exception as e:
         st.error(f"Error initializing Firebase: {e}")
