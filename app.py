@@ -36,7 +36,7 @@ def main():
         display_diagnoses()
     elif st.session_state.page == "intervention":
         upload_intervention()
-    elif st.session_state.page == "virtual_patient":
+    elif st.session_state.page == "run_virtual_patient_app":
         run_virtual_patient_app()
 
 if __name__ == "__main__":
