@@ -94,12 +94,12 @@ def main():
         for i in range(5):
             cols = st.columns(len(st.session_state.diagnoses) + 1)
             with cols[0]:
-                st.session_state.historical_features[i] = st.text_input("", key=f"hist_row_{i}", label_visibility="collapsed")
+                st.session_state.historical_features[i] = st.text_input("Enter historical feature", key=f"hist_row_{i}")
 
             for diagnosis, col in zip(st.session_state.diagnoses, cols[1:]):
                 with col:
                     st.selectbox(
-                        "",
+                        "Assessment for " + diagnosis,  # Provide a descriptive label
                         options=["", "Supports", "Does not support"],
                         key=f"select_{i}_{diagnosis}_hist",
                         label_visibility="collapsed"
@@ -118,13 +118,11 @@ def main():
                         'assessment': assessment
                     })
 
-            st.session_state.current_page = "pe_features"  # Change to the next page
+            st.session_state.current_page = "Physical Examination Features"  # Change to the next page
             st.success("Historical features submitted successfully.")
-            st.write("Transitioning to the next page...")  # Debugging line
             st.rerun()
 
 # Call the main function to run the app
 if __name__ == "__main__":
     main()
-
 
