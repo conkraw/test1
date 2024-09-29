@@ -17,7 +17,6 @@ def run_virtual_patient_app():
     def get_chatgpt_response(user_input):
         user_input_lower = user_input.lower()  # Normalize the user input to lower case
 
-        # Check if the question is a medical question based on croup_info
         if user_input_lower in croup_info:
             response = openai.ChatCompletion.create(
                 model="gpt-3.5-turbo",
@@ -28,7 +27,6 @@ def run_virtual_patient_app():
             )
             return response['choices'][0]['message']['content']
         else:
-            # Handle unknown medical inquiries naturally
             response = openai.ChatCompletion.create(
                 model="gpt-3.5-turbo",
                 messages=[
@@ -41,21 +39,18 @@ def run_virtual_patient_app():
     # Streamlit app layout
     st.title("Virtual Patient: Case #1")
 
-    # Instructions for the user
     st.info(
         "You will have the opportunity to perform a history and ask for important physical examination details using a virtual patient/parent. "
         "When you are ready, please start asking questions. You will be limited to 15 minutes. "
         "Alternatively, you may end the session if you click end."
     )
 
-    # Session state to track time and session status
+    # Session state to track time
     if 'start_time' not in st.session_state:
         st.session_state.start_time = time.time()
 
-    # Calculate elapsed time
     elapsed_time = (time.time() - st.session_state.start_time) / 60  # Convert to minutes
 
-    # Display patient information
     if elapsed_time < 15:
         with st.form("question_form"):
             user_input = st.text_input("Ask the virtual patient a question about their symptoms:")
@@ -71,9 +66,8 @@ def run_virtual_patient_app():
     # End session button with unique key
     if st.button("End Session", key="end_session_button"):
         st.session_state.start_time = None
-        st.session_state.page = "next_page"  # Change to your desired next page
+        st.session_state.page = "physical_examination"  # Navigate to physical examination selection
         st.success("Session ended. You can start a new session.")
         st.rerun()  # Re-run to apply session state changes
-
 
 
