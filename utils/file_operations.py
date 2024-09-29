@@ -24,3 +24,13 @@ def load_vital_signs(file_path):
             return vital_signs
     except FileNotFoundError:
         return None
+# utils/file_operations.py
+
+def read_diagnoses_from_file():
+    try:
+        with open('dx_list.txt', 'r') as file:
+            diagnoses = [line.strip() for line in file.readlines() if line.strip()]
+        return diagnoses
+    except Exception as e:
+        st.error(f"Error reading dx_list.txt: {e}")
+        return []
