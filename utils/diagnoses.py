@@ -1,13 +1,17 @@
-import streamlit as st 
-from utils.file_operations import read_diagnoses_from_file  
+import streamlit as st
+from utils.file_operations import read_diagnoses_from_file
 
 def display_diagnoses():
     # Ensure diagnoses are initialized
     if 'diagnoses' not in st.session_state:
         st.session_state.diagnoses = [""] * 5  # Initialize with empty strings for 5 diagnoses
 
+    # Initialize selected_buttons if not already done
+    if 'selected_buttons' not in st.session_state:
+        st.session_state.selected_buttons = [False] * 5  # Initialize with False for each diagnosis
+
     # Check if assessment data exists
-    if not st.session_state.assessment_data:
+    if 'assessment_data' not in st.session_state or not st.session_state.assessment_data:
         st.error("Please complete the assessment before updating diagnoses.")
         return
 
@@ -37,7 +41,7 @@ def display_diagnoses():
                     if st.button(f"{option}", key=button_key):
                         st.session_state.diagnoses[i] = option
                         st.session_state.selected_buttons[i] = True
-                        st.rerun()  # Refresh the app
+                        st.experimental_rerun()  # Refresh the app
 
     # Button to submit the diagnoses
     if st.button("Submit Diagnoses"):
@@ -48,12 +52,11 @@ def display_diagnoses():
                 # Handle submission logic here
                 st.success("Diagnoses submitted successfully.")
                 st.session_state.page = "next_page"  # Change to the next page
-                st.rerun()
+                st.experimental_rerun()
             else:
                 st.error("Please do not provide duplicate diagnoses.")
         else:
             st.error("Please select all 5 diagnoses.")
-
 
 
 
