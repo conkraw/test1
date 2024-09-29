@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-from utils.history_with_ai import run_virtual_patient 
+from utils.history_with_ai import get_chatgpt_response
 
 
 def main():
