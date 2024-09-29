@@ -40,7 +40,8 @@ def main():
         display_physical_examination()  # Call the main function from physical_examination.py
     elif st.session_state.page == "History Illness Script":  # New condition
         history_illness_script()  # Call the main function from physical_examination.py
-    elif st.session_state.page == "Physical Examination Features":  # New condition for the physical examination features
-        physical_examination_script()
+    elif st.session_state.page == "Physical Examination Features":  # Ensure this matches exactly
+        physical_examination_script()  # Call the main function from physical_examination_script.py
+
 if __name__ == "__main__":
     main()
