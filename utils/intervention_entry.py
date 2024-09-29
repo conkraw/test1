@@ -1,5 +1,7 @@
 import streamlit as st
 import pandas as pd
+from utils.history_with_ai import run_virtual_patient 
+
 
 def main():
     st.title("Intervention Description Entry")
@@ -15,6 +17,7 @@ def main():
             with open("interventions.csv", "a") as f:
                 f.write(f"{interventions}\n")
             st.success("Your interventions have been saved.")
+            run_virtual_patient()
         else:
             st.error("Please enter a description of the interventions.")
 
