@@ -2,8 +2,6 @@ import streamlit as st
 from utils.file_operations import load_users
 from utils.welcome import welcome_page
 from utils.login import login_page
-from utils.assessment import display_assessment
-from utils.diagnoses import display_diagnoses
 
 st.set_page_config(layout="wide")
 
@@ -22,8 +20,6 @@ def main():
         welcome_page()
     elif st.session_state.page == "login":
         login_page(users)
-    elif st.session_state.page == "diagnoses":
-        display_diagnoses()
 
 if __name__ == "__main__":
     main()
