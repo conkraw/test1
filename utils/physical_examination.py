@@ -82,7 +82,7 @@ def main():
 
     # List of examination components
     components = [
-        "","General Appearance", "Eyes", "Ears, Neck, Nose, Throat", "Lymph Nodes",
+        "General Appearance", "Eyes", "Ears, Neck, Nose, Throat", "Lymph Nodes",
         "Cardiovascular", "Lungs", "Abdomen", "Skin", "Extremities",
         "Musculoskeletal", "Neurological", "Psychiatry", "Genitourinary", "Image", "Audio", "Video"
     ]
@@ -101,5 +101,11 @@ def main():
     elif selected_component == "Video":
         display_video("video_1")  # Check for various formats of video_1
 
+    # Add a submit button to go to the next page
+    if st.button("Submit"):
+        st.session_state.page = "Next Page Name"  # Change to your actual next page
+        st.rerun()  # Rerun the app to reflect the changes
+
 if __name__ == '__main__':
     main()
+
