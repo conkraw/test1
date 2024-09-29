@@ -32,14 +32,8 @@ def main():
         upload_intervention()
     elif st.session_state.page == "virtual_patient":
         run_virtual_patient_app()  # Call the virtual patient app
-        if st.button("End Session"):
-            st.session_state.page = "physical_examination"  # Navigate to physical examination selection
-
     elif st.session_state.page == "physical_examination":
         physical_examination_selection()  # Call the physical examination selection function
 
 if __name__ == "__main__":
     main()
-
-
-
