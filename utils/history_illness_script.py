@@ -169,7 +169,8 @@ def main():  # Add a main function to encapsulate the logic
                         'historical_feature': st.session_state.historical_features[i],
                         'assessment': assessment
                     })
-
+            st.session_state.page = "PE Illness Script"  # Change to the next page
+            st.rerun()
             st.success("Historical features submitted successfully.")
 
 # Call the main function to run the app
