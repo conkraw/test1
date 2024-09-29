@@ -36,6 +36,7 @@ def display_diagnoses():
                     button_key = f"select_option_{i}_{option}"
                     if st.button(f"{option}", key=button_key):
                         st.session_state.diagnoses[i] = option
+                        st.session_state.selected_buttons[i] = True
                         st.rerun()  # Refresh the app
 
     # Button to submit the diagnoses
@@ -52,4 +53,7 @@ def display_diagnoses():
                 st.error("Please do not provide duplicate diagnoses.")
         else:
             st.error("Please select all 5 diagnoses.")
+
+
+
 
