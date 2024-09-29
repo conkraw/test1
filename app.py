@@ -1,30 +1,23 @@
 import streamlit as st
-import pandas as pd
-#from utils.file_operations import load_users
+from utils.file_operations import load_users
 from utils.welcome import welcome_page
 from utils.login import login_page
+# Add other necessary imports
 
-try:
-    from utils.file_operations import load_users
-except ImportError as e:
-    print(f"Import error: {e}")
+st.set_page_config(layout="wide")
 
-
-# Main application function
 def main():
-    # Initialize session state if it does not exist
+    # Your main logic here
+    users = load_users()
+
     if "page" not in st.session_state:
         st.session_state.page = "welcome"
 
-    # Load users
-    users = load_users()
-
-    # Navigation between pages
     if st.session_state.page == "welcome":
         welcome_page()
     elif st.session_state.page == "login":
         login_page(users)
+    # Add more page conditions as needed
 
 if __name__ == "__main__":
     main()
-
