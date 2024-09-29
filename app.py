@@ -6,6 +6,7 @@ from utils.welcome import welcome_page
 from utils.login import login_page
 from utils.intake_form import display_intake_form
 from utils.diagnoses import display_diagnoses
+from utils.intervention_entry import main as intervention_entry_main
 
 st.set_page_config(layout="wide")
 
@@ -22,6 +23,8 @@ def main():
         display_intake_form()
     elif st.session_state.page == "diagnoses":
         display_diagnoses()
+    elif st.session_state.page == "Intervention Entry":
+        intervention_entry_main()
 
 if __name__ == "__main__":
     main()
