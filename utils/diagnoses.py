@@ -30,7 +30,7 @@ def display_diagnoses():
             filtered_options = [dx for dx in dx_options if search_input.lower() in dx.lower()] if search_input else []
 
             # Display filtered options
-            if filtered_options:
+            if filtered_options and not st.session_state.selected_buttons[i]:
                 st.write("**Suggestions:**")
                 for option in filtered_options[:5]:  # Show a maximum of 5 options
                     button_key = f"select_option_{i}_{option}"
