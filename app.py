@@ -9,6 +9,7 @@ from utils.diagnoses import display_diagnoses
 from utils.intervention_entry import main as intervention_entry_main
 from utils.history_with_ai import run_virtual_patient
 from utils.focused_physical_examination import display_focused_physical_examination 
+from utils.physical_examination import main as physical_examination_main  # Import the main function
 
 st.set_page_config(layout="wide")
 
@@ -31,5 +32,7 @@ def main():
         run_virtual_patient()
     elif st.session_state.page == "Focused Physical Examination":  # Updated condition
         display_focused_physical_examination()  
+    elif st.session_state.page == "Physical Examination":  # New condition
+        physical_examination_main()  # Call the main function from physical_examination.py
 if __name__ == "__main__":
     main()
