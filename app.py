@@ -1,16 +1,13 @@
 import streamlit as st
-from firebase_setup import initialize_firebase
 from user_management import load_users, welcome_page, login_page
 from assessment import display_assessment
 from diagnoses import display_diagnoses
 from intervention import upload_intervention
 from virtual_patient import run_virtual_patient_app
+from focused_physical_exam import physical_examination_selection
 
 def main():
     st.set_page_config(layout="wide")
-
-    # Initialize Firebase
-    initialize_firebase()
 
     # Load user data
     users = load_users()
@@ -32,9 +29,14 @@ def main():
     elif st.session_state.page == "diagnoses":
         display_diagnoses()
     elif st.session_state.page == "intervention":
-        upload_intervention()  # Calls the updated upload_intervention function
+        upload_intervention()
     elif st.session_state.page == "virtual_patient":
-        run_virtual_patient_app()
+        run_virtual_patient_app()  # Call the virtual patient app
+        if st.button("End Session"):
+            st.session_state.page = "physical_examination"  # Navigate to physical examination selection
+
+    elif st.session_state.page == "physical_examination":
+        physical_examination_selection()  # Call the physical examination selection function
 
 if __name__ == "__main__":
     main()
