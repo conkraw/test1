@@ -11,7 +11,8 @@ from utils.history_with_ai import run_virtual_patient
 from utils.focused_physical_examination import display_focused_physical_examination 
 from utils.physical_examination import main as display_physical_examination  # Import the main function
 from utils.history_illness_script import main as history_illness_script  # Make sure to import the correct function
-from utils.pe_illness_script import main as pe_illness_script  # Import the new physical examination script
+from utils.physical_examination_script import main as physical_examination_script  # Import the new physical examination script
+
 
 
 st.set_page_config(layout="wide")
@@ -39,7 +40,7 @@ def main():
         display_physical_examination()  # Call the main function from physical_examination.py
     elif st.session_state.page == "History Illness Script":  # New condition
         history_illness_script()  # Call the main function from physical_examination.py
-    elif st.session_state.page == "pe_features":  # Updated condition
-        pe_illness_script()  
+    elif st.session_state.page == "Physical Examination Features":  # New condition for the physical examination features
+        physical_examination_script()
 if __name__ == "__main__":
     main()
