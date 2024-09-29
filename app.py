@@ -1,23 +1,26 @@
 import streamlit as st
-from user_management import load_users, welcome_page, login_page
-from assessment import display_assessment
-from diagnoses import display_diagnoses
-from intervention import upload_intervention
-from virtual_patient import run_virtual_patient_app
-from focused_physical_exam import physical_examination_selection
+import pandas as pd
+from utils.file_operations import load_users
+from pages.welcome import welcome_page
+from pages.login import login_page
+from pages.assessment import display_assessment
+from pages.diagnoses import display_diagnoses
+
+# Set page layout to wide
+st.set_page_config(layout="wide")
 
 def main():
-    st.set_page_config(layout="wide")
+    st.title("Pediatric Clerkship Virtual Clinical Reasoning Assessment")
 
     # Load user data
     users = load_users()
 
-    # Initialize session state
+    # Initialize session state for page if not already done
     if "page" not in st.session_state:
-        st.session_state.page = "welcome"
-        st.session_state.diagnoses = [""] * 5
-        st.session_state.selected_buttons = [False] * 5
-        st.session_state.assessment_data = {}
+        st.session_state.page = "welcome"  # Start on the welcome page
+        st.session_state.diagnoses = [""] * 5  # Initialize empty diagnoses
+        st.session_state.selected_buttons = [False] * 5  # Track selection status
+        st.session_state.assessment_data = {}  # Store assessment data
 
     # Check which page to display
     if st.session_state.page == "assessment":
@@ -28,12 +31,7 @@ def main():
         login_page(users)
     elif st.session_state.page == "diagnoses":
         display_diagnoses()
-    elif st.session_state.page == "intervention":
-        upload_intervention()
-    elif st.session_state.page == "virtual_patient":
-        run_virtual_patient_app()  # Call the virtual patient app
-    elif st.session_state.page == "physical_examination":
-        physical_examination_selection()  # Call the physical examination selection function
 
 if __name__ == "__main__":
     main()
+
