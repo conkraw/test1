@@ -170,8 +170,8 @@ def main():  # Add a main function to encapsulate the logic
                         'assessment': assessment
                     })
             st.session_state.page = "PE Illness Script"  # Change to the next page
-            st.rerun()
             st.success("Historical features submitted successfully.")
+            st.rerun()
 
 # Call the main function to run the app
 if __name__ == "__main__":
