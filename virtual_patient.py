@@ -1,9 +1,3 @@
-import streamlit as st
-import json
-import openai
-from docx import Document
-import time
-
 def run_virtual_patient_app():
     # Load OpenAI API key from Streamlit secrets
     openai.api_key = st.secrets["OPENAI_API_KEY"]
@@ -73,13 +67,13 @@ def run_virtual_patient_app():
 
     else:
         st.warning("Session time is up. Please end the session.")
-    
-    # End session button
-    if st.button("End Session"):
+
+    # End session button with unique key
+    if st.button("End Session", key="end_session_button"):
         st.session_state.start_time = None
-        st.session_state.page = "next_page"  # Set the next page you want to navigate to
+        st.session_state.page = "next_page"  # Change to your desired next page
         st.success("Session ended. You can start a new session.")
-        st.rerun()  # This will re-run the script and show the updated session state
+        st.rerun()  # Re-run to apply session state changes
 
 
 
