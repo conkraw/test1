@@ -3,9 +3,8 @@
 import pandas as pd
 
 def load_users():
-    # Your code to load users
-    pass
-
+    return pd.read_csv('users.csv')
+    
 def read_text_file(file_path):
     try:
         with open(file_path, 'r') as file:
@@ -24,7 +23,6 @@ def load_vital_signs(file_path):
             return vital_signs
     except FileNotFoundError:
         return None
-# utils/file_operations.py
 
 def read_diagnoses_from_file():
     try:
