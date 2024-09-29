@@ -7,6 +7,8 @@ from utils.login import login_page
 from utils.intake_form import display_intake_form
 from utils.diagnoses import display_diagnoses
 
+st.set_page_config(layout="wide")
+
 # Main function to control the app flow
 def main():
     if "page" not in st.session_state:
