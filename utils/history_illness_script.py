@@ -1,5 +1,4 @@
 import streamlit as st
-import os
 
 # Function to read diagnoses from a file
 def read_diagnoses_from_file():
@@ -11,7 +10,7 @@ def read_diagnoses_from_file():
         st.error(f"Error reading dx_list.txt: {e}")
         return []
 
-def main():  
+def main():
     # Initialize session state
     if 'current_page' not in st.session_state:
         st.session_state.current_page = "historical_features"  # Start on historical features page
@@ -119,12 +118,12 @@ def main():
                         'assessment': assessment
                     })
 
-            st.session_state.page = "pe_features"  # Change to the next page
+            st.session_state.current_page = "pe_features"  # Change to the next page
             st.success("Historical features submitted successfully.")
+            st.write("Transitioning to the next page...")  # Debugging line
             st.rerun()
 
 # Call the main function to run the app
 if __name__ == "__main__":
     main()
-
 
