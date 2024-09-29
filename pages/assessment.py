@@ -64,3 +64,4 @@ def display_assessment():
             st.rerun()  # Rerun the app to refresh the page
     else:
         st.error("No vital signs data available.")
+
