@@ -79,7 +79,7 @@ def display_intake_form():
                 'weight': weight_checkbox,
             }
             st.session_state.page = "diagnoses"  # Move to Diagnoses page
-            st.experimental_rerun()  # Rerun the app to refresh the page
+            st.rerun()  # Rerun the app to refresh the page
 
     else:
         st.error("No vital signs data available.")
