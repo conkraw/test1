@@ -118,7 +118,7 @@ def main():
                         'assessment': assessment
                     })
 
-            st.session_state.current_page = "pe_features"  # Change to the next page
+            st.session_state.current_page = "next page"  # Change to the next page
             st.success("Physical examination features submitted successfully.")
             st.write("Transitioning to the next page...")  # Debugging line
             st.rerun()
