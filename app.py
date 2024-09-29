@@ -1,14 +1,9 @@
 import streamlit as st
-import pandas as pd
-from utils.file_operations import load_users
-from pages.welcome import welcome_page
-from pages.login import login_page
-from pages.assessment import display_assessment
-from pages.diagnoses import display_diagnoses
+from utils.file_operations import load_users, read_text_file, load_vital_signs, read_diagnoses_from_file
+from utils.firebase_operations import upload_to_firebase
+from utils.user_management import welcome_page, login_page, display_assessment, display_diagnoses
 
-# Set page layout to wide
-st.set_page_config(layout="wide")
-
+# Main app function
 def main():
     st.title("Pediatric Clerkship Virtual Clinical Reasoning Assessment")
 
