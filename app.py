@@ -5,6 +5,7 @@ from assessment import display_assessment
 from diagnoses import display_diagnoses
 from intervention import upload_intervention
 from virtual_patient import run_virtual_patient_app
+from focused_physical_exam import focused_physical_exam  # Import the new function
 
 def main():
     st.set_page_config(layout="wide")
@@ -33,24 +34,17 @@ def main():
     elif st.session_state.page == "diagnoses":
         display_diagnoses()
     elif st.session_state.page == "intervention":
-        upload_intervention()  # Collects data but does not navigate yet
+        upload_intervention()  # Just collects data, does not upload yet
     elif st.session_state.page == "virtual_patient":
-        run_virtual_patient_app()
+        run_virtual_patient_app()  # Call the virtual patient app
+        st.session_state.page = "focused_physical_exam"  # Set the next page
 
-    # Finalize the upload of intervention data
-    if st.button("Finalize Intervention"):
-        if st.session_state.intervention_entry:
-            result = upload_to_firebase(st.session_state.intervention_entry)
-            if result:  # Assuming upload_to_firebase returns a success condition
-                st.success("Intervention data uploaded successfully!")
-                st.session_state.page = "virtual_patient"  # Navigate to virtual patient page
-                st.session_state.intervention_entry = None  # Clear the entry after upload
-            else:
-                st.error("Failed to upload intervention data.")
-        else:
-            st.warning("No intervention data to upload.")
+    # Handle focused physical examination selection
+    if st.session_state.page == "focused_physical_exam":
+        focused_physical_exam()
 
 if __name__ == "__main__":
     main()
+
 
 
