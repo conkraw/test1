@@ -18,6 +18,7 @@ def main():
                 f.write(f"{interventions}\n")
             st.success("Your interventions have been saved.")
             st.session_state.page = "History with AI"  # Change to the next page
+            st.rerun()
         else:
             st.error("Please enter a description of the interventions.")
 
