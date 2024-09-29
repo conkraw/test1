@@ -1,5 +1,3 @@
-# utils/focused_physical_examination.py
-
 import streamlit as st
 
 def display_focused_physical_examination():
@@ -19,25 +17,15 @@ def display_focused_physical_examination():
     st.markdown("<h5>Please select examinations necessary to confirm the most likely hypothesis and to discriminate between others:</h5>", unsafe_allow_html=True)
     selected_exams2 = st.multiselect("Select options:", options1, key="confirm_exams")
 
-    #if st.button("End Session"):
-    #    st.session_state.start_time = None
-    #    st.session_state.page = "Focused Physical Examination"
-    #    st.rerun()
-    #    st.write("Redirecting to a new screen...")
-
-    
     if st.button("Submit"):
-        # Prepare the data to upload
+        # Prepare the data to upload (if needed)
         entry = {
             'excluded_exams': selected_exams1,
             'confirmed_exams': selected_exams2
         }
-        # Upload to Firebase
-        #result = upload_to_firebase(entry)
-        #st.success(result)
-        st.session_state.page = "Physical Examination Components"
-        st.rerun()
-        st.write("Redirecting to a new screen...")
 
+        # Change the session state to navigate to the next page
+        st.session_state.page = "Physical Examination Components"
         st.success(f"Examinations selected to exclude hypotheses: {selected_exams1}")
         st.success(f"Examinations selected to confirm hypotheses: {selected_exams2}")
+
