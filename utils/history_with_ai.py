@@ -75,6 +75,8 @@ def run_virtual_patient():
     # Option to move to a new screen
     if st.button("Go to New Screen"):
         st.session_state.start_time = None
+        st.session_state.page = "Focused Physical Examination"
+        st.rerun()
         st.write("Redirecting to a new screen...")
 
 
