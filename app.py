@@ -33,6 +33,6 @@ def main():
     elif st.session_state.page == "Focused Physical Examination":  # Updated condition
         display_focused_physical_examination()  
     elif st.session_state.page == "Physical Examination":  # New condition
-        physical_examination_main()  # Call the main function from physical_examination.py
+        display_physical_examination()  # Call the main function from physical_examination.py
 if __name__ == "__main__":
     main()
