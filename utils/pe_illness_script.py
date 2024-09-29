@@ -32,7 +32,7 @@ def main():
     st.title("")
 
     # Physical Examination Features Page
-    if st.session_state.current_page == "physical_examination_features":
+    if st.session_state.current_page == "pe_features":
         st.markdown("""
             ### PHYSICAL EXAMINATION FEATURES
             Please provide up to 5 physical examination features that influence the differential diagnosis.
