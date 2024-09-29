@@ -1,8 +1,7 @@
-# Diagnoses Page function
 def display_diagnoses():
-    # Initialize diagnoses if not already done
+    # Ensure diagnoses are initialized
     if 'diagnoses' not in st.session_state:
-        st.session_state.diagnoses = [""] * 5  # Or however many diagnoses you want to allow
+        st.session_state.diagnoses = [""] * 5  # Initialize with empty strings for 5 diagnoses
 
     # Check if assessment data exists
     if not st.session_state.assessment_data:
@@ -13,7 +12,7 @@ def display_diagnoses():
 
     st.markdown("""## DIFFERENTIAL DIAGNOSIS UPDATE
                     Based on the information that has been subsequently provided in the above case, please review your initial differential diagnosis list and update it as necessary.""")
-    
+
     # Create columns for each diagnosis input
     cols = st.columns(5)  # Create 5 columns for 5 diagnoses
 
@@ -42,7 +41,7 @@ def display_diagnoses():
         # Check for empty diagnoses and duplicates
         if all(diagnosis for diagnosis in diagnoses):
             if len(diagnoses) == len(set(diagnoses)):
-                # Handle the submission logic here
+                # Handle submission logic here
                 st.success("Diagnoses submitted successfully.")
                 st.session_state.page = "next_page"  # Change to the next page
                 st.rerun()
