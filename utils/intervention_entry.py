@@ -17,7 +17,7 @@ def main():
             with open("interventions.csv", "a") as f:
                 f.write(f"{interventions}\n")
             st.success("Your interventions have been saved.")
-            get_chatgpt_response()
+            st.session_state.page = "History with AI"  # Change to the next page
         else:
             st.error("Please enter a description of the interventions.")
 
