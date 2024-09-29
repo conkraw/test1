@@ -11,28 +11,28 @@ def read_diagnoses_from_file():
         st.error(f"Error reading dx_list.txt: {e}")
         return []
 
-def main():  # Add a main function to encapsulate the logic
+def main():  
     # Initialize session state
     if 'current_page' not in st.session_state:
-        st.session_state.current_page = "diagnoses"
+        st.session_state.current_page = "historical_features"  # Start on historical features page
     if 'diagnoses' not in st.session_state:
         st.session_state.diagnoses = [""] * 5
     if 'historical_features' not in st.session_state:
         st.session_state.historical_features = [""] * 5
     if 'selected_buttons' not in st.session_state:
-        st.session_state.selected_buttons = [False] * 5  # Track button visibility for each diagnosis
+        st.session_state.selected_buttons = [False] * 5  
     if 'selected_moving_diagnosis' not in st.session_state:
-        st.session_state.selected_moving_diagnosis = ""  # Initialize selected moving diagnosis
+        st.session_state.selected_moving_diagnosis = ""  
 
     # Load diagnoses from file
     dx_options = read_diagnoses_from_file()
-    dx_options.insert(0, "")  # Add a blank option at the beginning
+    dx_options.insert(0, "")  
 
     # Title of the app
     st.title("")
 
     # Historical Features Page
-    elif st.session_state.current_page == "historical_features":
+    if st.session_state.current_page == "historical_features":
         st.markdown("""
             ### HISTORICAL FEATURES
             Please provide up to 5 historical features that influence the differential diagnosis.
@@ -42,7 +42,6 @@ def main():  # Add a main function to encapsulate the logic
         with st.sidebar:
             st.subheader("Reorder Diagnoses")
 
-            # Default to the currently selected diagnosis or the first one if none is selected
             selected_diagnosis = st.selectbox(
                 "Select a diagnosis to move",
                 options=st.session_state.diagnoses,
@@ -55,17 +54,15 @@ def main():  # Add a main function to encapsulate the logic
             if st.button("Adjust Priority"):
                 idx = st.session_state.diagnoses.index(selected_diagnosis)
                 if move_direction == "Higher Priority" and idx > 0:
-                    # Move up by one position
                     st.session_state.diagnoses[idx], st.session_state.diagnoses[idx - 1] = (
                         st.session_state.diagnoses[idx - 1], st.session_state.diagnoses[idx]
                     )
-                    st.session_state.selected_moving_diagnosis = st.session_state.diagnoses[idx - 1]  # Update selected diagnosis
+                    st.session_state.selected_moving_diagnosis = st.session_state.diagnoses[idx - 1]  
                 elif move_direction == "Lower Priority" and idx < len(st.session_state.diagnoses) - 1:
-                    # Move down by one position
                     st.session_state.diagnoses[idx], st.session_state.diagnoses[idx + 1] = (
                         st.session_state.diagnoses[idx + 1], st.session_state.diagnoses[idx]
                     )
-                    st.session_state.selected_moving_diagnosis = st.session_state.diagnoses[idx + 1]  # Update selected diagnosis
+                    st.session_state.selected_moving_diagnosis = st.session_state.diagnoses[idx + 1]  
 
             # Change a diagnosis section
             st.subheader("Change a Diagnosis")
@@ -82,12 +79,11 @@ def main():  # Add a main function to encapsulate the logic
                     st.write("**Available Options:**")
                     for option in new_filtered_options:
                         if st.button(f"{option}", key=f"select_new_{option}"):
-                            # Change selected diagnosis to the new one
                             index_to_change = st.session_state.diagnoses.index(change_diagnosis)
                             st.session_state.diagnoses[index_to_change] = option
-                            st.rerun()  # Rerun to update the displayed diagnoses
+                            st.rerun()  
 
-        # Create columns for each diagnosis input
+        # Display historical features
         cols = st.columns(len(st.session_state.diagnoses) + 1)
         with cols[0]:
             st.markdown("Historical Features")
@@ -122,13 +118,13 @@ def main():  # Add a main function to encapsulate the logic
                         'historical_feature': st.session_state.historical_features[i],
                         'assessment': assessment
                     })
-            st.session_state.page = "pe_features"  # Change to the next page
+
+            st.session_state.current_page = "pe_features"  # Change to the next page
             st.success("Historical features submitted successfully.")
             st.rerun()
 
 # Call the main function to run the app
 if __name__ == "__main__":
     main()
-
 
 
