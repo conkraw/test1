@@ -6,8 +6,8 @@ from utils.welcome import welcome_page
 from utils.login import login_page
 from utils.intake_form import display_intake_form
 from utils.diagnoses import display_diagnoses
-from utils.intervention_entry import main as intervention_entry_main
-from utils.history_with_ai import get_chatgpt_response
+from utils.intervention_entry import intervention_entry_main
+from utils.history_with_ai import run_virtual_patient
 
 st.set_page_config(layout="wide")
 
@@ -27,6 +27,6 @@ def main():
     elif st.session_state.page == "Intervention Entry":
         intervention_entry_main()
     elif st.session_state.page == "History with AI":
-        get_chatgpt_response()
+        run_virtual_patient()
 if __name__ == "__main__":
     main()
