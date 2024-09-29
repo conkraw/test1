@@ -51,7 +51,7 @@ def display_diagnoses():
             if len(diagnoses) == len(set(diagnoses)):
                 # Handle submission logic here
                 st.success("Diagnoses submitted successfully.")
-                st.session_state.page = "next_page"  # Change to the next page
+                st.session_state.page = ""Intervention Entry:"  # Change to the next page
                 st.rerun()
             else:
                 st.error("Please do not provide duplicate diagnoses.")
