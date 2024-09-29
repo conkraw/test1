@@ -9,7 +9,7 @@ from utils.diagnoses import display_diagnoses
 from utils.intervention_entry import main as intervention_entry_main
 from utils.history_with_ai import run_virtual_patient
 from utils.focused_physical_examination import display_focused_physical_examination 
-from utils.physical_examination import main as physical_examination_main  # Import the main function
+from utils.physical_examination import main as display_physical_examination  # Import the main function
 
 st.set_page_config(layout="wide")
 
