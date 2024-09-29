@@ -103,7 +103,7 @@ def main():
 
     # Add a submit button to go to the next page
     if st.button("Submit"):
-        st.session_state.page = "Next Page Name"  # Change to your actual next page
+        st.session_state.page = "History Illness Script"  # Change to your actual next page
         st.rerun()  # Rerun the app to reflect the changes
 
 if __name__ == '__main__':
