@@ -73,7 +73,7 @@ def run_virtual_patient():
             st.success("Session ended. You can start a new session.")
 
     # Option to move to a new screen
-    if st.button("Go to New Screen"):
+    if st.button("End Session"):
         st.session_state.start_time = None
         st.session_state.page = "Focused Physical Examination"
         st.rerun()
