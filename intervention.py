@@ -8,6 +8,6 @@ def upload_intervention():
         if interventions:
             st.success("Your intervention has been recorded. Moving to the virtual patient...")
             st.session_state.page = "virtual_patient"  # Navigate to virtual patient page
+            st.rerun()  # Rerun the script to update the page immediately
         else:
             st.error("Please enter a description of the intervention.")
-
