@@ -80,7 +80,7 @@ def run_virtual_patient_app():
             st.success("Session ended. You can start a new session.")
 
     # Option to move to a new screen
-    if st.button("Go to New Screen"):
-        st.session_state.start_time = None
-        st.write("Redirecting to a new screen...")
+    #if st.button("Go to New Screen"):
+    #    st.session_state.start_time = None
+    #    st.write("Redirecting to a new screen...")
 
