@@ -1,3 +1,4 @@
+# history_with_ai.py
 import streamlit as st
 import json
 import openai
@@ -43,40 +44,42 @@ def get_chatgpt_response(user_input):
         )
         return response['choices'][0]['message']['content']
 
-# Streamlit app layout
-st.title("Virtual Patient: Case #1")
+# New function to run the virtual patient interaction
+def run_virtual_patient():
+    # Streamlit app layout
+    st.title("Virtual Patient: Case #1")
 
-# Instructions for the user
-st.info(
-    "You will have the opportunity to perform a history and ask for important physical examination details using a virtual patient/parent. "
-    "When you are ready, please start asking questions. You will be limited to 15 minutes. "
-    "Alternatively, you may end the session if you click end."
-)
+    # Instructions for the user
+    st.info(
+        "You will have the opportunity to perform a history and ask for important physical examination details using a virtual patient/parent. "
+        "When you are ready, please start asking questions. You will be limited to 15 minutes. "
+        "Alternatively, you may end the session if you click end."
+    )
 
-# Session state to track time and session status
-if 'start_time' not in st.session_state:
-    st.session_state.start_time = time.time()
+    # Session state to track time and session status
+    if 'start_time' not in st.session_state:
+        st.session_state.start_time = time.time()
 
-# Calculate elapsed time
-elapsed_time = (time.time() - st.session_state.start_time) / 60  # Convert to minutes
+    # Calculate elapsed time
+    elapsed_time = (time.time() - st.session_state.start_time) / 60  # Convert to minutes
 
-# Display patient information
-if elapsed_time < 15:
-    with st.form("question_form"):
-        user_input = st.text_input("Ask the virtual patient a question about their symptoms:")
-        submit_button = st.form_submit_button("Submit")
+    # Display patient information
+    if elapsed_time < 15:
+        with st.form("question_form"):
+            user_input = st.text_input("Ask the virtual patient a question about their symptoms:")
+            submit_button = st.form_submit_button("Submit")
 
-        if submit_button and user_input:
-            virtual_patient_response = get_chatgpt_response(user_input)
-            st.write(f"Virtual Patient: {virtual_patient_response}")
+            if submit_button and user_input:
+                virtual_patient_response = get_chatgpt_response(user_input)
+                st.write(f"Virtual Patient: {virtual_patient_response}")
 
-else:
-    st.warning("Session time is up. Please end the session.")
-    if st.button("End Session"):
+    else:
+        st.warning("Session time is up. Please end the session.")
+        if st.button("End Session"):
+            st.session_state.start_time = None
+            st.success("Session ended. You can start a new session.")
+
+    # Option to move to a new screen
+    if st.button("Go to New Screen"):
         st.session_state.start_time = None
-        st.success("Session ended. You can start a new session.")
-
-# Option to move to a new screen
-if st.button("Go to New Screen"):
-    st.session_state.start_time = None
-    st.write("Redirecting to a new screen...")
+        st.write("Redirecting to a new screen...")
