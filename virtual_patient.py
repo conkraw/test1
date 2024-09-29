@@ -1,5 +1,3 @@
-# virtual_patient.py
-
 import streamlit as st
 import json
 import openai
@@ -75,13 +73,13 @@ def run_virtual_patient_app():
 
     else:
         st.warning("Session time is up. Please end the session.")
-        if st.button("End Session"):
-            st.session_state.start_time = None
-            st.success("Session ended. You can start a new session.")
-            st.rerun()
+    
+    # End session button
+    if st.button("End Session"):
+        st.session_state.start_time = None
+        st.session_state.page = "next_page"  # Set the next page you want to navigate to
+        st.success("Session ended. You can start a new session.")
+        st.rerun()  # This will re-run the script and show the updated session state
 
-    # Option to move to a new screen
-    #if st.button("Go to New Screen"):
-    #    st.session_state.start_time = None
-    #    st.write("Redirecting to a new screen...")
+
 
