@@ -1,6 +1,7 @@
 # app.py
 
 import streamlit as st
+from utils.file_operations import load_users
 from utils.welcome import welcome_page
 from utils.login import login_page
 from utils.intake_form import display_intake_form
@@ -10,7 +11,6 @@ from utils.diagnoses import display_diagnoses
 def main():
     if "page" not in st.session_state:
         st.session_state.page = "welcome"  # Default page
-
     if st.session_state.page == "welcome":
         welcome_page()
     elif st.session_state.page == "login":
