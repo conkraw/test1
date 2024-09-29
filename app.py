@@ -1,8 +1,14 @@
 import streamlit as st
 import pandas as pd
-from utils.file_operations import load_users
+#from utils.file_operations import load_users
 from utils.welcome import welcome_page
 from utils.login import login_page
+
+try:
+    from utils.file_operations import load_users
+except ImportError as e:
+    print(f"Import error: {e}")
+
 
 # Main application function
 def main():
