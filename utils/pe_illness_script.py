@@ -14,7 +14,7 @@ def read_diagnoses_from_file():
 def main():  
     # Initialize session state
     if 'current_page' not in st.session_state:
-        st.session_state.current_page = "physical_examination_features"  # Start on physical examination features page
+        st.session_state.current_page = "pe_features"  # Start on physical examination features page
     if 'diagnoses' not in st.session_state:
         st.session_state.diagnoses = [""] * 5
     if 'physical_examination_features' not in st.session_state:
