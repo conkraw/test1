@@ -119,7 +119,7 @@ def main():
                         'assessment': assessment
                     })
 
-            st.session_state.current_page = "pe_features"  # Change to the next page
+            st.session_state.page = "pe_features"  # Change to the next page
             st.success("Historical features submitted successfully.")
             st.rerun()
 
