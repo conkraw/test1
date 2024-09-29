@@ -1,3 +1,5 @@
+import streamlit as st 
+
 def display_diagnoses():
     # Ensure diagnoses are initialized
     if 'diagnoses' not in st.session_state:
