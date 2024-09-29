@@ -7,7 +7,7 @@ from utils.login import login_page
 from utils.intake_form import display_intake_form
 from utils.diagnoses import display_diagnoses
 from utils.intervention_entry import main as intervention_entry_main
-from utils.history_with_ai import run_virtual_patient()
+from utils.history_with_ai import run_virtual_patient
 
 st.set_page_config(layout="wide")
 
