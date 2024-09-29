@@ -17,7 +17,7 @@ def main():
             with open("interventions.csv", "a") as f:
                 f.write(f"{interventions}\n")
             st.success("Your interventions have been saved.")
-            run_virtual_patient()
+            get_chatgpt_response()
         else:
             st.error("Please enter a description of the interventions.")
 
