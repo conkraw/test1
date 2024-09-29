@@ -17,8 +17,8 @@ def main():
         st.session_state.current_page = "pe_features"  # Start on physical examination features page
     if 'diagnoses' not in st.session_state:
         st.session_state.diagnoses = [""] * 5
-    if 'physical_examination_features' not in st.session_state:
-        st.session_state.physical_examination_features = [""] * 5
+    if 'pe_features' not in st.session_state:
+        st.session_state.pe_features = [""] * 5
     if 'selected_buttons' not in st.session_state:
         st.session_state.selected_buttons = [False] * 5  
     if 'selected_moving_diagnosis' not in st.session_state:
@@ -95,7 +95,7 @@ def main():
         for i in range(5):
             cols = st.columns(len(st.session_state.diagnoses) + 1)
             with cols[0]:
-                st.session_state.physical_examination_features[i] = st.text_input("", key=f"pe_row_{i}", label_visibility="collapsed")
+                st.session_state.pe_features[i] = st.text_input("", key=f"pe_row_{i}", label_visibility="collapsed")
 
             for diagnosis, col in zip(st.session_state.diagnoses, cols[1:]):
                 with col:
@@ -115,7 +115,7 @@ def main():
                     if diagnosis not in assessments:
                         assessments[diagnosis] = []
                     assessments[diagnosis].append({
-                        'physical_examination_feature': st.session_state.physical_examination_features[i],
+                        'pe_features': st.session_state.pe_features[i],
                         'assessment': assessment
                     })
 
