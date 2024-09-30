@@ -15,6 +15,7 @@ from utils.physical_examination_features import display_physical_examination_fea
 from utils.lab_tests import display_laboratory_tests   # Make sure this import is correct
 from utils.radtests import display_radiological_tests 
 from utils.othertests import display_other_tests 
+from utils.results import display_results_image
 from utils.laboratory_features import display_laboratory_features
 from utils.treatments import display_treatments 
 
@@ -55,8 +56,8 @@ def main():
         display_radiological_tests()  # Function to handle the Other Tests page
     elif st.session_state.page == "Other Tests":  # New case for the Other Tests page
         display_other_tests()  # Function to handle the Other Tests page
-    elif st.session_state.page == "Simple Success":
-        display_simple_success()  # Show the simple success page
+    elif st.session_state.page == "Results":
+        display_results_image()  # Show the simple success page
     elif st.session_state.page == "Laboratory Features":  # New case for the Other Tests page
         display_laboratory_features()  # Function to handle the Other Tests page
     elif st.session_state.page == "Treatments":  # New case for the Other Tests page
