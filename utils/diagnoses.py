@@ -58,7 +58,7 @@ def display_diagnoses():
                             st.experimental_rerun()  # Refresh the app
 
     # Button to submit the diagnoses
-    if st.button("Submit Diagnose1s"):
+    if st.button("Submit Diagnoses"):
         diagnoses = [d.strip() for d in st.session_state.diagnoses]
         # Check for empty diagnoses and duplicates
         if all(diagnosis for diagnosis in diagnoses):
