@@ -72,10 +72,6 @@ def display_diagnoses():
         else:
             st.error("Please select all 5 diagnoses.")
 
-# Call the display_diagnoses function to run the code
-if __name__ == "__main__":
-    display_diagnoses()
-
 
 
 
