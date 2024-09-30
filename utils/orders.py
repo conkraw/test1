@@ -34,46 +34,6 @@ if 'radiological_tests' not in st.session_state:
 if 'other_tests' not in st.session_state:
     st.session_state.other_tests = [""] * 5
 
-# Title of the app
-st.title("Differential Diagnosis Tool")
-
-# Diagnoses Page
-if st.session_state.current_page == "diagnoses":
-    st.markdown("""
-        ## DIFFERENTIAL DIAGNOSIS
-        Please select 5 possible diagnoses you would consider. Do not provide duplicates.
-    """)
-
-    # Load diagnoses from file
-    dx_options = read_diagnoses_from_file()
-    if not dx_options:
-        st.error("No diagnoses available. Please check the dx_list.txt file.")
-    else:
-        dx_options.insert(0, "")  # Add a blank option at the beginning
-
-        # Create columns for each diagnosis input
-        cols = st.columns(5)
-        for i, col in enumerate(cols):
-            with col:
-                st.session_state.diagnoses[i] = st.selectbox(
-                    f"Diagnosis {i + 1}",
-                    options=dx_options,
-                    index=0,
-                    key=f"diagnosis_{i}"
-                )
-
-        # Button to submit the diagnoses
-        if st.button("Submit Diagnoses"):
-            diagnoses = [d.strip() for d in st.session_state.diagnoses]
-            if all(diagnosis for diagnosis in diagnoses):
-                if len(diagnoses) == len(set(diagnoses)):
-                    st.session_state.current_page = "laboratory_testing"  # Move to Laboratory Testing page
-                    st.rerun()  # Rerun the app to refresh the page
-                else:
-                    st.error("Please do not provide duplicate diagnoses.")
-            else:
-                st.error("Please select all 5 diagnoses.")
-
 # Laboratory Testing Page
 elif st.session_state.current_page == "laboratory_testing":
     st.markdown("### LABORATORY TESTING")
