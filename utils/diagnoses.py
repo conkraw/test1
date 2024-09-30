@@ -40,21 +40,22 @@ def display_diagnoses():
             # Change diagnosis button
             change_button = st.button(f"Change Diagnosis {i + 1}", key=f"change_button_{i}")
             if change_button:
-                st.session_state.selected_buttons[i] = False  # Allow changing the selection
                 st.session_state.diagnoses[i] = ""  # Reset the current diagnosis
-                st.success("Diagnosis reset. Please enter a new diagnosis.")  # Provide feedback
+                st.session_state.selected_buttons[i] = False  # Allow changing the selection
+                st.success("Diagnosis reset. Please enter a new diagnosis.")
                 st.experimental_rerun()  # Refresh the app
 
             # Display filtered options if no diagnosis is selected
-            if filtered_options and not st.session_state.selected_buttons[i]:
-                st.write("**Suggestions:**")
-                for option in filtered_options[:5]:  # Show a maximum of 5 options
-                    button_key = f"select_option_{i}_{option}"
-                    if st.button(f"{option}", key=button_key):
-                        st.session_state.diagnoses[i] = option
-                        st.session_state.selected_buttons[i] = True
-                        st.success(f"Selected diagnosis: {option}")  # Feedback on selection
-                        st.experimental_rerun()  # Refresh the app
+            if not st.session_state.selected_buttons[i]:
+                if filtered_options:
+                    st.write("**Suggestions:**")
+                    for option in filtered_options[:5]:  # Show a maximum of 5 options
+                        button_key = f"select_option_{i}_{option}"
+                        if st.button(f"{option}", key=button_key):
+                            st.session_state.diagnoses[i] = option
+                            st.session_state.selected_buttons[i] = True
+                            st.success(f"Selected diagnosis: {option}")  # Feedback on selection
+                            st.experimental_rerun()  # Refresh the app
 
     # Button to submit the diagnoses
     if st.button("Submit Diagnoses"):
@@ -74,6 +75,7 @@ def display_diagnoses():
 # Call the display_diagnoses function to run the code
 if __name__ == "__main__":
     display_diagnoses()
+
 
 
 
