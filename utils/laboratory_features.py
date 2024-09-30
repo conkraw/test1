@@ -113,6 +113,6 @@ def display_laboratory_features():
                     'assessment': assessment
                 })
         
-        st.session_state.page = "Simple Success"  # Change to the Simple Success page
+        st.session_state.page = "Treatments"  # Change to the Simple Success page
         st.success("Laboratory features submitted successfully.")
         st.rerun()  # Rerun to update the app
