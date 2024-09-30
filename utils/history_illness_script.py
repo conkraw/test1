@@ -119,7 +119,7 @@ def main():
                         'assessment': assessment
                     })
         
-            st.session_state.page = "Simple Success"  # Change to the Simple Success page
+            st.session_state.page = "Physical Examination Features"  # Change to the Simple Success page
             st.success("Historical features submitted successfully.")
             st.rerun()  # Rerun to update the app
 
