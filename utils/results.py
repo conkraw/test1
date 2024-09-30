@@ -1,12 +1,18 @@
-# results.py
+# utils.py
 
 import streamlit as st
 import os
+import requests
 
-def display_results_image(results_file_path='test1/utils/results.txt'):
-    # Read the results from the text file
-    with open(results_file_path, 'r') as file:
-        results = [line.strip() for line in file.readlines()]
+def display_results_image(results_url='https://raw.githubusercontent.com/conkraw/main/utils/results.txt'):
+    # Fetch the results from the GitHub raw URL
+    try:
+        response = requests.get(results_url)
+        response.raise_for_status()  # Raise an error for bad responses
+        results = response.text.splitlines()  # Split by lines
+    except requests.RequestException as e:
+        st.error(f"Error fetching results: {e}")
+        return
 
     # Create a dropdown in Streamlit for the user to select a result
     selected_result = st.selectbox("Select a result", results)
@@ -19,7 +25,7 @@ def display_results_image(results_file_path='test1/utils/results.txt'):
     # Look for the image file in the same directory
     image_path = None
     for ext in image_extensions:
-        potential_path = f"test1/utils/results/{image_filename}{ext}"
+        potential_path = f"test1/utils/{image_filename}{ext}"
         if os.path.exists(potential_path):
             image_path = potential_path
             break
