@@ -127,6 +127,6 @@ def display_radiological_tests():
                     'assessment': assessment
                 })
         
-        st.session_state.page = "Simple Success"  # Change to the Simple Success page
+        st.session_state.page = "Other Tests"  # Change to the Simple Success page
         st.success("Radiological tests submitted successfully.")
         st.rerun()  # Rerun to update the app
