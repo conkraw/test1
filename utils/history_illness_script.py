@@ -130,7 +130,7 @@ def main():
 
             #st.session_state.current_page = "Simple Success"  # Change to the next page
             st.success("Historical features submitted successfully.")
-            print("Transitioning to Simple Success page.")  # Debugging statement
+            st.write("Your operation was successful.") # Debugging statement
             st.rerun()
 
 if __name__ == "__main__":
