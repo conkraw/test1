@@ -128,7 +128,7 @@ def main():
                 st.warning("No assessments were made. Please enter at least one historical feature and its assessment.")
                 return
 
-            st.session_state.current_page = "Simple Success"  # Change to the next page
+            #st.session_state.current_page = "Simple Success"  # Change to the next page
             st.success("Historical features submitted successfully.")
             print("Transitioning to Simple Success page.")  # Debugging statement
             st.rerun()
