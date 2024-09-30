@@ -47,7 +47,7 @@ def display_laboratory_tests():
                 assessments[f"lab_test_{i}"] = assessment
 
         st.success("Laboratory testing assessments submitted successfully.")
-        st.session_state.current_page = "radiological_tests"  # Move to Radiological Tests page
+        st.session_state.page = "Radiological Tests"  # Move to Radiological Tests page
         st.rerun()  # Rerun the app to refresh the page
 
 def display_radiological_tests():
@@ -86,7 +86,7 @@ def display_radiological_tests():
                 assessments[f"rad_test_{i}"] = assessment
 
         st.success("Radiological tests assessments submitted successfully.")
-        st.session_state.current_page = "other_tests"  # Move to Other Tests page
+        st.session_state.page = "Other Tests"  # Move to Other Tests page
         st.rerun()  # Rerun the app to refresh the page
 
 def display_other_tests():
@@ -125,31 +125,15 @@ def display_other_tests():
                 assessments[f"other_test_{i}"] = assessment
 
         st.success("Other tests assessments submitted successfully.")
-        st.session_state.current_page = "Simple Success"  # Move to Simple Success page
+        st.session_state.page = "Simple Success"  # Move to Simple Success page
         st.rerun()  # Rerun the app to refresh the page
 
 # Initialize session state
-if 'current_page' not in st.session_state:
-    st.session_state.current_page = "laboratory_testing"
 if 'laboratory_testing' not in st.session_state:
     st.session_state.laboratory_testing = [""] * 5
 if 'radiological_tests' not in st.session_state:
     st.session_state.radiological_tests = [""] * 5
 if 'other_tests' not in st.session_state:
     st.session_state.other_tests = [""] * 5
-
-# Title of the app
-st.title("Differential Diagnosis Tool")
-
-# Page Routing
-if st.session_state.current_page == "laboratory_testing":
-    display_laboratory_tests()
-elif st.session_state.current_page == "radiological_tests":
-    display_radiological_tests()
-elif st.session_state.current_page == "other_tests":
-    display_other_tests()
-elif st.session_state.current_page == "Simple Success":
-    st.markdown("### SUCCESS")
-    st.success("All assessments submitted successfully.")
 
 
