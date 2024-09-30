@@ -1,7 +1,8 @@
-# utils/orders.py
-
 import streamlit as st
+import os
+import json
 
+# Function to read tests from a file
 def read_tests_from_file(filename):
     try:
         with open(filename, 'r') as file:
@@ -11,17 +12,34 @@ def read_tests_from_file(filename):
         st.error(f"Error reading {filename}: {e}")
         return []  # Return an empty list if error occurs
 
-def display_laboratory_testing():
+# Set the page config to normal
+st.set_page_config(layout="wide")
+
+# Initialize session state
+if 'current_page' not in st.session_state:
+    st.session_state.current_page = "laboratory_testing"
+if 'laboratory_testing' not in st.session_state:
+    st.session_state.laboratory_testing = [""] * 5
+if 'radiological_tests' not in st.session_state:
+    st.session_state.radiological_tests = [""] * 5
+if 'other_tests' not in st.session_state:
+    st.session_state.other_tests = [""] * 5
+
+# Title of the app
+st.title("Diagnostic Orders")
+
+# Laboratory Testing Page
+if st.session_state.current_page == "laboratory_testing":
     st.markdown("### LABORATORY TESTING")
     st.write("For each laboratory test that you have chosen, please describe how they would influence your differential diagnosis.")
 
-    lab_options = read_tests_from_file('labtests.txt')  # Ensure this function is defined elsewhere
-    cols = st.columns(1)
+    lab_options = read_tests_from_file('labtests.txt')
+    cols = st.columns(len(st.session_state.laboratory_testing) + 1)
     with cols[0]:
         st.markdown("Laboratory Tests", unsafe_allow_html=True)
 
     for i in range(5):
-        cols = st.columns(1)
+        cols = st.columns(len(st.session_state.laboratory_testing) + 1)
         with cols[0]:
             st.selectbox(
                 "",
@@ -30,23 +48,37 @@ def display_laboratory_testing():
                 label_visibility="collapsed"
             )
 
+    for diagnosis in range(5):
+        with cols[diagnosis + 1]:
+            st.selectbox(
+                "",
+                options=["", "Necessary", "Neither More Nor Less Useful", "Unnecessary"],
+                key=f"select_{diagnosis}_lab",
+                label_visibility="collapsed"
+            )
+
     if st.button("Submit Laboratory Testing"):
+        assessments = {}
+        for i in range(5):
+            assessment = st.session_state[f"select_{i}_lab"]
+            assessments[f"lab_test_{i}"] = assessment
+
         st.success("Laboratory testing assessments submitted successfully.")
-        st.session_state.current_page = "radiological_tests"
-        st.experimental_rerun()  # Rerun the app to refresh the page
+        st.session_state.current_page = "radiological_tests"  # Move to Radiological Tests page
+        st.rerun()  # Rerun the app to refresh the page
 
-
-def display_radiological_tests():
+# Radiological Tests Page
+elif st.session_state.current_page == "radiological_tests":
     st.markdown("### RADIOLOGICAL TESTS")
     st.write("For each radiological test that you have chosen, please describe how they would influence your differential diagnosis.")
 
-    rad_options = read_tests_from_file('radtests.txt')  # Ensure this function is defined elsewhere
-    cols = st.columns(1)
+    rad_options = read_tests_from_file('radtests.txt')
+    cols = st.columns(len(st.session_state.radiological_tests) + 1)
     with cols[0]:
         st.markdown("Radiological Tests", unsafe_allow_html=True)
 
     for i in range(5):
-        cols = st.columns(1)
+        cols = st.columns(len(st.session_state.radiological_tests) + 1)
         with cols[0]:
             st.selectbox(
                 "",
@@ -55,23 +87,37 @@ def display_radiological_tests():
                 label_visibility="collapsed"
             )
 
+    for diagnosis in range(5):
+        with cols[diagnosis + 1]:
+            st.selectbox(
+                "",
+                options=["", "Necessary", "Neither More Nor Less Useful", "Unnecessary"],
+                key=f"select_{diagnosis}_rad",
+                label_visibility="collapsed"
+            )
+
     if st.button("Submit Radiological Tests"):
+        assessments = {}
+        for i in range(5):
+            assessment = st.session_state[f"select_{i}_rad"]
+            assessments[f"rad_test_{i}"] = assessment
+
         st.success("Radiological tests assessments submitted successfully.")
-        st.session_state.current_page = "other_tests"
-        st.experimental_rerun()  # Rerun the app to refresh the page
+        st.session_state.current_page = "other_tests"  # Move to Other Tests page
+        st.rerun()  # Rerun the app to refresh the page
 
-
-def display_other_tests():
+# Other Tests Page
+elif st.session_state.current_page == "other_tests":
     st.markdown("### OTHER TESTS")
     st.write("For each other test that you have chosen, please describe how they would influence your differential diagnosis.")
 
-    other_options = read_tests_from_file('othertests.txt')  # Ensure this function is defined elsewhere
-    cols = st.columns(1)
+    other_options = read_tests_from_file('othertests.txt')
+    cols = st.columns(len(st.session_state.other_tests) + 1)
     with cols[0]:
         st.markdown("Other Tests", unsafe_allow_html=True)
 
     for i in range(5):
-        cols = st.columns(1)
+        cols = st.columns(len(st.session_state.other_tests) + 1)
         with cols[0]:
             st.selectbox(
                 "",
@@ -80,7 +126,27 @@ def display_other_tests():
                 label_visibility="collapsed"
             )
 
+    for diagnosis in range(5):
+        with cols[diagnosis + 1]:
+            st.selectbox(
+                "",
+                options=["", "Necessary", "Neither More Nor Less Useful", "Unnecessary"],
+                key=f"select_{diagnosis}_other",
+                label_visibility="collapsed"
+            )
+
     if st.button("Submit Other Tests"):
+        assessments = {}
+        for i in range(5):
+            assessment = st.session_state[f"select_{i}_other"]
+            assessments[f"other_test_{i}"] = assessment
+
         st.success("Other tests assessments submitted successfully.")
-        st.session_state.current_page = "Simple Success"
-        st.experimental_rerun()  # Rerun the app to refresh the page
+        st.session_state.current_page = "Simple Success"  # Move to Simple Success page
+        st.rerun()  # Rerun the app to refresh the page
+
+# Simple Success Page
+if st.session_state.current_page == "Simple Success":
+    st.markdown("### SUCCESS")
+    st.success("All assessments submitted successfully.")
+
