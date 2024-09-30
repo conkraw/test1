@@ -4,7 +4,7 @@ import streamlit as st
 import os
 import requests
 
-def display_results_image(results_url='https://raw.githubusercontent.com/conkraw/main/utils/results.txt'):
+def display_results_image(results_url='https://github.com/conkraw/main/utils/results.txt'):
     # Fetch the results from the GitHub raw URL
     try:
         response = requests.get(results_url)
