@@ -113,7 +113,7 @@ def display_physical_examination_features():
                     'assessment': assessment
                 })
         
-        st.session_state.page = "Simple Success"  # Change to the Simple Success page
+        st.session_state.page = "Other Tests"  # Change to the Simple Success page
         st.success("Physical examination features submitted successfully.")
         st.rerun()  # Rerun to update the app
 
