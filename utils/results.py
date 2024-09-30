@@ -4,16 +4,18 @@ import streamlit as st
 import os
 import requests
 
-def display_results_image(results_url='https://raw.githubusercontent.com/conkraw/main/test1/utils/results.txt'):
-    # Fetch the results from the GitHub raw URL
+def read_results_from_file():
     try:
-        response = requests.get(results_url)
-        response.raise_for_status()  # Raise an error for bad responses
-        results = response.text.splitlines()  # Split by lines
-    except requests.RequestException as e:
-        st.error(f"Error fetching results: {e}")
-        return
+        with open('results.txt', 'r') as file:
+            diagnoses = [line.strip() for line in file.readlines() if line.strip()]
+        return diagnoses
+    except Exception as e:
+        st.error(f"Error reading dx_list.txt: {e}")
+        return []
 
+def display_results_image():
+    results = read_results_from_file()
+        
     # Create a dropdown in Streamlit for the user to select a result
     selected_result = st.selectbox("Select a result", results)
 
