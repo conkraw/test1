@@ -11,7 +11,7 @@ from utils.physical_examination import main as display_physical_examination
 from utils.history_illness_script import main as history_illness_script
 from utils.simple_success import display_simple_success  # Make sure this import is correct
 from utils.physical_examination_features import display_physical_examination_features  # Make sure this import is correct
-from utils.orders import display_other_tests, display_laboratory_tests, display_radiological_tests, read_tests_from_file,   
+from utils.orders import display_other_tests, display_laboratory_tests, display_radiological_tests, read_tests_from_file   
 
 st.set_page_config(layout="wide")
 
