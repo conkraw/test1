@@ -11,6 +11,7 @@ from utils.physical_examination import main as display_physical_examination
 from utils.history_illness_script import main as history_illness_script
 from utils.simple_success import display_simple_success  # Make sure this import is correct
 from utils.physical_examination_features import display_physical_examination_features  # Make sure this import is correct
+from utils.lab_tests import display_laboratory_tests   # Make sure this import is correct
 
 
 st.set_page_config(layout="wide")
@@ -44,8 +45,8 @@ def main():
         history_illness_script()
     elif st.session_state.page == "Physical Examination Features":
         display_physical_examination_features()  # Show the simple success page
-    #elif st.session_state.page == "Other Tests":  # New case for the Other Tests page
-    #    display_other_tests()  # Function to handle the Other Tests page
+    elif st.session_state.page == "Laboratory Tests":  # New case for the Other Tests page
+        display_laboratory_tests()  # Function to handle the Other Tests page
     #elif st.session_state.page == "Other Tests":  # New case for the Other Tests page
     #    display_other_tests()  # Function to handle the Other Tests page
     #elif st.session_state.page == "Other Tests":  # New case for the Other Tests page
