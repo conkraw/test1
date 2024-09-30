@@ -28,7 +28,7 @@ def main():
     dx_options.insert(0, "")  
 
     # Title of the app
-    st.title("")
+    st.title("Physical Examination Features App")
 
     # Physical Examination Features Page
     if st.session_state.current_page == "physical_examination_features":
@@ -94,14 +94,14 @@ def main():
         for i in range(5):
             cols = st.columns(len(st.session_state.diagnoses) + 1)
             with cols[0]:
-                st.session_state.physical_examination_features[i] = st.text_input("", key=f"pe_row_{i}", label_visibility="collapsed")
+                st.session_state.physical_examination_features[i] = st.text_input(f"", key=f"exam_row_{i}", label_visibility="collapsed")
 
             for diagnosis, col in zip(st.session_state.diagnoses, cols[1:]):
                 with col:
                     st.selectbox(
-                        "",
+                        "Assessment for " + diagnosis,
                         options=["", "Supports", "Does not support"],
-                        key=f"select_{i}_{diagnosis}_pe",
+                        key=f"select_{i}_{diagnosis}_exam",
                         label_visibility="collapsed"
                     )
 
@@ -110,20 +110,20 @@ def main():
             assessments = {}
             for i in range(5):
                 for diagnosis in st.session_state.diagnoses:
-                    assessment = st.session_state[f"select_{i}_{diagnosis}_pe"]
+                    assessment = st.session_state[f"select_{i}_{diagnosis}_exam"]
                     if diagnosis not in assessments:
                         assessments[diagnosis] = []
                     assessments[diagnosis].append({
                         'physical_examination_feature': st.session_state.physical_examination_features[i],
                         'assessment': assessment
                     })
-
-            st.session_state.current_page = "next page"  # Change to the next page
+        
+            st.session_state.page = "Simple Success"  # Change to the Simple Success page
             st.success("Physical examination features submitted successfully.")
-            st.write("Transitioning to the next page...")  # Debugging line
-            st.rerun()
+            st.rerun()  # Rerun to update the app
 
 # Call the main function to run the app
 if __name__ == "__main__":
     main()
+
 
