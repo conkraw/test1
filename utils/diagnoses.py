@@ -33,7 +33,7 @@ def display_diagnoses():
             # Filter options based on the search input
             filtered_options = [dx for dx in dx_options if search_input.lower() in dx.lower()] if search_input else []
 
-            # Always show selected diagnosis if available
+            # Show selected diagnosis if available
             if current_diagnosis:
                 st.write(f"**Selected:** {current_diagnosis}")
 
@@ -42,9 +42,9 @@ def display_diagnoses():
                 st.session_state.selected_buttons[i] = False  # Allow changing the selection
                 st.session_state.diagnoses[i] = ""  # Reset the current diagnosis
                 st.success("Diagnosis reset. Please enter a new diagnosis.")  # Provide feedback
-                st.rerun()  # Refresh the app
+                st.experimental_rerun()  # Refresh the app
 
-            # Display filtered options
+            # Display filtered options if no diagnosis is selected
             if filtered_options and not st.session_state.selected_buttons[i]:
                 st.write("**Suggestions:**")
                 for option in filtered_options[:5]:  # Show a maximum of 5 options
@@ -53,7 +53,7 @@ def display_diagnoses():
                         st.session_state.diagnoses[i] = option
                         st.session_state.selected_buttons[i] = True
                         st.success(f"Selected diagnosis: {option}")  # Feedback on selection
-                        st.rerun()  # Refresh the app
+                        st.experimental_rerun()  # Refresh the app
 
     # Button to submit the diagnoses
     if st.button("Submit Diagnoses"):
@@ -64,7 +64,7 @@ def display_diagnoses():
                 # Handle submission logic here
                 st.success("Diagnoses submitted successfully.")
                 st.session_state.page = "Intervention Entry"  # Change to the next page
-                st.rerun()
+                st.experimental_rerun()
             else:
                 st.error("Please do not provide duplicate diagnoses.")
         else:
