@@ -11,7 +11,7 @@ from utils.history_with_ai import run_virtual_patient
 from utils.focused_physical_examination import display_focused_physical_examination 
 from utils.physical_examination import main as display_physical_examination  # Import the main function
 from utils.history_illness_script import main as history_illness_script  # Import the history illness script
-from simple_success import display_simple_success  # Import the simple success module
+from utils.simple_success import display_simple_success  # Import the simple success module
 
 st.set_page_config(layout="wide")
 
