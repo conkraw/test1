@@ -123,7 +123,7 @@ def main():
 
             # Proceed to Simple Success page
             if assessments:
-                st.session_state.current_page = "simple_success"  # Change to the next page
+                st.session_state.current_page = "Simple Success"  # Change to the next page
                 st.success("Historical features submitted successfully.")
                 st.rerun()  # Rerun to update the page
 
