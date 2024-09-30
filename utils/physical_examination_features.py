@@ -95,7 +95,7 @@ def main():
             cols = st.columns(len(st.session_state.diagnoses) + 1)
             with cols[0]:
                 st.session_state.physical_examination_features[i] = st.text_input(
-                    f"Feature {i + 1}",  # Provide a descriptive label
+                    f"Physical Examination Feature {i + 1}",  # Descriptive label
                     key=f"exam_row_{i}",
                     label_visibility="collapsed"  # Hide the label visually
                 )
@@ -106,7 +106,7 @@ def main():
                         f"Assessment for {diagnosis}",
                         options=["", "Supports", "Does not support"],
                         key=f"select_{i}_{diagnosis}_exam",
-                        label_visibility="collapsed"
+                        label_visibility="collapsed"  # Hide the label visually
                     )
 
         # Submit button for physical examination features
