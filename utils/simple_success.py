@@ -1,16 +1,9 @@
 import streamlit as st
 
 def display_simple_success():
-    st.title("Simple Success Module")
-
-    # Simulated success message
-    if st.button("Submit Historical Features"):
-        st.success("Success! Historical features submitted.")
-        
-        # Button to go to the next page
-        if st.button("Go to Next Page"):
-            st.session_state.current_page = "next_page"  # Change this to your actual next page
-            st.rerun()  # Rerun the app to reflect the change
-
-if __name__ == "__main__":
-    display_simple_success()
+    st.title("Success!")
+    st.write("Your operation was successful.")
+    
+    if st.button("Proceed to Next Page"):
+        st.session_state.page = "next_page"  # Change this to the actual next page you want to navigate to
+        st.rerun()  # Rerun the app to reflect the page change
