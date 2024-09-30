@@ -43,7 +43,7 @@ def display_diagnoses():
                 st.session_state.diagnoses[i] = ""  # Reset the current diagnosis
                 st.session_state.selected_buttons[i] = False  # Allow changing the selection
                 st.success("Diagnosis reset. Please enter a new diagnosis.")
-                st.experimental_rerun()  # Refresh the app
+                st.rerun()  # Refresh the app
 
             # Display filtered options if no diagnosis is selected
             if not st.session_state.selected_buttons[i]:
