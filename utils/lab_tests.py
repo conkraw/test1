@@ -99,9 +99,10 @@ def display_laboratory_tests():
         cols = st.columns(len(st.session_state.diagnoses) + 1)
         with cols[0]:
             selected_lab_test = st.selectbox(
-                f"Select Laboratory Test {i + 1}",
+                f"",
                 options=[""] + lab_tests,
-                key=f"lab_row_{i}"
+                key=f"lab_row_{i},
+                label_visibility="collapsed",
             )
 
         for diagnosis, col in zip(st.session_state.diagnoses, cols[1:]):
