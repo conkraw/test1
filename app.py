@@ -9,18 +9,17 @@ from utils.history_with_ai import run_virtual_patient
 from utils.focused_physical_examination import display_focused_physical_examination
 from utils.physical_examination import main as display_physical_examination
 from utils.history_illness_script import main as history_illness_script
-from utils.simple_success import display_simple_success  # Make sure this import is correct
-from utils.simple_success1 import display_simple_success1  # Make sure this import is correct
-from utils.physical_examination_features import display_physical_examination_features  # Make sure this import is correct
-from utils.lab_tests import display_laboratory_tests   # Make sure this import is correct
-from utils.radtests import display_radiological_tests 
-from utils.othertests import display_other_tests 
+from utils.simple_success import display_simple_success
+from utils.simple_success1 import display_simple_success1
+from utils.physical_examination_features import display_physical_examination_features
+from utils.lab_tests import display_laboratory_tests
+from utils.radtests import display_radiological_tests
+from utils.othertests import display_other_tests
 from utils.results import display_results_image
 from utils.laboratory_features import display_laboratory_features
-from utils.treatments import display_treatments 
+from utils.treatments import display_treatments
 
 st.set_page_config(layout="wide")
-st.sidebar.empty() 
 
 def main():
     # Initialize session state
@@ -28,6 +27,32 @@ def main():
         st.session_state.page = "welcome"  # Default page
 
     print(f"Current page: {st.session_state.page}")  # Debugging statement
+
+    # Sidebar logic
+    if st.session_state.page in ["welcome", "login"]:
+        st.sidebar.empty()  # Hide sidebar for these pages
+    else:
+        # Sidebar for navigation (adjust as necessary for your app)
+        st.sidebar.title("Navigation")
+        st.sidebar.selectbox("Select a page:", [
+            "welcome",
+            "login",
+            "intake_form",
+            "diagnoses",
+            "Intervention Entry",
+            "History with AI",
+            "Focused Physical Examination",
+            "Physical Examination Components",
+            "History Illness Script",
+            "Physical Examination Features",
+            "Laboratory Tests",
+            "Radiology Tests",
+            "Other Tests",
+            "Results",
+            "Laboratory Features",
+            "Treatments",
+            "Simple Success"
+        ], index=list(pages.keys()).index(st.session_state.page), key="page_selector")
 
     # Page routing
     if st.session_state.page == "welcome":
@@ -50,21 +75,24 @@ def main():
     elif st.session_state.page == "History Illness Script":
         history_illness_script()
     elif st.session_state.page == "Physical Examination Features":
-        display_physical_examination_features()  # Show the simple success page
-    elif st.session_state.page == "Laboratory Tests":  # New case for the Other Tests page
-        display_laboratory_tests()  # Function to handle the Other Tests page
-    elif st.session_state.page == "Radiology Tests":  # New case for the Other Tests page
-        display_radiological_tests()  # Function to handle the Other Tests page
-    elif st.session_state.page == "Other Tests":  # New case for the Other Tests page
-        display_other_tests()  # Function to handle the Other Tests page
+        display_physical_examination_features()
+    elif st.session_state.page == "Laboratory Tests":
+        display_laboratory_tests()
+    elif st.session_state.page == "Radiology Tests":
+        display_radiological_tests()
+    elif st.session_state.page == "Other Tests":
+        display_other_tests()
     elif st.session_state.page == "Results":
-        display_results_image()  # Show the simple success page
-    elif st.session_state.page == "Laboratory Features":  # New case for the Other Tests page
-        display_laboratory_features()  # Function to handle the Other Tests page
-    elif st.session_state.page == "Treatments":  # New case for the Other Tests page
-        display_treatments()  # Function to handle the Other Tests page
+        display_results_image()
+    elif st.session_state.page == "Laboratory Features":
+        display_laboratory_features()
+    elif st.session_state.page == "Treatments":
+        display_treatments()
     elif st.session_state.page == "Simple Success":
-        display_simple_success1()  # Show the simple success page
+        display_simple_success1()
+
+if __name__ == "__main__":
+    main()
 
 if __name__ == "__main__":
     main()
