@@ -118,20 +118,20 @@ def main():
 
         # Submit button for historical features
         if st.button("Submit Historical Features"):
-            assessments = {}
-            for i in range(5):
-                for diagnosis in st.session_state.diagnoses:
-                    assessment = st.session_state[f"select_{i}_{diagnosis}_hist"]
-                    if diagnosis not in assessments:
-                        assessments[diagnosis] = []
-                    assessments[diagnosis].append({
-                        'historical_feature': st.session_state.historical_features[i],
-                        'assessment': assessment
-                    })
+            #assessments = {}
+            #for i in range(5):
+            #    for diagnosis in st.session_state.diagnoses:
+            #        assessment = st.session_state[f"select_{i}_{diagnosis}_hist"]
+            #        if diagnosis not in assessments:
+            #            assessments[diagnosis] = []
+            #        assessments[diagnosis].append({
+            #            'historical_feature': st.session_state.historical_features[i],
+            #            'assessment': assessment
+            #        })
 
-            print("Assessments collected:", assessments)  # Debugging statement
+            #print("Assessments collected:", assessments)  # Debugging statement
             st.session_state.current_page = "Simple Success"  # Change to the next page
-            st.success("Historical features submitted successfully.")
+            #st.success("Historical features submitted successfully.")
             print("Transitioning to Simple Success page.")  # Debugging statement
             st.rerun()
 
