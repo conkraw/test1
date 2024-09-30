@@ -106,6 +106,7 @@ def main():
                     )
 
         # Submit button for historical features
+        # Inside your submit button logic in history_illness_script.py
         if st.button("Submit Historical Features"):
             assessments = {}
             for i in range(5):
@@ -117,27 +118,9 @@ def main():
                         'historical_feature': st.session_state.historical_features[i],
                         'assessment': assessment
                     })
-
-            # Log the assessments
-            st.write("Assessments collected:", assessments)
-
-            # Proceed to Simple Success page
-            if assessments:
-                st.session_state.current_page = "Simple Success"  # Change to the next page
-                st.success("Historical features submitted successfully.")
-                st.rerun()  # Rerun to update the page
-
-    # Simple Success Page Logic
-    #elif st.session_state.current_page == "simple_success":
-    #    st.title("Success")
-    #    st.markdown("Your historical features have been submitted successfully!")
-    #    if st.button("Go to Next Page"):
-    #        st.session_state.current_page = "next_page"  # Set this to whatever the next page should be
-    #        st.rerun()  # Rerun to update the page
-
-# Call the main function to run the app
-if __name__ == "__main__":
-    main()
-
+        
+            st.session_state.page = "Simple Success"  # Change to the Simple Success page
+            st.success("Historical features submitted successfully.")
+            st.rerun()  # Rerun to update the app
 
 
