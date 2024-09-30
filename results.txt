@@ -1,3 +1,2 @@
-CBC
-LFT
-BMP
+Complete Blood Count  
+Basic Metabolic Panel
