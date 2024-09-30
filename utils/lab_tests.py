@@ -127,7 +127,7 @@ def display_laboratory_tests():
                     'assessment': assessment
                 })
         
-        st.session_state.page = "Simple Success"  # Change to the Simple Success page
+        st.session_state.page = "Radiology Tests"  # Change to the Simple Success page
         st.success("Laboratory tests submitted successfully.")
         st.rerun()  # Rerun to update the app
 
