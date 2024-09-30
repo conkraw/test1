@@ -1,0 +1,5 @@
+[theme]
+primaryColor = "#F39C12"  # Change the primary button color
+backgroundColor = "#ECF0F1"
+secondaryBackgroundColor = "#FFFFFF"
+textColor = "#2C3E50"
