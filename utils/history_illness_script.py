@@ -125,7 +125,7 @@ def main():
             if assessments:
                 st.session_state.current_page = "simple_success"  # Change to the next page
                 st.success("Historical features submitted successfully.")
-                st.experimental_rerun()  # Rerun to update the page
+                st.rerun()  # Rerun to update the page
 
     # Simple Success Page Logic
     elif st.session_state.current_page == "simple_success":
@@ -133,7 +133,7 @@ def main():
         st.markdown("Your historical features have been submitted successfully!")
         if st.button("Go to Next Page"):
             st.session_state.current_page = "next_page"  # Set this to whatever the next page should be
-            st.experimental_rerun()  # Rerun to update the page
+            st.rerun()  # Rerun to update the page
 
 # Call the main function to run the app
 if __name__ == "__main__":
