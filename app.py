@@ -10,10 +10,8 @@ from utils.intervention_entry import main as intervention_entry_main
 from utils.history_with_ai import run_virtual_patient
 from utils.focused_physical_examination import display_focused_physical_examination 
 from utils.physical_examination import main as display_physical_examination  # Import the main function
-from utils.history_illness_script import main as history_illness_script  # Make sure to import the correct function
-from utils.physical_examination_script import main as physical_examination_script  # Import the new physical examination script
-
-
+from utils.history_illness_script import main as history_illness_script  # Import the history illness script
+from simple_success import display_simple_success  # Import the simple success module
 
 st.set_page_config(layout="wide")
 
@@ -21,6 +19,8 @@ st.set_page_config(layout="wide")
 def main():
     if "page" not in st.session_state:
         st.session_state.page = "welcome"  # Default page
+
+    # Page routing
     if st.session_state.page == "welcome":
         welcome_page()
     elif st.session_state.page == "login":
@@ -34,14 +34,15 @@ def main():
         intervention_entry_main()
     elif st.session_state.page == "History with AI":
         run_virtual_patient()
-    elif st.session_state.page == "Focused Physical Examination":  # Updated condition
+    elif st.session_state.page == "Focused Physical Examination":
         display_focused_physical_examination()  
-    elif st.session_state.page == "Physical Examination Components":  # New condition
+    elif st.session_state.page == "Physical Examination Components":
         display_physical_examination()  # Call the main function from physical_examination.py
-    elif st.session_state.page == "History Illness Script":  # New condition
-        history_illness_script()  # Call the main function from physical_examination.py
-    elif st.session_state.page == "Physical Examination Features":  # Ensure this matches exactly
-        physical_examination_script()  # Call the main function from physical_examination_script.py
+    elif st.session_state.page == "History Illness Script":
+        history_illness_script()  # Call the main function from history_illness_script.py
+    elif st.session_state.page == "Simple Success":  # Use the new condition here
+        display_simple_success()  # Call the simple success module
 
 if __name__ == "__main__":
     main()
+
