@@ -33,13 +33,17 @@ def display_diagnoses():
             # Filter options based on the search input
             filtered_options = [dx for dx in dx_options if search_input.lower() in dx.lower()] if search_input else []
 
+            # Always show selected diagnosis if available
             if current_diagnosis:
-            st.write(f"**Selected:** {current_diagnosis}")
+                st.write(f"**Selected:** {current_diagnosis}")
+
+            # Change diagnosis button
             if st.button(f"Change Diagnosis {i + 1}", key=f"change_button_{i}"):
                 st.session_state.selected_buttons[i] = False  # Allow changing the selection
                 st.session_state.diagnoses[i] = ""  # Reset the current diagnosis
-                st.rerun()  # Refresh the app to update the input field
-                
+                st.success("Diagnosis reset. Please enter a new diagnosis.")  # Provide feedback
+                st.rerun()  # Refresh the app
+
             # Display filtered options
             if filtered_options and not st.session_state.selected_buttons[i]:
                 st.write("**Suggestions:**")
@@ -48,6 +52,7 @@ def display_diagnoses():
                     if st.button(f"{option}", key=button_key):
                         st.session_state.diagnoses[i] = option
                         st.session_state.selected_buttons[i] = True
+                        st.success(f"Selected diagnosis: {option}")  # Feedback on selection
                         st.rerun()  # Refresh the app
 
     # Button to submit the diagnoses
@@ -64,6 +69,9 @@ def display_diagnoses():
                 st.error("Please do not provide duplicate diagnoses.")
         else:
             st.error("Please select all 5 diagnoses.")
+
+# Call the display_diagnoses function to run the code
+display_diagnoses()
 
 
 
