@@ -1,6 +1,5 @@
 import streamlit as st
 import os
-import json
 
 # Function to read tests from a file
 def read_tests_from_file(filename):
