@@ -127,6 +127,6 @@ def display_other_tests():
                     'assessment': assessment
                 })
         
-        st.session_state.page = "Simple Success"  # Change to the Simple Success page
+        st.session_state.page = "Results"  # Change to the Simple Success page
         st.success("Other tests submitted successfully.")
         st.rerun()  # Rerun to update the app
