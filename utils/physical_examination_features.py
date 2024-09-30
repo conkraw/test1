@@ -94,12 +94,16 @@ def main():
         for i in range(5):
             cols = st.columns(len(st.session_state.diagnoses) + 1)
             with cols[0]:
-                st.session_state.physical_examination_features[i] = st.text_input(f"", key=f"exam_row_{i}", label_visibility="collapsed")
+                st.session_state.physical_examination_features[i] = st.text_input(
+                    f"Feature {i + 1}",  # Provide a descriptive label
+                    key=f"exam_row_{i}",
+                    label_visibility="collapsed"  # Hide the label visually
+                )
 
             for diagnosis, col in zip(st.session_state.diagnoses, cols[1:]):
                 with col:
                     st.selectbox(
-                        "Assessment for " + diagnosis,
+                        f"Assessment for {diagnosis}",
                         options=["", "Supports", "Does not support"],
                         key=f"select_{i}_{diagnosis}_exam",
                         label_visibility="collapsed"
