@@ -10,26 +10,35 @@ def read_diagnoses_from_file():
         st.error(f"Error reading dx_list.txt: {e}")
         return []
 
+# Function to read laboratory tests from a file
+def read_lab_tests_from_file():
+    try:
+        with open('labtests.txt', 'r') as file:
+            lab_tests = [line.strip() for line in file.readlines() if line.strip()]
+        return lab_tests
+    except Exception as e:
+        st.error(f"Error reading labtests.txt: {e}")
+        return []
+
 def display_laboratory_tests():
     # Initialize session state
     if 'current_page' not in st.session_state:
         st.session_state.current_page = "laboratory_tests"
     if 'diagnoses' not in st.session_state:
         st.session_state.diagnoses = [""] * 5
-    if 'laboratory_tests' not in st.session_state:
-        st.session_state.laboratory_tests = [""] * 5
     if 'selected_moving_diagnosis' not in st.session_state:
         st.session_state.selected_moving_diagnosis = ""  
 
-    # Load diagnoses from file
+    # Load diagnoses and laboratory tests from files
     dx_options = read_diagnoses_from_file()
+    lab_tests = read_lab_tests_from_file()
     dx_options.insert(0, "")  
 
     st.title("Laboratory Tests App")
 
     st.markdown("""
         ### LABORATORY TESTS
-        Please provide up to 5 laboratory tests that influence the differential diagnosis.
+        Please select up to 5 laboratory tests that influence the differential diagnosis.
     """)
 
     # Reorder section in the sidebar
@@ -89,7 +98,11 @@ def display_laboratory_tests():
     for i in range(5):
         cols = st.columns(len(st.session_state.diagnoses) + 1)
         with cols[0]:
-            st.session_state.laboratory_tests[i] = st.text_input(f"", key=f"lab_row_{i}", label_visibility="collapsed")
+            selected_lab_test = st.selectbox(
+                f"Select Laboratory Test {i + 1}",
+                options=[""] + lab_tests,
+                key=f"lab_row_{i}"
+            )
 
         for diagnosis, col in zip(st.session_state.diagnoses, cols[1:]):
             with col:
@@ -109,13 +122,11 @@ def display_laboratory_tests():
                 if diagnosis not in assessments:
                     assessments[diagnosis] = []
                 assessments[diagnosis].append({
-                    'laboratory_test': st.session_state.laboratory_tests[i],
+                    'laboratory_test': st.session_state[f"lab_row_{i}"],
                     'assessment': assessment
                 })
         
         st.session_state.page = "Simple Success"  # Change to the Simple Success page
         st.success("Laboratory tests submitted successfully.")
         st.rerun()  # Rerun to update the app
-
-
 
