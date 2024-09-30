@@ -19,7 +19,7 @@ def display_results_image(results_file_path='test1/utils/results.txt'):
     # Look for the image file in the same directory
     image_path = None
     for ext in image_extensions:
-        potential_path = f"test1/utils/{image_filename}{ext}"
+        potential_path = f"test1/utils/results/{image_filename}{ext}"
         if os.path.exists(potential_path):
             image_path = potential_path
             break
