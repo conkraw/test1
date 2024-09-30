@@ -18,7 +18,7 @@ def display_diagnoses():
     dx_options = read_diagnoses_from_file()  # Load diagnosis options from the file
 
     st.markdown("""## DIFFERENTIAL DIAGNOSIS UPDATE
-                    Based on the information that has been subsequently provided in the above case, please review your initial differential diagnosis list and update it as necessary.""")
+                    Based on the information provided in the above case, please review your initial differential diagnosis list and update it as necessary.""")
 
     # Create columns for each diagnosis input
     cols = st.columns(5)  # Create 5 columns for 5 diagnoses
@@ -38,7 +38,8 @@ def display_diagnoses():
                 st.write(f"**Selected:** {current_diagnosis}")
 
             # Change diagnosis button
-            if st.button(f"Change Diagnosis {i + 1}", key=f"change_button_{i}"):
+            change_button = st.button(f"Change Diagnosis {i + 1}", key=f"change_button_{i}")
+            if change_button:
                 st.session_state.selected_buttons[i] = False  # Allow changing the selection
                 st.session_state.diagnoses[i] = ""  # Reset the current diagnosis
                 st.success("Diagnosis reset. Please enter a new diagnosis.")  # Provide feedback
@@ -71,7 +72,9 @@ def display_diagnoses():
             st.error("Please select all 5 diagnoses.")
 
 # Call the display_diagnoses function to run the code
-display_diagnoses()
+if __name__ == "__main__":
+    display_diagnoses()
+
 
 
 
