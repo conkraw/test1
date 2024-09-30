@@ -27,12 +27,6 @@ def main():
         st.session_state.page = "welcome"  # Default page
 
     print(f"Current page: {st.session_state.page}")  # Debugging statement
-
-    # Sidebar logic
-    if st.session_state.page in ["welcome", "login"]:
-        st.sidebar.empty()  # Hide sidebar for these pages
-    else:
-        pass 
         
     # Page routing
     if st.session_state.page == "welcome":
