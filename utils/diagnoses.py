@@ -1,23 +1,6 @@
 import streamlit as st
 from utils.file_operations import read_diagnoses_from_file
 
-# Inject custom CSS
-st.markdown(
-    """
-    <style>
-    .stButton {
-        background-color: gray;  /* Change button background color */
-        color: white;            /* Change text color */
-        border: None;
-    }
-    .stButton:hover {
-        background-color: darkgray;  /* Change color on hover */
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
-
 def display_diagnoses():
     # Ensure diagnoses are initialized
     if 'diagnoses' not in st.session_state:
