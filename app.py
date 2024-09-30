@@ -41,10 +41,10 @@ def main():
         display_physical_examination()
     elif st.session_state.page == "History Illness Script":
         history_illness_script()
-    elif st.session_state.page == "Physical Examination Features":
-        physical_examination_features()  # Show the simple success page
-    elif st.session_state.page == "Simple Success":
-        display_simple_success()  # Show the simple success page
+    #elif st.session_state.page == "Physical Examination Features":
+    #    physical_examination_features()  # Show the simple success page
+    #elif st.session_state.page == "Simple Success":
+    #    display_simple_success()  # Show the simple success page
 
 if __name__ == "__main__":
     main()
