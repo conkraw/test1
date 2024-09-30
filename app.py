@@ -10,10 +10,12 @@ from utils.focused_physical_examination import display_focused_physical_examinat
 from utils.physical_examination import main as display_physical_examination
 from utils.history_illness_script import main as history_illness_script
 from utils.simple_success import display_simple_success  # Make sure this import is correct
+from utils.simple_success1 import display_simple_success1  # Make sure this import is correct
 from utils.physical_examination_features import display_physical_examination_features  # Make sure this import is correct
 from utils.lab_tests import display_laboratory_tests   # Make sure this import is correct
 from utils.radtests import display_radiological_tests 
 from utils.othertests import display_other_tests 
+from utils.laboratory_features import display_laboratory_features 
 
 st.set_page_config(layout="wide")
 
@@ -54,6 +56,10 @@ def main():
         display_other_tests()  # Function to handle the Other Tests page
     elif st.session_state.page == "Simple Success":
         display_simple_success()  # Show the simple success page
+    elif st.session_state.page == "Laboratory Features":  # New case for the Other Tests page
+        display_laboratory_features()  # Function to handle the Other Tests page
+    elif st.session_state.page == "Simple Success":
+        display_simple_success1()  # Show the simple success page
 
 if __name__ == "__main__":
     main()
