@@ -105,7 +105,7 @@ def main():
         for i in range(5):
             cols = st.columns(len(st.session_state.diagnoses) + 1)
             with cols[0]:
-                st.session_state.historical_features[i] = st.text_input("Enter historical feature", key=f"hist_row_{i}")
+                st.session_state.historical_features[i] = st.text_input("", key=f"hist_row_{i}",label_visibility="collapsed")
 
             for diagnosis, col in zip(st.session_state.diagnoses, cols[1:]):
                 with col:
