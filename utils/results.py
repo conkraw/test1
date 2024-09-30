@@ -27,7 +27,7 @@ def display_results_image():
     # Look for the image file in the same directory
     image_path = None
     for ext in image_extensions:
-        potential_path = f"test1/{image_filename}{ext}"
+        potential_path = f"{image_filename}{ext}"
         if os.path.exists(potential_path):
             image_path = potential_path
             break
