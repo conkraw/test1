@@ -128,12 +128,12 @@ def main():
                 st.rerun()  # Rerun to update the page
 
     # Simple Success Page Logic
-    elif st.session_state.current_page == "simple_success":
-        st.title("Success")
-        st.markdown("Your historical features have been submitted successfully!")
-        if st.button("Go to Next Page"):
-            st.session_state.current_page = "next_page"  # Set this to whatever the next page should be
-            st.rerun()  # Rerun to update the page
+    #elif st.session_state.current_page == "simple_success":
+    #    st.title("Success")
+    #    st.markdown("Your historical features have been submitted successfully!")
+    #    if st.button("Go to Next Page"):
+    #        st.session_state.current_page = "next_page"  # Set this to whatever the next page should be
+    #        st.rerun()  # Rerun to update the page
 
 # Call the main function to run the app
 if __name__ == "__main__":
