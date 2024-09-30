@@ -94,12 +94,12 @@ def main():
         for i in range(5):
             cols = st.columns(len(st.session_state.diagnoses) + 1)
             with cols[0]:
-                st.session_state.historical_features[i] = st.text_input(f"", key=f"hist_row_{i}",label_visibility="collapsed")
+                st.session_state.historical_features[i] = st.text_input(f"Enter historical feature {i + 1}", key=f"hist_row_{i}")
 
             for diagnosis, col in zip(st.session_state.diagnoses, cols[1:]):
                 with col:
                     st.selectbox(
-                        "Assessment for " + diagnosis,  # Provide a descriptive label
+                        "Assessment for " + diagnosis,
                         options=["", "Supports", "Does not support"],
                         key=f"select_{i}_{diagnosis}_hist",
                         label_visibility="collapsed"
@@ -118,20 +118,26 @@ def main():
                         'assessment': assessment
                     })
 
-            # Debugging output
+            # Log the assessments
             st.write("Assessments collected:", assessments)
 
-            # Only proceed if assessments are present
+            # Proceed to Simple Success page
             if assessments:
-                st.session_state.current_page = "Simple Success"  # Change to the next page
+                st.session_state.current_page = "simple_success"  # Change to the next page
                 st.success("Historical features submitted successfully.")
-            else:
-                st.warning("No valid assessments were submitted.")
-                
-            st.rerun()  # Rerun to update the page
+                st.experimental_rerun()  # Rerun to update the page
+
+    # Simple Success Page Logic
+    elif st.session_state.current_page == "simple_success":
+        st.title("Success")
+        st.markdown("Your historical features have been submitted successfully!")
+        if st.button("Go to Next Page"):
+            st.session_state.current_page = "next_page"  # Set this to whatever the next page should be
+            st.experimental_rerun()  # Rerun to update the page
 
 # Call the main function to run the app
 if __name__ == "__main__":
     main()
+
 
 
