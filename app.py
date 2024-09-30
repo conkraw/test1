@@ -32,28 +32,8 @@ def main():
     if st.session_state.page in ["welcome", "login"]:
         st.sidebar.empty()  # Hide sidebar for these pages
     else:
-        # Sidebar for navigation (adjust as necessary for your app)
-        st.sidebar.title("Navigation")
-        st.sidebar.selectbox("Select a page:", [
-            "welcome",
-            "login",
-            "intake_form",
-            "diagnoses",
-            "Intervention Entry",
-            "History with AI",
-            "Focused Physical Examination",
-            "Physical Examination Components",
-            "History Illness Script",
-            "Physical Examination Features",
-            "Laboratory Tests",
-            "Radiology Tests",
-            "Other Tests",
-            "Results",
-            "Laboratory Features",
-            "Treatments",
-            "Simple Success"
-        ], index=list(pages.keys()).index(st.session_state.page), key="page_selector")
-
+        pass 
+        
     # Page routing
     if st.session_state.page == "welcome":
         welcome_page()
