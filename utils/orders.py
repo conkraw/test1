@@ -35,7 +35,7 @@ def display_laboratory_tests():
                 st.selectbox(
                     "",
                     options=["", "Necessary", "Neither More Nor Less Useful", "Unnecessary"],
-                    key=f"select_{diagnosis}_lab",
+                    key=f"select_{i}_lab_{diagnosis}",  # Make the key unique
                     label_visibility="collapsed"
                 )
 
@@ -43,7 +43,7 @@ def display_laboratory_tests():
         assessments = {}
         for i in range(5):
             for diagnosis in range(5):
-                assessment = st.session_state[f"select_{diagnosis}_lab"]
+                assessment = st.session_state[f"select_{i}_lab_{diagnosis}"]
                 assessments[f"lab_test_{i}"] = assessment
 
         st.success("Laboratory testing assessments submitted successfully.")
@@ -74,7 +74,7 @@ def display_radiological_tests():
                 st.selectbox(
                     "",
                     options=["", "Necessary", "Neither More Nor Less Useful", "Unnecessary"],
-                    key=f"select_{diagnosis}_rad",
+                    key=f"select_{i}_rad_{diagnosis}",  # Make the key unique
                     label_visibility="collapsed"
                 )
 
@@ -82,7 +82,7 @@ def display_radiological_tests():
         assessments = {}
         for i in range(5):
             for diagnosis in range(5):
-                assessment = st.session_state[f"select_{diagnosis}_rad"]
+                assessment = st.session_state[f"select_{i}_rad_{diagnosis}"]
                 assessments[f"rad_test_{i}"] = assessment
 
         st.success("Radiological tests assessments submitted successfully.")
@@ -113,7 +113,7 @@ def display_other_tests():
                 st.selectbox(
                     "",
                     options=["", "Necessary", "Neither More Nor Less Useful", "Unnecessary"],
-                    key=f"select_{diagnosis}_other",
+                    key=f"select_{i}_other_{diagnosis}",  # Make the key unique
                     label_visibility="collapsed"
                 )
 
@@ -121,7 +121,7 @@ def display_other_tests():
         assessments = {}
         for i in range(5):
             for diagnosis in range(5):
-                assessment = st.session_state[f"select_{diagnosis}_other"]
+                assessment = st.session_state[f"select_{i}_other_{diagnosis}"]
                 assessments[f"other_test_{i}"] = assessment
 
         st.success("Other tests assessments submitted successfully.")
