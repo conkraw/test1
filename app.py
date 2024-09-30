@@ -13,6 +13,7 @@ from utils.simple_success import display_simple_success  # Make sure this import
 from utils.physical_examination_features import display_physical_examination_features  # Make sure this import is correct
 from utils.lab_tests import display_laboratory_tests   # Make sure this import is correct
 from utils.radtests import display_radiological_tests 
+from utils.othertests import display_other_tests 
 
 st.set_page_config(layout="wide")
 
@@ -49,8 +50,8 @@ def main():
         display_laboratory_tests()  # Function to handle the Other Tests page
     elif st.session_state.page == "Radiology Tests":  # New case for the Other Tests page
         display_radiological_tests()  # Function to handle the Other Tests page
-    #elif st.session_state.page == "Other Tests":  # New case for the Other Tests page
-    #    display_other_tests()  # Function to handle the Other Tests page
+    elif st.session_state.page == "Other Tests":  # New case for the Other Tests page
+        display_other_tests()  # Function to handle the Other Tests page
     elif st.session_state.page == "Simple Success":
         display_simple_success()  # Show the simple success page
 
