@@ -90,6 +90,10 @@ def display_radiological_tests():
         st.rerun()  # Rerun the app to refresh the page
 
 def display_other_tests():
+    # Check if 'other_tests' key is in session state; if not, initialize it
+    if 'other_tests' not in st.session_state:
+        st.session_state.other_tests = [""] * 5  # Initialize if not present
+
     st.markdown("### OTHER TESTS")
     st.write("For each other test that you have chosen, please describe how they would influence your differential diagnosis.")
 
@@ -134,6 +138,7 @@ if 'laboratory_testing' not in st.session_state:
 if 'radiological_tests' not in st.session_state:
     st.session_state.radiological_tests = [""] * 5
 if 'other_tests' not in st.session_state:
-    st.session_state.other_tests = [""] * 5
+    st.session_state.other_tests = [""] * 5  # Ensure this is initialized
+
 
 
