@@ -30,9 +30,10 @@ def display_diagnoses():
             # Search input for diagnosis
             search_input = st.text_input(f"Diagnosis {i + 1}", value=current_diagnosis, key=f"diagnosis_search_{i}")
 
-            # Update session state directly if the user changes the input
+            # Check if input has changed
             if search_input != current_diagnosis:
                 st.session_state.diagnoses[i] = search_input
+                st.session_state.selected_buttons[i] = False  # Reset selection status
                 st.rerun()  # Refresh the app
 
             # Filter options based on the search input
@@ -72,6 +73,7 @@ def display_diagnoses():
 # Call the display_diagnoses function to run the code
 if __name__ == "__main__":
     display_diagnoses()
+
 
 
 
