@@ -5,6 +5,7 @@ def read_diagnoses_from_file():
     try:
         with open('dx_list.txt', 'r') as file:
             diagnoses = [line.strip() for line in file.readlines() if line.strip()]
+        print("Diagnoses loaded successfully:", diagnoses)  # Debugging statement
         return diagnoses
     except Exception as e:
         st.error(f"Error reading dx_list.txt: {e}")
@@ -14,18 +15,24 @@ def main():
     # Initialize session state
     if 'current_page' not in st.session_state:
         st.session_state.current_page = "historical_features"  # Start on historical features page
+        print("Initialized current_page to historical_features")  # Debugging statement
     if 'diagnoses' not in st.session_state:
         st.session_state.diagnoses = [""] * 5
+        print("Initialized diagnoses state")  # Debugging statement
     if 'historical_features' not in st.session_state:
         st.session_state.historical_features = [""] * 5
+        print("Initialized historical_features state")  # Debugging statement
     if 'selected_buttons' not in st.session_state:
         st.session_state.selected_buttons = [False] * 5  
+        print("Initialized selected_buttons state")  # Debugging statement
     if 'selected_moving_diagnosis' not in st.session_state:
         st.session_state.selected_moving_diagnosis = ""  
+        print("Initialized selected_moving_diagnosis state")  # Debugging statement
 
     # Load diagnoses from file
     dx_options = read_diagnoses_from_file()
     dx_options.insert(0, "")  
+    print("Diagnosis options:", dx_options)  # Debugging statement
 
     # Title of the app
     st.title("")
@@ -47,16 +54,18 @@ def main():
                 index=st.session_state.diagnoses.index(st.session_state.selected_moving_diagnosis) if st.session_state.selected_moving_diagnosis in st.session_state.diagnoses else 0,
                 key="move_diagnosis"
             )
+            print(f"Selected diagnosis to move: {selected_diagnosis}")  # Debugging statement
 
             move_direction = st.radio("Adjust Priority:", options=["Higher Priority", "Lower Priority"], key="move_direction")
 
             if st.button("Adjust Priority"):
                 idx = st.session_state.diagnoses.index(selected_diagnosis)
+                print(f"Adjusting priority for: {selected_diagnosis}, direction: {move_direction}")  # Debugging statement
                 if move_direction == "Higher Priority" and idx > 0:
                     st.session_state.diagnoses[idx], st.session_state.diagnoses[idx - 1] = (
                         st.session_state.diagnoses[idx - 1], st.session_state.diagnoses[idx]
                     )
-                    st.session_state.selected_moving_diagnosis = st.session_state.diagnoses[idx - 1]  
+                    st.session_state.selected_moving_diagnosis = st.session_state.diagnoses[idx - 1]
                 elif move_direction == "Lower Priority" and idx < len(st.session_state.diagnoses) - 1:
                     st.session_state.diagnoses[idx], st.session_state.diagnoses[idx + 1] = (
                         st.session_state.diagnoses[idx + 1], st.session_state.diagnoses[idx]
@@ -70,6 +79,7 @@ def main():
                 options=st.session_state.diagnoses,
                 key="change_diagnosis"
             )
+            print(f"Change diagnosis selected: {change_diagnosis}")  # Debugging statement
 
             new_diagnosis_search = st.text_input("Search for a new diagnosis", "")
             if new_diagnosis_search:
@@ -80,6 +90,7 @@ def main():
                         if st.button(f"{option}", key=f"select_new_{option}"):
                             index_to_change = st.session_state.diagnoses.index(change_diagnosis)
                             st.session_state.diagnoses[index_to_change] = option
+                            print(f"Changed diagnosis: {change_diagnosis} to {option}")  # Debugging statement
                             st.rerun()  
 
         # Display historical features
@@ -99,7 +110,7 @@ def main():
             for diagnosis, col in zip(st.session_state.diagnoses, cols[1:]):
                 with col:
                     st.selectbox(
-                        "Assessment for " + diagnosis,  # Provide a descriptive label
+                        "Assessment for " + diagnosis,
                         options=["", "Supports", "Does not support"],
                         key=f"select_{i}_{diagnosis}_hist",
                         label_visibility="collapsed"
@@ -118,8 +129,10 @@ def main():
                         'assessment': assessment
                     })
 
+            print("Assessments collected:", assessments)  # Debugging statement
             st.session_state.current_page = "Simple Success"  # Change to the next page
             st.success("Historical features submitted successfully.")
+            print("Transitioning to Simple Success page.")  # Debugging statement
             st.rerun()
 
 # Call the main function to run the app
