@@ -219,5 +219,5 @@ elif st.session_state.current_page == "other_tests":
 
         st.success("Other tests assessments submitted successfully.")
         # Set the session state to redirect to the Simple Success page
-        st.session_state.current_page = "simple_success"
+        st.session_state.current_page = "Simple Success"
         st.rerun()  # Rerun the app to refresh the page
