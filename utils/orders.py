@@ -2,6 +2,15 @@
 
 import streamlit as st
 
+def read_tests_from_file(filename):
+    try:
+        with open(filename, 'r') as file:
+            tests = [line.strip() for line in file.readlines() if line.strip()]
+        return tests
+    except Exception as e:
+        st.error(f"Error reading {filename}: {e}")
+        return []  # Return an empty list if error occurs
+
 def display_laboratory_testing():
     st.markdown("### LABORATORY TESTING")
     st.write("For each laboratory test that you have chosen, please describe how they would influence your differential diagnosis.")
