@@ -49,8 +49,8 @@ def display_diagnoses():
                     st.write("**Suggestions:**")
                     for option in filtered_options[:5]:  # Show a maximum of 5 options
                         button_key = f"select_option_{i}_{option}"
-                        # Create a styled button using HTML
-                        if st.markdown(f'<button style="background-color: gray; color: white; border: none; padding: 10px; cursor: pointer;" onclick="document.getElementById(\'{button_key}\').click();">{option}</button>', unsafe_allow_html=True):
+                        # Create a button with a unique key
+                        if st.button(f"{option}", key=button_key):
                             st.session_state.diagnoses[i] = option
                             st.session_state.selected_buttons[i] = True
                             st.success(f"Selected diagnosis: {option}")  # Feedback on selection
