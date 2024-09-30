@@ -20,6 +20,7 @@ from utils.laboratory_features import display_laboratory_features
 from utils.treatments import display_treatments 
 
 st.set_page_config(layout="wide")
+st.sidebar.empty() 
 
 def main():
     # Initialize session state
