@@ -55,7 +55,7 @@ def display_diagnoses():
                             st.session_state.diagnoses[i] = option
                             st.session_state.selected_buttons[i] = True
                             st.success(f"Selected diagnosis: {option}")  # Feedback on selection
-                            st.experimental_rerun()  # Refresh the app
+                            st.rerun()  # Refresh the app
 
     # Button to submit the diagnoses
     if st.button("Submit Diagnoses"):
@@ -66,7 +66,7 @@ def display_diagnoses():
                 # Handle submission logic here
                 st.success("Diagnoses submitted successfully.")
                 st.session_state.page = "Intervention Entry"  # Change to the next page
-                st.experimental_rerun()
+                st.rerun()
             else:
                 st.error("Please do not provide duplicate diagnoses.")
         else:
