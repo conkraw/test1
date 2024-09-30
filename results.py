@@ -32,6 +32,6 @@ def display_results_image(results_file_path='test1/utils/results.txt'):
 
     # Add a button to go to the next page
     if st.button("Next Page"):
-        st.session_state.page = "Simple Success"  # Change to the Simple Success page
+        st.session_state.page = "Laboratory Features"  # Change to the Simple Success page
         st.rerun()  # Rerun to update the app
 
