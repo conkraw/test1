@@ -101,7 +101,7 @@ def display_laboratory_tests():
             selected_lab_test = st.selectbox(
                 f"",
                 options=[""] + lab_tests,
-                key=f"lab_row_{i},
+                key=f"lab_row_{i}",
                 label_visibility="collapsed",
             )
 
