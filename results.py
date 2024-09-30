@@ -1,4 +1,4 @@
-# utils.py
+# results.py
 
 import streamlit as st
 import os
@@ -29,3 +29,9 @@ def display_results_image(results_file_path='test1/utils/results.txt'):
         st.image(image_path, caption=selected_result, use_column_width=True)
     else:
         st.write("No image found for this result.")
+
+    # Add a button to go to the next page
+    if st.button("Next Page"):
+        st.session_state.page = "Simple Success"  # Change to the Simple Success page
+        st.rerun()  # Rerun to update the app
+
