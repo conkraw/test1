@@ -10,6 +10,7 @@ from utils.focused_physical_examination import display_focused_physical_examinat
 from utils.physical_examination import main as display_physical_examination
 from utils.history_illness_script import main as history_illness_script
 from utils.simple_success import display_simple_success  # Make sure this import is correct
+from utils.physical_examination_features import main as physical_examination_features
 
 st.set_page_config(layout="wide")
 
@@ -40,6 +41,8 @@ def main():
         display_physical_examination()
     elif st.session_state.page == "History Illness Script":
         history_illness_script()
+    elif st.session_state.page == "Physical Examination Features":
+        physical_examination_features()  # Show the simple success page
     elif st.session_state.page == "Simple Success":
         display_simple_success()  # Show the simple success page
 
