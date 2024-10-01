@@ -75,13 +75,14 @@ def main():
     elif st.session_state.page == "Simple Success":
         display_simple_success1()
 
-def save_session_data():
+def save_session_data(db):
     session_data = collect_session_data()
     try:
-        upload_message = upload_to_firebase(session_data)
+        upload_message = upload_to_firebase(db, session_data)  # Pass db as an argument
         st.success(upload_message)  # Provide feedback to the user
     except Exception as e:
         st.error(f"Error saving progress: {e}")
+
 
 def collect_session_data():
     session_data = {
