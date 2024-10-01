@@ -40,7 +40,7 @@ def display_diagnoses():
                     st.success(f"Selected diagnosis: {search_input}")
                 elif search_input.strip():  # Check if the input is not just whitespace
                     st.session_state.selected_buttons[i] = False
-                    st.warning("The entered diagnosis does not match the standard wording in the International Classification of Diseases (ICD). Please try again."
+                    st.warning("The entered diagnosis does not match the standard wording in the International Classification of Diseases (ICD). Please try again.")
                 # No rerun needed here; the input will be handled in the next loop
 
             # Filter options for suggestions
