@@ -1,3 +1,6 @@
+import streamlit as st
+from utils.file_operations import read_diagnoses_from_file
+
 def display_diagnoses():
     # Ensure diagnoses are initialized
     if 'diagnoses' not in st.session_state:
