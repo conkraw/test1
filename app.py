@@ -18,7 +18,7 @@ from utils.othertests import display_other_tests
 from utils.results import display_results_image
 from utils.laboratory_features import display_laboratory_features
 from utils.treatments import display_treatments
-from firebase_operations import initialize_firebase, upload_to_firebase  # Import your Firebase functions
+from utils.firebase_operations import initialize_firebase, upload_to_firebase  # Import your Firebase functions
 
 
 st.set_page_config(layout="wide")
