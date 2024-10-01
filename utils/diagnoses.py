@@ -33,8 +33,8 @@ def display_diagnoses():
                 st.session_state.selected_buttons[i] = False
                 st.rerun()
 
-            # Modify filtering to check for exact matches
-            filtered_options = [dx for dx in dx_options if search_input.lower() in dx.lower() and search_input.strip() != ""] if search_input else []
+            # Filter options for suggestions
+            filtered_options = [dx for dx in dx_options if search_input.lower() in dx.lower()] if search_input else []
 
             if current_diagnosis:
                 st.write(f"**Selected:** {current_diagnosis}")
@@ -45,10 +45,12 @@ def display_diagnoses():
                     for option in filtered_options[:5]:
                         button_key = f"select_option_{i}_{option}"
                         if st.button(f"{option}", key=button_key):
-                            st.session_state.diagnoses[i] = option
-                            st.session_state.selected_buttons[i] = True
-                            st.success(f"Selected diagnosis: {option}")
-                            st.rerun()
+                            # Only accept the diagnosis if it matches an option
+                            if option in dx_options:
+                                st.session_state.diagnoses[i] = option
+                                st.session_state.selected_buttons[i] = True
+                                st.success(f"Selected diagnosis: {option}")
+                                st.rerun()
 
     if st.button("Submit Diagnoses"):
         diagnoses = [d.strip() for d in st.session_state.diagnoses]
@@ -64,5 +66,6 @@ def display_diagnoses():
 
 if __name__ == "__main__":
     display_diagnoses()
+
 
 
