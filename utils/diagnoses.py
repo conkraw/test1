@@ -28,23 +28,26 @@ def display_diagnoses():
         with col:
             search_input = st.text_input(f"Diagnosis {i + 1}", value=current_diagnosis, key=f"diagnosis_search_{i}")
 
-            # Display the current selection
-            if current_diagnosis:
-                st.write(f"**Selected:** {current_diagnosis}")
-
             # Filter options for suggestions
             filtered_options = [dx for dx in dx_options if search_input.lower() in dx.lower()] if search_input else []
 
-            if filtered_options:
-                st.write("**Suggestions:**")
-                for option in filtered_options[:5]:
-                    button_key = f"select_option_{i}_{option}"
-                    if st.button(f"{option}", key=button_key):
-                        # Update diagnosis directly upon button click
-                        st.session_state.diagnoses[i] = option
-                        st.session_state.selected_buttons[i] = True
-                        st.success(f"Selected diagnosis: {option}")
-                        # No rerun needed; state should update immediately
+            # If a diagnosis is already selected, don't show suggestions
+            if not current_diagnosis:
+                if filtered_options:
+                    st.write("**Suggestions:**")
+                    for option in filtered_options[:5]:
+                        button_key = f"select_option_{i}_{option}"
+                        if st.button(f"{option}", key=button_key):
+                            # Update the diagnosis immediately upon button click
+                            st.session_state.diagnoses[i] = option
+                            st.session_state.selected_buttons[i] = True
+                            # Clear the input box to show the selection
+                            st.session_state[f"diagnosis_search_{i}"] = option
+                            break  # Exit loop after selection
+
+            # Display the current selection if any
+            if current_diagnosis:
+                st.write(f"**Selected:** {current_diagnosis}")
 
     if st.button("Submit Diagnoses"):
         diagnoses = [d.strip() for d in st.session_state.diagnoses]
@@ -60,6 +63,5 @@ def display_diagnoses():
 
 if __name__ == "__main__":
     display_diagnoses()
-
 
 
