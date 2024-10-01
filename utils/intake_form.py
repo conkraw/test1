@@ -2,8 +2,10 @@
 
 import streamlit as st
 from utils.file_operations import read_text_file, load_vital_signs
+from utils.session_management import collect_session_data 
+from utils.firebase_operations import upload_to_firebase 
 
-def display_intake_form():
+def display_intake_form(db):
     st.markdown(f"<h3 style='font-family: \"DejaVu Sans\";'>Welcome {st.session_state.user_name}! Here is the intake form.</h3>", unsafe_allow_html=True)
 
     # Read and display the text from ptinfo.txt
@@ -78,6 +80,10 @@ def display_intake_form():
                 'temperature': temperature_checkbox,
                 'weight': weight_checkbox,
             }
+    
+            session_data = collect_session_data()
+            upload_message = upload_to_firebase(db, session_data) 
+            
             st.session_state.page = "diagnoses"  # Move to Diagnoses page
             st.rerun()  # Rerun the app to refresh the page
 
