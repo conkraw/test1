@@ -1,6 +1,7 @@
 # login.py
 
 import streamlit as st
+from utils.session_management import collect_session_data  # Import the function
 
 def login_page(users):
     st.markdown("<p style='font-family: \"DejaVu Sans\";'>Please enter your unique code to access the assessment.</p>", unsafe_allow_html=True)
