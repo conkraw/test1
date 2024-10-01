@@ -35,17 +35,16 @@ def display_diagnoses():
             # Filter options for suggestions
             filtered_options = [dx for dx in dx_options if search_input.lower() in dx.lower()] if search_input else []
 
-            # If there are no current selections, check for button clicks
-            if not st.session_state.selected_buttons[i]:
-                if filtered_options:
-                    st.write("**Suggestions:**")
-                    for option in filtered_options[:5]:
-                        button_key = f"select_option_{i}_{option}"
-                        if st.button(f"{option}", key=button_key):
-                            # Update state on first click
-                            st.session_state.diagnoses[i] = option
-                            st.session_state.selected_buttons[i] = True
-                            st.success(f"Selected diagnosis: {option}")
+            if filtered_options:
+                st.write("**Suggestions:**")
+                for option in filtered_options[:5]:
+                    button_key = f"select_option_{i}_{option}"
+                    if st.button(f"{option}", key=button_key):
+                        # Update diagnosis directly upon button click
+                        st.session_state.diagnoses[i] = option
+                        st.session_state.selected_buttons[i] = True
+                        st.success(f"Selected diagnosis: {option}")
+                        # No rerun needed; state should update immediately
 
     if st.button("Submit Diagnoses"):
         diagnoses = [d.strip() for d in st.session_state.diagnoses]
@@ -61,5 +60,6 @@ def display_diagnoses():
 
 if __name__ == "__main__":
     display_diagnoses()
+
 
 
