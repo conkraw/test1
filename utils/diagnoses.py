@@ -41,7 +41,6 @@ def display_diagnoses():
                 elif search_input.strip():  # Check if the input is not just whitespace
                     st.session_state.selected_buttons[i] = False
                     st.warning("The entered diagnosis does not match the standard wording in the International Classification of Diseases (ICD). Please try again.")
-                # No rerun needed here; the input will be handled in the next loop
 
             # Filter options for suggestions
             filtered_options = [dx for dx in dx_options if search_input.lower() in dx.lower()] if search_input else []
@@ -62,7 +61,6 @@ def display_diagnoses():
             if len(diagnoses) == len(set(diagnoses)):
                 st.success("Diagnoses submitted successfully.")
                 st.session_state.page = "Intervention Entry"
-                st.rerun()
             else:
                 st.error("Please do not provide duplicate diagnoses.")
         else:
@@ -70,6 +68,5 @@ def display_diagnoses():
 
 if __name__ == "__main__":
     display_diagnoses()
-
 
 
