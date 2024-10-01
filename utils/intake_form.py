@@ -1,7 +1,7 @@
 import streamlit as st
 from utils.file_operations import read_text_file, load_vital_signs
-from utils.session_management import collect_session_data 
-from utils.firebase_operations import upload_to_firebase 
+from utils.session_management import collect_session_data  #######NEED THIS
+from utils.firebase_operations import upload_to_firebase ####NEED THIS
 
 def display_intake_form(db):
     st.markdown(f"<h3 style='font-family: \"DejaVu Sans\";'>Welcome {st.session_state.user_name}! Here is the intake form.</h3>", unsafe_allow_html=True)
@@ -69,7 +69,7 @@ def display_intake_form(db):
 
         # Button to proceed to the diagnoses page
         if st.button("Next"):
-            st.session_state.vs_data = {  # Changed from assessment_data to vs_data
+            st.session_state.vs_data = { 
                 'unique_code': st.session_state.unique_code,
                 'heart_rate': heart_rate_checkbox,
                 'respiratory_rate': respiratory_rate_checkbox,
@@ -81,8 +81,8 @@ def display_intake_form(db):
 
             print(st.session_state.vs_data) 
             
-            session_data = collect_session_data()
-            upload_message = upload_to_firebase(db, session_data) 
+            session_data = collect_session_data() ###### NEED THIS
+            upload_message = upload_to_firebase(db, session_data) ####NEED THIS
             
             st.session_state.page = "diagnoses"  # Move to Diagnoses page
             st.rerun()  # Rerun the app to refresh the page
