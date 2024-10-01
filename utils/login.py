@@ -4,20 +4,27 @@ import streamlit as st
 from utils.session_management import collect_session_data 
 from utils.firebase_operations import upload_to_firebase 
 
-def login_page(users,db):
+def login_page(users, db):
     st.markdown("<p style='font-family: \"DejaVu Sans\";'>Please enter your unique code to access the assessment.</p>", unsafe_allow_html=True)
-    unique_code = st.text_input("Unique Code:")
-
+    unique_code_input = st.text_input("Unique Code:")
+    
     if st.button("Submit"):
-        session_data = collect_session_data()
-        upload_message = upload_to_firebase(db, session_data) 
-        if unique_code:
+        if unique_code_input:
             try:
-                unique_code = int(unique_code.strip())
+                # Convert the input to an integer and check if it's valid
+                unique_code = int(unique_code_input.strip())
                 if unique_code in users['code'].values:
+                    # Store the unique code in session state
                     st.session_state.user_name = users.loc[users['code'] == unique_code, 'name'].values[0]
-                    st.session_state.unique_code = unique_code  # Store unique code in session state
+                    st.session_state.unique_code = unique_code
+
+                    # Collect session data after setting the unique code
+                    session_data = collect_session_data()
+                    upload_message = upload_to_firebase(db, session_data) 
+                    
+                    # Navigate to the intake form page
                     st.session_state.page = "intake_form"  # Change to assessment page
+                    st.success(upload_message)  # Show success message
                     st.rerun()  # Rerun to refresh the view
                 else:
                     st.error("Invalid code. Please try again.")
@@ -25,3 +32,4 @@ def login_page(users,db):
                 st.error("Please enter a valid code.")
         else:
             st.error("Please enter a code.")
+
