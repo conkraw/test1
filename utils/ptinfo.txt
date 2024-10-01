@@ -1,1 +1,11 @@
-The patient is a 4 year old male who presents to the urgent care clinic with stridor and respiratory distress.
+CANDIDATE INSTRUCTIONS
+
+Station Title: Discussion of Anaphylactic Reaction
+
+You are a medical student in the Pediatric Ward.
+
+A 7-year-old boy has been admitted for cellulitis. During treatment, he received ceftriaxone, which he is allergic to, and experienced a severe anaphylactic reaction.
+
+Your task at this station is to communicate the situation to the child’s mother. You should explain the reason for the admission, describe the allergic reaction, outline the emergency measures taken, and address any concerns she may have.
+
+You have 8 minutes to complete this assessment. 
