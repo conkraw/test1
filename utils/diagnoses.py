@@ -20,18 +20,21 @@ def display_diagnoses():
 
     for i, col in enumerate(cols):
         with col:
-            # Text input to display the selected diagnosis
             current_diagnosis = st.session_state.diagnoses[i]
             search_input = st.text_input(f"Diagnosis {i + 1}", value=current_diagnosis, key=f"diagnosis_search_{i}")
 
-            # Update the session state only if the user has not yet made a selection
-            if search_input != current_diagnosis:
-                st.session_state.diagnoses[i] = search_input
+            # Show selected diagnosis
+            if current_diagnosis:
+                st.write(f"**Selected:** {current_diagnosis}")
 
             # Filter options based on the search input
             filtered_options = [dx for dx in dx_options if search_input.lower() in dx.lower()] if search_input else []
 
-            if filtered_options:
+            # Logic to determine if buttons should be shown
+            if current_diagnosis:
+                # If a diagnosis is already selected, do not show buttons
+                st.warning("Diagnosis already selected. Enter a new diagnosis to see suggestions.")
+            elif filtered_options:
                 st.write("**Suggestions:**")
                 for option in filtered_options[:5]:  # Show up to 5 suggestions
                     button_key = f"select_option_{i}_{option}"
@@ -53,3 +56,4 @@ def display_diagnoses():
 
 if __name__ == "__main__":
     display_diagnoses()
+
