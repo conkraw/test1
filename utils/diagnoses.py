@@ -38,7 +38,7 @@ def display_diagnoses():
             if current_diagnosis:
                 st.write(f"**Selected:** {current_diagnosis}")
             elif search_input and search_input not in filtered_options:
-                st.warning("Please select a diagnosis from the suggestions.")
+                st.warning("Please select a diagnosis from the suggestions. If there are no suggestions, try again.")
 
             # Update session state with the current input only if it matches an option
             if current_diagnosis and current_diagnosis in dx_options:
