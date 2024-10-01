@@ -19,6 +19,7 @@ from utils.results import display_results_image
 from utils.laboratory_features import display_laboratory_features
 from utils.treatments import display_treatments
 from utils.firebase_operations import initialize_firebase, upload_to_firebase  # Import your Firebase functions
+from utils.session_management import collect_session_data  # Import the session management function
 
 st.set_page_config(layout="wide")
 
@@ -43,7 +44,7 @@ def main():
         welcome_page()
     elif st.session_state.page == "login":
         users = load_users()
-        login_page(users)
+        login_page(users, db)
     elif st.session_state.page == "intake_form":
         display_intake_form()
     elif st.session_state.page == "diagnoses":
