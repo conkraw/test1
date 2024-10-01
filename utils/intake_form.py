@@ -69,7 +69,7 @@ def display_intake_form(db):
 
         # Button to proceed to the diagnoses page
         if st.button("Next"):
-            st.session_state.assessment_data = {
+            st.session_state.vs_data = {  # Changed from assessment_data to vs_data
                 'unique_code': st.session_state.unique_code,
                 'heart_rate': heart_rate_checkbox,
                 'respiratory_rate': respiratory_rate_checkbox,
@@ -87,3 +87,4 @@ def display_intake_form(db):
 
     else:
         st.error("No vital signs data available.")
+
