@@ -32,25 +32,17 @@ def display_diagnoses():
             if current_diagnosis:
                 st.write(f"**Selected:** {current_diagnosis}")
 
-            # Check if the input matches any valid diagnosis
-            if search_input != current_diagnosis:
-                if search_input in dx_options:
-                    st.session_state.diagnoses[i] = search_input
-                    st.session_state.selected_buttons[i] = True
-                    st.success(f"Selected diagnosis: {search_input}")
-                elif search_input.strip():  # Check if the input is not just whitespace
-                    st.session_state.selected_buttons[i] = False
-                    st.warning("The entered diagnosis does not match the standard wording in the International Classification of Diseases (ICD). Please try again.")
-
             # Filter options for suggestions
             filtered_options = [dx for dx in dx_options if search_input.lower() in dx.lower()] if search_input else []
 
+            # If there are no current selections, check for button clicks
             if not st.session_state.selected_buttons[i]:
                 if filtered_options:
                     st.write("**Suggestions:**")
                     for option in filtered_options[:5]:
                         button_key = f"select_option_{i}_{option}"
                         if st.button(f"{option}", key=button_key):
+                            # Update state on first click
                             st.session_state.diagnoses[i] = option
                             st.session_state.selected_buttons[i] = True
                             st.success(f"Selected diagnosis: {option}")
@@ -61,6 +53,7 @@ def display_diagnoses():
             if len(diagnoses) == len(set(diagnoses)):
                 st.success("Diagnoses submitted successfully.")
                 st.session_state.page = "Intervention Entry"
+                st.rerun()  # Redirect or rerun if needed
             else:
                 st.error("Please do not provide duplicate diagnoses.")
         else:
