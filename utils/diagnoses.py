@@ -11,7 +11,7 @@ def display_diagnoses():
         st.session_state.selected_buttons = [False] * 5
 
     # Check if assessment data exists
-    if 'assessment_data' not in st.session_state or not st.session_state.assessment_data:
+    if 'vs_data' not in st.session_state or not st.session_state.assessment_data:
         st.error("Please complete the assessment before updating diagnoses.")
         return
 
