@@ -35,8 +35,8 @@ def main():
     # Collect and upload session data whenever the page changes
     previous_page = st.session_state.get("previous_page")
     if previous_page != st.session_state.page:
-        save_session_data()  # Call the save function on page change
-        st.session_state.previous_page = st.session_state.page  # Update previous page
+        save_session_data(db)  # Pass db to the save function
+        st.session_state.previous_page = st.session_state.page  
 
     # Page routing
     if st.session_state.page == "welcome":
