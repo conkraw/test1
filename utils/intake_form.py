@@ -68,7 +68,7 @@ def display_intake_form():
             st.markdown("</div>", unsafe_allow_html=True)
 
         # Button to proceed to the diagnoses page
-        if st.button("Next to Diagnoses"):
+        if st.button("Next"):
             st.session_state.assessment_data = {
                 'unique_code': st.session_state.unique_code,
                 'heart_rate': heart_rate_checkbox,
