@@ -46,7 +46,7 @@ def main():
         users = load_users()
         login_page(users, db)
     elif st.session_state.page == "intake_form":
-        display_intake_form()
+        display_intake_form(db)
     elif st.session_state.page == "diagnoses":
         display_diagnoses()
     elif st.session_state.page == "Intervention Entry":
