@@ -45,12 +45,14 @@ def display_diagnoses():
                     for option in filtered_options[:5]:
                         button_key = f"select_option_{i}_{option}"
                         if st.button(f"{option}", key=button_key):
-                            # Only accept the diagnosis if it matches an option
+                            # Only accept the diagnosis if it exactly matches an option
                             if option in dx_options:
                                 st.session_state.diagnoses[i] = option
                                 st.session_state.selected_buttons[i] = True
                                 st.success(f"Selected diagnosis: {option}")
-                                st.rerun()
+                            else:
+                                st.error("Invalid selection. Please choose a valid diagnosis from the suggestions.")
+                            st.rerun()
 
     if st.button("Submit Diagnoses"):
         diagnoses = [d.strip() for d in st.session_state.diagnoses]
@@ -66,6 +68,5 @@ def display_diagnoses():
 
 if __name__ == "__main__":
     display_diagnoses()
-
 
 
