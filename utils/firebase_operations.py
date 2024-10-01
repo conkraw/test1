@@ -31,7 +31,7 @@ def initialize_firebase():
 
 def upload_to_firebase(db, entry):
     if db is not None:
-        db.collection('your_collection_name').add(entry)  # Change 'your_collection_name' to your collection name
+        db.collection('your_collection_name').add(entry)  # Change to your collection name
         return "Data uploaded to Firebase."
     else:
         return "Failed to upload data. Firebase not initialized."
