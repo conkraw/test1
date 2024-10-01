@@ -23,24 +23,24 @@ def display_diagnoses():
             current_diagnosis = st.session_state.diagnoses[i]
             search_input = st.text_input(f"Diagnosis {i + 1}", value=current_diagnosis, key=f"diagnosis_search_{i}")
 
-            # Show selected diagnosis
-            if current_diagnosis:
-                st.write(f"**Selected:** {current_diagnosis}")
-
-            # Filter options based on the search input
-            filtered_options = [dx for dx in dx_options if search_input.lower() in dx.lower()] if search_input else []
-
             # Logic to determine if buttons should be shown
-            if current_diagnosis:
-                # If a diagnosis is already selected, do not show buttons
+            if current_diagnosis and search_input == current_diagnosis:
+                st.write(f"**Selected:** {current_diagnosis}")
                 st.warning("Diagnosis already selected. Enter a new diagnosis to see suggestions.")
-            elif filtered_options:
-                st.write("**Suggestions:**")
-                for option in filtered_options[:5]:  # Show up to 5 suggestions
-                    button_key = f"select_option_{i}_{option}"
-                    if st.button(f"{option}", key=button_key):
-                        st.session_state.diagnoses[i] = option
-                        st.rerun()  # Rerun to update the input field with the selected diagnosis
+            else:
+                # Update the diagnosis in session state if the input changes
+                st.session_state.diagnoses[i] = search_input
+
+                # Filter options based on the search input
+                filtered_options = [dx for dx in dx_options if search_input.lower() in dx.lower()] if search_input else []
+
+                if filtered_options:
+                    st.write("**Suggestions:**")
+                    for option in filtered_options[:5]:  # Show up to 5 suggestions
+                        button_key = f"select_option_{i}_{option}"
+                        if st.button(f"{option}", key=button_key):
+                            st.session_state.diagnoses[i] = option
+                            st.experimental_rerun()  # Rerun to update the input field with the selected diagnosis
 
     if st.button("Submit Diagnoses"):
         diagnoses = [d.strip() for d in st.session_state.diagnoses]
@@ -48,7 +48,7 @@ def display_diagnoses():
             if len(diagnoses) == len(set(diagnoses)):
                 st.success("Diagnoses submitted successfully.")
                 st.session_state.page = "Intervention Entry"
-                st.rerun()  # Rerun to navigate to the next page
+                st.experimental_rerun()  # Rerun to navigate to the next page
             else:
                 st.error("Please do not provide duplicate diagnoses.")
         else:
