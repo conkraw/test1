@@ -41,7 +41,7 @@ def display_diagnoses():
                 elif search_input.strip():  # Check if the input is not just whitespace
                     st.session_state.selected_buttons[i] = False
                     st.warning("Invalid selection. Please choose a valid diagnosis from the suggestions.")
-                st.rerun()
+                # No rerun needed here; the input will be handled in the next loop
 
             # Filter options for suggestions
             filtered_options = [dx for dx in dx_options if search_input.lower() in dx.lower()] if search_input else []
@@ -55,7 +55,6 @@ def display_diagnoses():
                             st.session_state.diagnoses[i] = option
                             st.session_state.selected_buttons[i] = True
                             st.success(f"Selected diagnosis: {option}")
-                            st.rerun()
 
     if st.button("Submit Diagnoses"):
         diagnoses = [d.strip() for d in st.session_state.diagnoses]
@@ -71,5 +70,6 @@ def display_diagnoses():
 
 if __name__ == "__main__":
     display_diagnoses()
+
 
 
