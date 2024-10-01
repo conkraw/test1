@@ -6,10 +6,6 @@ def display_diagnoses():
     if 'diagnoses' not in st.session_state:
         st.session_state.diagnoses = [""] * 5
 
-    # Initialize selected_buttons if not already done
-    if 'selected_buttons' not in st.session_state:
-        st.session_state.selected_buttons = [False] * 5
-
     # Check if assessment data exists
     if 'vs_data' not in st.session_state or not st.session_state.vs_data:
         st.error("Please complete the assessment before updating diagnoses.")
@@ -38,11 +34,8 @@ def display_diagnoses():
                     for option in filtered_options[:5]:
                         button_key = f"select_option_{i}_{option}"
                         if st.button(f"{option}", key=button_key):
-                            # Update the diagnosis immediately upon button click
+                            # Update the diagnosis directly upon button click
                             st.session_state.diagnoses[i] = option
-                            st.session_state.selected_buttons[i] = True
-                            # Clear the input box to show the selection
-                            st.session_state[f"diagnosis_search_{i}"] = option
                             break  # Exit loop after selection
 
             # Display the current selection if any
