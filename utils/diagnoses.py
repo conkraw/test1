@@ -1,9 +1,9 @@
 import streamlit as st
 from utils.file_operations import read_diagnoses_from_file
 from utils.session_management import collect_session_data  #######NEED THIS
-from utils.firebase_operations import upload_to_firebase 
+from utils.firebase_operations import upload_to_firebase  #######NEED THIS
 
-def display_diagnoses():
+def display_diagnoses(db): #######NEED THIS INCLUDING DB
     # Ensure diagnoses are initialized
     if 'diagnoses' not in st.session_state:
         st.session_state.diagnoses = [""] * 5
@@ -52,11 +52,11 @@ def display_diagnoses():
         diagnoses = [d.strip() for d in st.session_state.diagnoses]
         if all(diagnosis for diagnosis in diagnoses):
             if len(diagnoses) == len(set(diagnoses)):
-                session_data = collect_session_data()
+                session_data = collect_session_data() #######NEED THIS
                 session_data['diagnoses_s1'].append({
                 "diagnoses_s1": diagnoses
             })
-                upload_message = upload_to_firebase(db, session_data)
+                upload_message = upload_to_firebase(db, session_data) #######NEED THIS
                 st.success("Diagnoses submitted successfully.")
                 st.session_state.page = "Intervention Entry"
                 st.rerun()  # Rerun to navigate to the next page
