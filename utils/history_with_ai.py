@@ -5,6 +5,7 @@ import json
 import openai
 from docx import Document
 import time
+import random
 
 def read_croup_doc():
     doc = Document("croup.docx")
@@ -22,24 +23,30 @@ openai.api_key = st.secrets["OPENAI_API_KEY"]
 def get_chatgpt_response(user_input):
     user_input_lower = user_input.lower()
     
+    # Example croup_info dictionary
+    # croup_info = {'what are symptoms': 'respiratory distress'}
+    
+    # List of alternative responses
+    alternative_responses = [
+        "I'm not sure about that.",
+        "I don't have that information.",
+        "That's a good question, but I don't know.",
+        "I'm not certain.",
+    ]
+
     if user_input_lower in croup_info:
+        answer = croup_info[user_input_lower]
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
             messages=[
                 {"role": "user", "content": user_input},
-                {"role": "assistant", "content": "Role play a parent whose child is experiencing croup."}
+                {"role": "assistant", "content": f"The answer is: {answer}"}
             ]
         )
         return response['choices'][0]['message']['content']
     else:
-        response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
-            messages=[
-                {"role": "user", "content": user_input},
-                {"role": "assistant", "content": "Please respond naturally as a concerned parent."}
-            ]
-        )
-        return response['choices'][0]['message']['content']
+        return random.choice(alternative_responses)  # Random response from the list
+
 
 def run_virtual_patient():
     st.title("Virtual Patient: Case #1")
