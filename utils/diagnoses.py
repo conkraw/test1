@@ -28,16 +28,24 @@ def display_diagnoses():
         with col:
             search_input = st.text_input(f"Diagnosis {i + 1}", value=current_diagnosis, key=f"diagnosis_search_{i}")
 
+            # Display the current selection
+            if current_diagnosis:
+                st.write(f"**Selected:** {current_diagnosis}")
+
+            # Check for exact matches from dx_options when user inputs
             if search_input != current_diagnosis:
-                st.session_state.diagnoses[i] = search_input
-                st.session_state.selected_buttons[i] = False
+                if search_input in dx_options:
+                    st.session_state.diagnoses[i] = search_input
+                    st.session_state.selected_buttons[i] = True
+                    st.success(f"Selected diagnosis: {search_input}")
+                else:
+                    st.session_state.diagnoses[i] = search_input  # Temporarily store the input
+                    st.session_state.selected_buttons[i] = False  # Mark it as not selected
+                    st.warning("Invalid selection. Please choose a valid diagnosis from the suggestions.")
                 st.rerun()
 
             # Filter options for suggestions
             filtered_options = [dx for dx in dx_options if search_input.lower() in dx.lower()] if search_input else []
-
-            if current_diagnosis:
-                st.write(f"**Selected:** {current_diagnosis}")
 
             if not st.session_state.selected_buttons[i]:
                 if filtered_options:
@@ -45,13 +53,9 @@ def display_diagnoses():
                     for option in filtered_options[:5]:
                         button_key = f"select_option_{i}_{option}"
                         if st.button(f"{option}", key=button_key):
-                            # Only accept the diagnosis if it exactly matches an option
-                            if option in dx_options:
-                                st.session_state.diagnoses[i] = option
-                                st.session_state.selected_buttons[i] = True
-                                st.success(f"Selected diagnosis: {option}")
-                            else:
-                                st.error("Invalid selection. Please choose a valid diagnosis from the suggestions.")
+                            st.session_state.diagnoses[i] = option
+                            st.session_state.selected_buttons[i] = True
+                            st.success(f"Selected diagnosis: {option}")
                             st.rerun()
 
     if st.button("Submit Diagnoses"):
