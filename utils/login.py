@@ -7,13 +7,14 @@ def login_page(users):
     unique_code = st.text_input("Unique Code:")
 
     if st.button("Submit"):
+        session_data = collect_session_data()
+        upload_message = upload_to_firebase(db, session_data) 
         if unique_code:
             try:
                 unique_code = int(unique_code.strip())
                 if unique_code in users['code'].values:
                     st.session_state.user_name = users.loc[users['code'] == unique_code, 'name'].values[0]
                     st.session_state.unique_code = unique_code  # Store unique code in session state
-                    #st.session_state.diagnoses = [""] * 5
                     st.session_state.page = "intake_form"  # Change to assessment page
                     st.rerun()  # Rerun to refresh the view
                 else:
