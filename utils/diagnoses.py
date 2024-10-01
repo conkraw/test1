@@ -33,7 +33,8 @@ def display_diagnoses():
                 st.session_state.selected_buttons[i] = False
                 st.rerun()
 
-            filtered_options = [dx for dx in dx_options if search_input.lower() in dx.lower()] if search_input else []
+            # Modify filtering to check for exact matches
+            filtered_options = [dx for dx in dx_options if search_input.lower() in dx.lower() and search_input.strip() != ""] if search_input else []
 
             if current_diagnosis:
                 st.write(f"**Selected:** {current_diagnosis}")
@@ -63,10 +64,5 @@ def display_diagnoses():
 
 if __name__ == "__main__":
     display_diagnoses()
-
-
-
-
-
 
 
