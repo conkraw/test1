@@ -32,13 +32,15 @@ def display_diagnoses():
                     button_key = f"select_option_{i}_{option}"
                     if st.button(f"{option}", key=button_key):
                         st.session_state.diagnoses[i] = option
-                        st.experimental_rerun()  # Rerun to update the input field with the selected diagnosis
+                        st.rerun()  # Rerun to update the input field with the selected diagnosis
 
-            # Ensure the text input only reflects a selected diagnosis or remains empty
+            # Show the selected diagnosis
             if current_diagnosis:
                 st.write(f"**Selected:** {current_diagnosis}")
-            elif search_input and search_input not in filtered_options:
-                st.warning("Please select a diagnosis from the suggestions. If there are no suggestions, try again.")
+
+            # Display the warning only if no buttons are available
+            if not filtered_options and search_input:
+                st.warning("Please select a diagnosis from the suggestions.")
 
             # Update session state with the current input only if it matches an option
             if current_diagnosis and current_diagnosis in dx_options:
@@ -50,7 +52,7 @@ def display_diagnoses():
             if len(diagnoses) == len(set(diagnoses)):
                 st.success("Diagnoses submitted successfully.")
                 st.session_state.page = "Intervention Entry"
-                st.experimental_rerun()  # Rerun to navigate to the next page
+                st.rerun()  # Rerun to navigate to the next page
             else:
                 st.error("Please do not provide duplicate diagnoses.")
         else:
@@ -58,3 +60,4 @@ def display_diagnoses():
 
 if __name__ == "__main__":
     display_diagnoses()
+
