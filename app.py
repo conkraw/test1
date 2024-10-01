@@ -94,6 +94,3 @@ def collect_session_data():
 
 if __name__ == "__main__":
     main()
-
-    main()
-
