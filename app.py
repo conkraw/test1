@@ -20,7 +20,6 @@ from utils.laboratory_features import display_laboratory_features
 from utils.treatments import display_treatments
 from utils.firebase_operations import initialize_firebase, upload_to_firebase  # Import your Firebase functions
 
-
 st.set_page_config(layout="wide")
 
 def main():
@@ -32,7 +31,13 @@ def main():
         st.session_state.page = "welcome"  # Default page
 
     print(f"Current page: {st.session_state.page}")  # Debugging statement
-        
+
+    # Collect and upload session data whenever the page changes
+    previous_page = st.session_state.get("previous_page")
+    if previous_page != st.session_state.page:
+        save_session_data()  # Call the save function on page change
+        st.session_state.previous_page = st.session_state.page  # Update previous page
+
     # Page routing
     if st.session_state.page == "welcome":
         welcome_page()
@@ -69,7 +74,15 @@ def main():
         display_treatments()
     elif st.session_state.page == "Simple Success":
         display_simple_success1()
-        
+
+def save_session_data():
+    session_data = collect_session_data()
+    try:
+        upload_message = upload_to_firebase(session_data)
+        st.success(upload_message)  # Provide feedback to the user
+    except Exception as e:
+        st.error(f"Error saving progress: {e}")
+
 def collect_session_data():
     session_data = {
         "unique_code": st.session_state.get("unique_code", ""),
@@ -78,6 +91,9 @@ def collect_session_data():
         # ... add other session state variables here
     }
     return session_data
+
 if __name__ == "__main__":
+    main()
+
     main()
 
