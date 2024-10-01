@@ -78,7 +78,9 @@ def display_intake_form(db):
                 'temperature': temperature_checkbox,
                 'weight': weight_checkbox,
             }
-    
+
+            print(st.session_state.vs_data) 
+            
             session_data = collect_session_data()
             upload_message = upload_to_firebase(db, session_data) 
             
