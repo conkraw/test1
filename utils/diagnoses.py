@@ -50,6 +50,11 @@ def display_diagnoses():
         diagnoses = [d.strip() for d in st.session_state.diagnoses]
         if all(diagnosis for diagnosis in diagnoses):
             if len(diagnoses) == len(set(diagnoses)):
+                session_data = collect_session_data()
+                session_data['diagnoses_history'].append({
+                "diagnoses_s1": diagnoses
+            })
+                upload_data_to_firebase(session_data)
                 st.success("Diagnoses submitted successfully.")
                 st.session_state.page = "Intervention Entry"
                 st.rerun()  # Rerun to navigate to the next page
