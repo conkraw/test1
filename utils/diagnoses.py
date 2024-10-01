@@ -1,5 +1,7 @@
 import streamlit as st
 from utils.file_operations import read_diagnoses_from_file
+from utils.session_management import collect_session_data  #######NEED THIS
+from utils.firebase_operations import upload_to_firebase 
 
 def display_diagnoses():
     # Ensure diagnoses are initialized
