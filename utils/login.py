@@ -13,7 +13,7 @@ def login_page(users):
                 if unique_code in users['code'].values:
                     st.session_state.user_name = users.loc[users['code'] == unique_code, 'name'].values[0]
                     st.session_state.unique_code = unique_code  # Store unique code in session state
-                    st.session_state.diagnoses = [""] * 5
+                    #st.session_state.diagnoses = [""] * 5
                     st.session_state.page = "intake_form"  # Change to assessment page
                     st.rerun()  # Rerun to refresh the view
                 else:
