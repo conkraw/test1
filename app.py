@@ -24,6 +24,9 @@ from utils.firebase_operations import initialize_firebase, upload_to_firebase  #
 st.set_page_config(layout="wide")
 
 def main():
+    # Initialize Firebase
+    db = initialize_firebase()  # Call Firebase initialization
+    
     # Initialize session state
     if "page" not in st.session_state:
         st.session_state.page = "welcome"  # Default page
