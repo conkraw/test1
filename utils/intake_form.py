@@ -11,7 +11,7 @@ def display_intake_form(db):
     # Read and display the text from ptinfo.txt
     document_text = read_text_file("ptinfo.txt")
     if document_text:
-        st.markdown(f"<div style='font-family: \"DejaVu Sans\";'>{document_text}</div>", unsafe_allow_html=True)
+        st.markdown(document_text, unsafe_allow_html=True)
     else:
         st.write("No text found in the document.")
 
@@ -19,8 +19,8 @@ def display_intake_form(db):
     vital_signs = load_vital_signs("vital_signs.txt")
     if vital_signs:
         st.markdown("<h2>Vital Signs:</h2>", unsafe_allow_html=True)
-        
-        # Create checkboxes for each vital sign
+
+        # Checkboxes for vital signs
         heart_rate_checkbox = st.checkbox(f"HEART RATE: {vital_signs.get('heart_rate', 'N/A')}", key='heart_rate_checkbox')
         respiratory_rate_checkbox = st.checkbox(f"RESPIRATORY RATE: {vital_signs.get('respiratory_rate', 'N/A')}", key='respiratory_rate_checkbox')
         blood_pressure_checkbox = st.checkbox(f"BLOOD PRESSURE: {vital_signs.get('blood_pressure', 'N/A')}", key='blood_pressure_checkbox')
@@ -30,7 +30,7 @@ def display_intake_form(db):
 
         # Button to proceed to the diagnoses page
         if st.button("Next"):
-            # Collect data for upload
+            # Store vital signs data in session state
             st.session_state.vs_data = {
                 'unique_code': st.session_state.unique_code,
                 'heart_rate': heart_rate_checkbox,
@@ -41,9 +41,9 @@ def display_intake_form(db):
                 'weight': weight_checkbox,
             }
     
-            # Upload to Firebase using session management function
-            upload_message = upload_to_firebase(db, st.session_state.vs_data) 
-            st.success("Data uploaded successfully!")  # Optional success message
+            # Collect session data and upload to Firebase
+            session_data = collect_session_data()  # Collect session data
+            upload_message = upload_to_firebase(db, session_data)  # Upload session data
             
             # Move to Diagnoses page
             st.session_state.page = "diagnoses"  
