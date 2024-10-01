@@ -87,7 +87,6 @@ def collect_session_data():
     session_data = {
         "unique_code": st.session_state.get("unique_code", ""),
         "diagnoses": st.session_state.get("diagnoses", []),
-        "other_key": st.session_state.get("other_key", ""),  # Add more keys as needed
         # ... add other session state variables here
     }
     return session_data
