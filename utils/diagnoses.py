@@ -32,15 +32,14 @@ def display_diagnoses():
             if current_diagnosis:
                 st.write(f"**Selected:** {current_diagnosis}")
 
-            # Check for exact matches from dx_options when user inputs
+            # Check if the input matches any valid diagnosis
             if search_input != current_diagnosis:
                 if search_input in dx_options:
                     st.session_state.diagnoses[i] = search_input
                     st.session_state.selected_buttons[i] = True
                     st.success(f"Selected diagnosis: {search_input}")
-                else:
-                    st.session_state.diagnoses[i] = search_input  # Temporarily store the input
-                    st.session_state.selected_buttons[i] = False  # Mark it as not selected
+                elif search_input.strip():  # Check if the input is not just whitespace
+                    st.session_state.selected_buttons[i] = False
                     st.warning("Invalid selection. Please choose a valid diagnosis from the suggestions.")
                 st.rerun()
 
