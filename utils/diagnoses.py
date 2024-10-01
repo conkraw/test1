@@ -56,7 +56,7 @@ def display_diagnoses():
                 session_data['diagnoses_s1'].append({
                 "diagnoses_s1": diagnoses
             })
-                upload_data_to_firebase(session_data)
+                upload_to_firebase(session_data)
                 st.success("Diagnoses submitted successfully.")
                 st.session_state.page = "Intervention Entry"
                 st.rerun()  # Rerun to navigate to the next page
