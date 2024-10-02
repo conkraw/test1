@@ -2,7 +2,7 @@
 
 import streamlit as st
 from utils.session_management import collect_session_data 
-from utils.firebase_operations import upload_to_firebase 
+from utils.firebase_operations import initialize_firebase, upload_to_firebase, document_id, entry
 
 def login_page(users, db):
     st.markdown("<p style='font-family: \"DejaVu Sans\";'>Please enter your unique code to access the assessment.</p>", unsafe_allow_html=True)
@@ -20,7 +20,7 @@ def login_page(users, db):
 
                     # Collect session data after setting the unique code
                     session_data = collect_session_data()
-                    upload_message = upload_to_firebase(db, session_data,document_id,entry) 
+                    upload_message = upload_to_firebase(db, 'your_collection_name', document_id, entry)
                     
                     # Navigate to the intake form page
                     st.session_state.page = "intake_form"  # Change to assessment page
