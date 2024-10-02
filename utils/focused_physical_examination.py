@@ -21,14 +21,16 @@ def display_focused_physical_examination(db,document_id):
     selected_exams2 = st.multiselect("Select options:", options1, key="confirm_exams")
     
     if st.button("Submit"):
+         # Collect session data
+        session_data = collect_session_data()  # Collect session data
+        
         # Prepare the data to upload
         entry = {
             'excluded_exams': selected_exams1,
             'confirmed_exams': selected_exams2,
         }
         
-    # Collect session data
-    session_data = collect_session_data()  # Collect session data
+   
 
     # Upload the session data to Firebase
     upload_message = upload_to_firebase(db, 'your_collection_name', document_id, entry)
