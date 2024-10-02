@@ -37,8 +37,8 @@ def main():
         st.session_state.document_id = str(uuid.uuid4())
 
     # Debugging statements
-    st.write(f"Current page: {st.session_state.page}")  
-    st.write(f"Current Document ID: {st.session_state.document_id}")
+    #st.write(f"Current page: {st.session_state.page}")  
+    #st.write(f"Current Document ID: {st.session_state.document_id}")
 
     # Page routing
     if st.session_state.page == "welcome":
