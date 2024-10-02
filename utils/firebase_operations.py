@@ -31,7 +31,6 @@ def initialize_firebase():
 
 def upload_to_firebase(db, entry):
     db.collection('your_collection_name').add(entry)  # Change 'your_collection_name' to your collection name
-    return "Data uploaded to Firebase."
 
     return "Data uploaded to Firebase."
 
