@@ -49,43 +49,43 @@ def display_diagnoses(db, document_id):  #######NEED THIS INCLUDING DB
                 st.session_state.diagnoses[i] = current_diagnosis
 
     if st.button("Submit Diagnoses"):
-    diagnoses = [d.strip() for d in st.session_state.diagnoses]
-    if all(diagnosis for diagnosis in diagnoses):
-        if len(diagnoses) == len(set(diagnoses)):
-            session_data = collect_session_data()
-
-            # Create entry with the new diagnoses data
-            entry = {
-                "diagnoses_s1": diagnoses
-            }
-
-            # Fetch the existing data from Firebase
-            existing_data = db.collection('your_collection_name').document(document_id).get()
-            if existing_data.exists:
-                existing_data_dict = existing_data.to_dict()
-                # Append new diagnoses to the existing ones
-                if 'diagnoses_s1' in existing_data_dict:
-                    existing_data_dict['diagnoses_s1'].extend(diagnoses)
+        diagnoses = [d.strip() for d in st.session_state.diagnoses]
+        if all(diagnosis for diagnosis in diagnoses):
+            if len(diagnoses) == len(set(diagnoses)):
+                session_data = collect_session_data()
+    
+                # Create entry with the new diagnoses data
+                entry = {
+                    "diagnoses_s1": diagnoses
+                }
+    
+                # Fetch the existing data from Firebase
+                existing_data = db.collection('your_collection_name').document(document_id).get()
+                if existing_data.exists:
+                    existing_data_dict = existing_data.to_dict()
+                    # Append new diagnoses to the existing ones
+                    if 'diagnoses_s1' in existing_data_dict:
+                        existing_data_dict['diagnoses_s1'].extend(diagnoses)
+                    else:
+                        existing_data_dict['diagnoses_s1'] = diagnoses
+    
+                    # Update the document with the combined data
+                    try:
+                        db.collection('your_collection_name').document(document_id).set(existing_data_dict)
+                        st.success("Diagnoses updated successfully.")
+                    except Exception as e:
+                        st.error(f"Error updating data: {e}")
                 else:
-                    existing_data_dict['diagnoses_s1'] = diagnoses
-
-                # Update the document with the combined data
-                try:
-                    db.collection('your_collection_name').document(document_id).set(existing_data_dict)
-                    st.success("Diagnoses updated successfully.")
-                except Exception as e:
-                    st.error(f"Error updating data: {e}")
+                    # If the document does not exist, create it
+                    try:
+                        db.collection('your_collection_name').document(document_id).set(entry)
+                        st.success("Diagnoses submitted successfully.")
+                    except Exception as e:
+                        st.error(f"Error uploading data: {e}")
+    
+                st.session_state.page = "Intervention Entry"
+                st.rerun()  # Rerun to navigate to the next page
             else:
-                # If the document does not exist, create it
-                try:
-                    db.collection('your_collection_name').document(document_id).set(entry)
-                    st.success("Diagnoses submitted successfully.")
-                except Exception as e:
-                    st.error(f"Error uploading data: {e}")
-
-            st.session_state.page = "Intervention Entry"
-            st.rerun()  # Rerun to navigate to the next page
+                st.error("Please do not provide duplicate diagnoses.")
         else:
-            st.error("Please do not provide duplicate diagnoses.")
-    else:
-        st.error("Please select all 5 diagnoses.")
+            st.error("Please select all 5 diagnoses.")
