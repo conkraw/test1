@@ -59,7 +59,7 @@ def run_virtual_patient(db):
     if 'session_data' not in st.session_state:
         st.session_state.session_data = {
             'questions_asked': [],
-            'responses': []
+            'responses': []  # Ensure responses key is initialized
         }
 
     # Calculate elapsed time
@@ -77,7 +77,7 @@ def run_virtual_patient(db):
 
                 # Get the virtual patient's response
                 virtual_patient_response = get_chatgpt_response(user_input)
-                st.session_state.session_data['responses'].append(virtual_patient_response)
+                st.session_state.session_data['responses'].append(virtual_patient_response)  # Append response
 
                 # Display the response in the main area
                 st.write(f"Virtual Patient: {virtual_patient_response}")
@@ -103,6 +103,7 @@ def run_virtual_patient(db):
         # Collect session data and upload to Firebase upon ending session
         session_data = collect_session_data()  # Collect session data
         session_data['questions_asked'] = st.session_state.session_data['questions_asked']
+        session_data['responses'] = st.session_state.session_data['responses']  # Include responses in session data
         upload_message = upload_to_firebase(db, session_data)  # Upload to Firebase
         st.success("Your questions have been saved successfully.")
 
