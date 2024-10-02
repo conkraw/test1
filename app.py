@@ -18,26 +18,27 @@ from utils.othertests import display_other_tests
 from utils.results import display_results_image
 from utils.laboratory_features import display_laboratory_features
 from utils.treatments import display_treatments
-from utils.firebase_operations import initialize_firebase, upload_to_firebase  # Import your Firebase functions
-from utils.session_management import collect_session_data  # Import the session management function
+from utils.firebase_operations import initialize_firebase, upload_to_firebase
+from utils.session_management import collect_session_data
+import uuid  # To generate unique document IDs
 
 st.set_page_config(layout="wide")
 
 def main():
     # Initialize Firebase
-    db = initialize_firebase()  # Call Firebase initialization
+    db = initialize_firebase()
     
     # Initialize session state
     if "page" not in st.session_state:
         st.session_state.page = "welcome"  # Default page
+    
+    # Generate a unique document ID at the start of the session
+    if "document_id" not in st.session_state:
+        st.session_state.document_id = str(uuid.uuid4())
 
-    print(f"Current page: {st.session_state.page}")  # Debugging statement
-
-    # Collect and upload session data whenever the page changes
-    #previous_page = st.session_state.get("previous_page")
-    #if previous_page != st.session_state.page:
-    #    save_session_data(db)  # Pass db to the save function
-    #    st.session_state.previous_page = st.session_state.page  
+    # Debugging statement
+    print(f"Current page: {st.session_state.page}")  
+    print(f"Current Document ID: {st.session_state.document_id}")
 
     # Page routing
     if st.session_state.page == "welcome":
@@ -46,7 +47,7 @@ def main():
         users = load_users()
         login_page(users, db)
     elif st.session_state.page == "intake_form":
-        display_intake_form(db,document_id,entry)
+        display_intake_form(db, st.session_state.document_id)  # Pass document ID
     elif st.session_state.page == "diagnoses":
         display_diagnoses(db)
     elif st.session_state.page == "Intervention Entry":
@@ -54,7 +55,7 @@ def main():
     elif st.session_state.page == "History with AI":
         run_virtual_patient(db)
     elif st.session_state.page == "Focused Physical Examination":
-        display_focused_physical_examination(db)
+        display_focused_physical_examination(db, st.session_state.document_id)  # Pass document ID
     elif st.session_state.page == "Physical Examination Components":
         display_physical_examination()
     elif st.session_state.page == "History Illness Script":
@@ -79,10 +80,14 @@ def main():
 def save_session_data(db):
     session_data = collect_session_data()
     try:
-        upload_message = upload_to_firebase(db, session_data)  # Pass db as an argument
-        st.success(upload_message)  # Provide feedback to the user
+        upload_message = upload_to_firebase(db, 'your_collection_name', st.session_state.document_id, session_data)  # Use document ID
+        st.success(upload_message)
     except Exception as e:
         st.error(f"Error saving progress: {e}")
+
+if __name__ == "__main__":
+    main()
+
 
 
 if __name__ == "__main__":
