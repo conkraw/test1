@@ -1,4 +1,6 @@
 import streamlit as st
+from utils.session_management import collect_session_data  #######NEED THIS
+from utils.firebase_operations import upload_to_firebase  
 
 # Function to read diagnoses from a file
 def read_diagnoses_from_file():
