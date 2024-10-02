@@ -23,9 +23,8 @@ def main(db,document_id):
             #})
 
             # Create entry with the diagnoses data
-                entry = {
-                    "interventions": interventions
-                }
+            entry = {
+                "interventions": interventions}
             
             # Upload the session data to Firebase
             upload_message = upload_to_firebase(db, 'your_collection_name', document_id, entry)  # Upload to Firebase
