@@ -37,6 +37,5 @@ def display_focused_physical_examination(db):
     
         # Change the session state to navigate to the next page
         st.session_state.page = "Physical Examination Components"
-        st.success(f"Examinations selected to exclude hypotheses: {selected_exams1}")
-        st.success(f"Examinations selected to confirm hypotheses: {selected_exams2}")
+        st.rerun()
 
