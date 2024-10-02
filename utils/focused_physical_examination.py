@@ -32,8 +32,8 @@ def display_focused_physical_examination(db):
     session_data = collect_session_data()  # Collect session data
 
     # Specify your unique collection name and document ID
-    collection_name = 'your_unique_collection_name'  # Replace with your desired collection name
-    document_id = 'st.session_state.unique_code'  # This could be user ID, session ID, etc.
+    collection_name = 'your_collection_name'  # Replace with your desired collection name
+    document_id = st.session_state.unique_code  # This could be user ID, session ID, etc.
 
     # Upload the session data to Firebase
     upload_message = upload_to_firebase(db, collection_name, document_id, session_data)
