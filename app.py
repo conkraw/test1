@@ -88,7 +88,3 @@ def save_session_data(db):
 if __name__ == "__main__":
     main()
 
-
-
-if __name__ == "__main__":
-    main()
