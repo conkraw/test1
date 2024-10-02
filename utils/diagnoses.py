@@ -56,8 +56,7 @@ def display_diagnoses(db, document_id):  #######NEED THIS INCLUDING DB
                 
                 # Create entry with the diagnoses data
                 entry = {
-                    "diagnoses_s1": diagnoses,
-                    **session_data  # Include other session data if needed
+                    "diagnoses_s1": diagnoses
                 }
 
                 # Upload to Firebase
