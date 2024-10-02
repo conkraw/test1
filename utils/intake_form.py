@@ -82,7 +82,13 @@ def display_intake_form(db,document_id):
             print(st.session_state.vs_data) 
             
             session_data = collect_session_data() ###### NEED THIS
-            upload_message = upload_to_firebase(db, session_data,document_id,entry) ####NEED THIS
+
+            # Ensure you define the entry structure, e.g., entry = st.session_state.vs_data
+            
+            entry = st.session_state.vs_data  # This assumes you want to upload vs_data
+
+
+            upload_message = upload_to_firebase(db, 'your_collection_name', document_id, entry)   
             
             st.session_state.page = "diagnoses"  # Move to Diagnoses page
             st.rerun()  # Rerun the app to refresh the page
