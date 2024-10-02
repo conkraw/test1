@@ -29,8 +29,10 @@ def initialize_firebase():
         st.error(f"Error initializing Firebase: {e}")
         return None
 
-def upload_to_firebase(db, entry):
-    db.collection('your_collection_name').add(entry)  # Change 'your_collection_name' to your collection name
+#def upload_to_firebase(db, entry):
+#    db.collection('your_collection_name').add(entry)  # Change 'your_collection_name' to your collection name
+#    return "Data uploaded to Firebase."
 
+def upload_to_firebase(db, collection_name, document_id, entry):
+    db.collection(collection_name).document(document_id).set(entry)  
     return "Data uploaded to Firebase."
-
