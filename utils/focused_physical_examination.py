@@ -1,4 +1,5 @@
 import streamlit as st
+import time
 from utils.session_management import collect_session_data  #######NEED THIS
 from utils.firebase_operations import upload_to_firebase  
 
@@ -24,18 +25,20 @@ def display_focused_physical_examination(db):
         entry = {
             'excluded_exams': selected_exams1,
             'confirmed_exams': selected_exams2
+            'timestamp': time.time() 
         }
         
-        # Collect session data
-        session_data = collect_session_data()  # Collect session data
-        
-        # Add the exams entry to session data
-        session_data['examinations'] = entry  # Include selected examinations in the session data
-    
-        # Upload the session data to Firebase
-        upload_message = upload_to_firebase(db,session_data)  # Upload to Firebase
-    
-        # Change the session state to navigate to the next page
-        st.session_state.page = "Physical Examination Components"
-        st.rerun()
+    # Collect session data
+    session_data = collect_session_data()  # Collect session data
+
+    # Specify your unique collection name and document ID
+    collection_name = 'your_unique_collection_name'  # Replace with your desired collection name
+    document_id = 'st.session_state.unique_code'  # This could be user ID, session ID, etc.
+
+    # Upload the session data to Firebase
+    upload_message = upload_to_firebase(db, collection_name, document_id, session_data)
+
+    # Change the session state to navigate to the next page
+    st.session_state.page = "Physical Examination Components"
+    st.rerun()
 
