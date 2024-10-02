@@ -50,7 +50,7 @@ def main():
     elif st.session_state.page == "diagnoses":
         display_diagnoses(db)
     elif st.session_state.page == "Intervention Entry":
-        intervention_entry_main()
+        intervention_entry_main(db)
     elif st.session_state.page == "History with AI":
         run_virtual_patient()
     elif st.session_state.page == "Focused Physical Examination":
