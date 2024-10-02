@@ -87,7 +87,7 @@ def run_virtual_patient(db,document_id):
 
                 # Upload to Firebase
                 try:
-                    upload_message = upload_to_firebase(db, 'your_collection_name', 'your_document_id', entry)  # Provide a document ID
+                    upload_message = upload_to_firebase(db, 'your_collection_name', document_id, entry)  # Provide a document ID
                     st.success("Your questions have been saved successfully.")
                 except Exception as e:
                     st.error(f"Error uploading data: {e}")
