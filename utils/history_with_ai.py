@@ -46,6 +46,7 @@ def get_chatgpt_response(user_input):
         return response['choices'][0]['message']['content']
     else:
         return random.choice(alternative_responses)  # Random response from the list
+        
 def run_virtual_patient(db):
     st.title("Virtual Patient: Case #1")
 
