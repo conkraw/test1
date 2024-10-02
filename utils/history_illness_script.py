@@ -14,6 +14,8 @@ def read_diagnoses_from_file():
 
 def main(db,document_id):
     # Initialize session state
+    if 'diagnoses_s1_locked' not in st.session_state:
+        st.session_state.diagnoses_s1_locked = False  # Lock flag
     if 'current_page' not in st.session_state:
         st.session_state.current_page = "historical_features"  # Start on historical features page
     if 'diagnoses' not in st.session_state:
@@ -25,6 +27,8 @@ def main(db,document_id):
     if 'selected_moving_diagnosis' not in st.session_state:
         st.session_state.selected_moving_diagnosis = ""  
 
+    st.session_state.diagnoses_s1_locked = True
+    
     # Load diagnoses from file
     dx_options = read_diagnoses_from_file()
     dx_options.insert(0, "")  
