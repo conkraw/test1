@@ -42,7 +42,7 @@ def get_chatgpt_response(user_input):
     else:
         return random.choice(alternative_responses)
 
-def run_virtual_patient(db):
+def run_virtual_patient(db,document_id):
     st.title("Virtual Patient: Case #1")
 
     st.info(
