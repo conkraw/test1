@@ -20,14 +20,23 @@ def display_focused_physical_examination(db):
     selected_exams2 = st.multiselect("Select options:", options1, key="confirm_exams")
 
     if st.button("Submit"):
-        # Prepare the data to upload (if needed)
-        entry = {
-            'excluded_exams': selected_exams1,
-            'confirmed_exams': selected_exams2
-        }
+    # Prepare the data to upload
+    entry = {
+        'excluded_exams': selected_exams1,
+        'confirmed_exams': selected_exams2
+    }
+    
+    # Collect session data
+    session_data = collect_session_data()  # Collect session data
+    
+    # Add the exams entry to session data
+    session_data['examinations'] = entry  # Include selected examinations in the session data
 
-        # Change the session state to navigate to the next page
-        st.session_state.page = "Physical Examination Components"
-        st.success(f"Examinations selected to exclude hypotheses: {selected_exams1}")
-        st.success(f"Examinations selected to confirm hypotheses: {selected_exams2}")
+    # Upload the session data to Firebase
+    upload_message = upload_to_firebase(db, session_data)  # Upload to Firebase
+
+    # Change the session state to navigate to the next page
+    st.session_state.page = "Physical Examination Components"
+    st.success(f"Examinations selected to exclude hypotheses: {selected_exams1}")
+    st.success(f"Examinations selected to confirm hypotheses: {selected_exams2}")
 
