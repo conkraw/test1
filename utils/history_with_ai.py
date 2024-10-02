@@ -6,6 +6,9 @@ import openai
 from docx import Document
 import time
 import random
+from utils.session_management import collect_session_data  #######NEED THIS
+from utils.firebase_operations import upload_to_firebase  
+
 
 def read_croup_doc():
     doc = Document("croup.docx")
