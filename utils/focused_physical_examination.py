@@ -3,7 +3,7 @@ import time
 from utils.session_management import collect_session_data  #######NEED THIS
 from utils.firebase_operations import upload_to_firebase  
 
-def display_focused_physical_examination(db):
+def display_focused_physical_examination(db,document_id):
     st.title("Focused Physical Examination Selection")
 
     # Prompt for excluding hypotheses
@@ -36,7 +36,7 @@ def display_focused_physical_examination(db):
     document_id = st.session_state.unique_code  # This could be user ID, session ID, etc.
 
     # Upload the session data to Firebase
-    upload_message = upload_to_firebase(db, collection_name, document_id, session_data)
+    upload_message = upload_to_firebase(db, collection_name, document_id, entry)
 
     # Change the session state to navigate to the next page
     st.session_state.page = "Physical Examination Components"
