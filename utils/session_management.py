@@ -17,6 +17,6 @@ def collect_session_data():
 
 
 
-excluded_exams
+
 
 
