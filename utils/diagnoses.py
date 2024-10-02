@@ -56,7 +56,7 @@ def display_diagnoses(db): #######NEED THIS INCLUDING DB
                 session_data['diagnoses_s1'].append({
                 "diagnoses_s1": diagnoses
             })
-                upload_message = upload_to_firebase(db, session_data) #######NEED THIS
+                upload_message = upload_to_firebase(db, 'your_collection_name', document_id, entry)
                 st.success("Diagnoses submitted successfully.")
                 st.session_state.page = "Intervention Entry"
                 st.rerun()  # Rerun to navigate to the next page
