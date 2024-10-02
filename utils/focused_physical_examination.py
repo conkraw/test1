@@ -18,8 +18,6 @@ def display_focused_physical_examination(db):
     # Prompt for confirming hypotheses
     st.markdown("<h5>Please select examinations necessary to confirm the most likely hypothesis and to discriminate between others:</h5>", unsafe_allow_html=True)
     selected_exams2 = st.multiselect("Select options:", options1, key="confirm_exams")
-
-    collection_name = "test"
     
     if st.button("Submit"):
         # Prepare the data to upload
@@ -35,7 +33,7 @@ def display_focused_physical_examination(db):
         session_data['examinations'] = entry  # Include selected examinations in the session data
     
         # Upload the session data to Firebase
-        upload_message = upload_to_firebase(db, collection_name, session_data)  # Upload to Firebase
+        upload_message = upload_to_firebase(db,session_data)  # Upload to Firebase
     
         # Change the session state to navigate to the next page
         st.session_state.page = "Physical Examination Components"
