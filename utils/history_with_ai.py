@@ -43,7 +43,6 @@ def get_chatgpt_response(user_input):
     else:
         return random.choice(alternative_responses)  # Random response from the list
 
-        
 def run_virtual_patient(db):
     st.title("Virtual Patient: Case #1")
 
@@ -56,10 +55,11 @@ def run_virtual_patient(db):
     if 'start_time' not in st.session_state or st.session_state.start_time is None:
         st.session_state.start_time = time.time()
 
-    # Initialize session data for storing questions
+    # Initialize session data for storing questions and responses
     if 'session_data' not in st.session_state:
         st.session_state.session_data = {
-            'questions_asked': []
+            'questions_asked': [],
+            'responses': []
         }
 
     # Calculate elapsed time
@@ -77,12 +77,17 @@ def run_virtual_patient(db):
 
                 # Get the virtual patient's response
                 virtual_patient_response = get_chatgpt_response(user_input)
+                st.session_state.session_data['responses'].append(virtual_patient_response)
+
+                # Display the response in the main area
                 st.write(f"Virtual Patient: {virtual_patient_response}")
 
-                # Display the questions asked so far
-                st.write("Questions asked so far:")
-                for question in st.session_state.session_data['questions_asked']:
-                    st.write(f"- {question}")
+                # Display the questions and responses in the sidebar
+                with st.sidebar:
+                    st.header("Questions and Responses")
+                    for question, response in zip(st.session_state.session_data['questions_asked'], st.session_state.session_data['responses']):
+                        st.write(f"**Q:** {question}")
+                        st.write(f"**A:** {response}")
 
                 # Collect session data and upload to Firebase upon submission
                 session_data = collect_session_data()  # Collect session data
@@ -105,4 +110,5 @@ def run_virtual_patient(db):
         st.session_state.page = "Focused Physical Examination"
         st.write("Session ended. You can start a new session.")
         st.rerun()
+
 
