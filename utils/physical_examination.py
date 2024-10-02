@@ -102,7 +102,7 @@ def main():
         display_video("video_1")  # Check for various formats of video_1
 
     # Add a submit button to go to the next page
-    if st.button("Submit"):
+    if st.button("Next"):
         st.session_state.page = "History Illness Script"  # Change to your actual next page
         st.rerun()  # Rerun the app to reflect the changes
 
