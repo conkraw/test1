@@ -59,7 +59,7 @@ def main():
     elif st.session_state.page == "Physical Examination Components":
         display_physical_examination()
     elif st.session_state.page == "History Illness Script":
-        history_illness_script(db)
+        history_illness_script(db,st.session_state.document_id)
     elif st.session_state.page == "Physical Examination Features":
         display_physical_examination_features(db)
     elif st.session_state.page == "Laboratory Tests":
