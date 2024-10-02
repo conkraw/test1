@@ -9,6 +9,7 @@ def collect_session_data():
         "diagnoses_s1": st.session_state.get("diagnoses_s1", []),
         "interventions": st.session_state.get("interventions", []),
         "questions_asked": st.session_state.get("questions_asked", []),
+        "responses": st.session_state.get("responses", []),
         # Add other session state variables as needed
     }
     return session_data
