@@ -36,16 +36,16 @@ def main():
     if "document_id" not in st.session_state:
         st.session_state.document_id = str(uuid.uuid4())
 
-    # Debugging statement
-    print(f"Current page: {st.session_state.page}")  
-    print(f"Current Document ID: {st.session_state.document_id}")
+    # Debugging statements
+    st.write(f"Current page: {st.session_state.page}")  
+    st.write(f"Current Document ID: {st.session_state.document_id}")
 
     # Page routing
     if st.session_state.page == "welcome":
         welcome_page()
     elif st.session_state.page == "login":
         users = load_users()
-        login_page(users, db)
+        login_page(users, db, st.session_state.document_id)  # Pass document ID
     elif st.session_state.page == "intake_form":
         display_intake_form(db, st.session_state.document_id)  # Pass document ID
     elif st.session_state.page == "diagnoses":
@@ -87,4 +87,3 @@ def save_session_data(db):
 
 if __name__ == "__main__":
     main()
-
