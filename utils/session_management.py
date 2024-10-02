@@ -10,10 +10,14 @@ def collect_session_data():
         "interventions": st.session_state.get("interventions", []),
         "questions_asked": st.session_state.get("questions_asked", []),
         "responses": st.session_state.get("responses", []),
+        "excluded_exams": st.session_state.get("excluded_exams", []),
+        "confirmed_exams": st.session_state.get("confirmed_exams", []),
         # Add other session state variables as needed
     }
     return session_data
 
 
+
+excluded_exams
 
 
