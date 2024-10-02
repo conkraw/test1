@@ -1,3 +1,8 @@
+import streamlit as st
+from utils.file_operations import read_diagnoses_from_file
+from utils.session_management import collect_session_data  #######NEED THIS
+from utils.firebase_operations import upload_to_firebase  #######NEED THIS
+
 def display_diagnoses(db, document_id):  #######NEED THIS INCLUDING DB
     # Ensure diagnoses are initialized
     if 'diagnoses' not in st.session_state:
