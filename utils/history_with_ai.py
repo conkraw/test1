@@ -9,16 +9,16 @@ from utils.firebase_operations import upload_to_firebase
 
 def read_croup_doc():
     doc = Document("croup.docx")
-    content = []
+    croup_info = {}
     for para in doc.paragraphs:
-        content.append(para.text)
-    return "\n".join(content).lower()
+        # Assuming each paragraph contains a question and an answer separated by a colon
+        if ':' in para.text:
+            question, answer = para.text.split(':', 1)
+            croup_info[question.strip().lower()] = answer.strip().lower()
+    return croup_info
 
 # Load the document content
 croup_info = read_croup_doc()
-
-# Set up OpenAI API key from Streamlit secrets
-openai.api_key = st.secrets["OPENAI_API_KEY"]
 
 def get_chatgpt_response(user_input):
     user_input_lower = user_input.lower()
@@ -42,6 +42,7 @@ def get_chatgpt_response(user_input):
         return response['choices'][0]['message']['content']
     else:
         return random.choice(alternative_responses)  # Random response from the list
+
         
 def run_virtual_patient(db):
     st.title("Virtual Patient: Case #1")
