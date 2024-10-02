@@ -53,10 +53,12 @@ def display_diagnoses(db, document_id):  #######NEED THIS INCLUDING DB
         if all(diagnosis for diagnosis in diagnoses):
             if len(diagnoses) == len(set(diagnoses)):
                 session_data = collect_session_data() #######NEED THIS
+
+                diagnoses_s1 = diagnoses
                 
                 # Create entry with the diagnoses data
                 entry = {
-                    "diagnoses_s1": diagnoses
+                    "diagnoses_s1": diagnoses_s1
                 }
 
                 # Upload to Firebase
