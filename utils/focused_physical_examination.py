@@ -24,7 +24,7 @@ def display_focused_physical_examination(db):
         # Prepare the data to upload
         entry = {
             'excluded_exams': selected_exams1,
-            'confirmed_exams': selected_exams2
+            'confirmed_exams': selected_exams2,
             'timestamp': time.time() 
         }
         
