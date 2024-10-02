@@ -1,5 +1,3 @@
-# utils/history_with_ai.py
-
 import streamlit as st
 import json
 import openai
@@ -8,7 +6,6 @@ import time
 import random
 from utils.session_management import collect_session_data  #######NEED THIS
 from utils.firebase_operations import upload_to_firebase  
-
 
 def read_croup_doc():
     doc = Document("croup.docx")
@@ -26,10 +23,6 @@ openai.api_key = st.secrets["OPENAI_API_KEY"]
 def get_chatgpt_response(user_input):
     user_input_lower = user_input.lower()
     
-    # Example croup_info dictionary
-    # croup_info = {'what are symptoms': 'respiratory distress'}
-    
-    # List of alternative responses
     alternative_responses = [
         "I'm not sure about that.",
         "I don't have that information.",
@@ -85,42 +78,30 @@ def run_virtual_patient(db):
                 virtual_patient_response = get_chatgpt_response(user_input)
                 st.write(f"Virtual Patient: {virtual_patient_response}")
 
-                # Optionally display the questions asked so far
+                # Display the questions asked so far
                 st.write("Questions asked so far:")
                 for question in st.session_state.session_data['questions_asked']:
                     st.write(f"- {question}")
 
-        # Option to save questions and upload to Firebase
-        if st.button("Save Questions"):
-            if st.session_state.session_data['questions_asked']:
-                # Collect session data
+                # Collect session data and upload to Firebase upon submission
                 session_data = collect_session_data()  # Collect session data
-                
-                # Append questions to the session data
                 session_data['questions_asked'] = st.session_state.session_data['questions_asked']
-
-                # Upload the session data to Firebase
                 upload_message = upload_to_firebase(db, session_data)  # Upload to Firebase
-                
                 st.success("Your questions have been saved successfully.")
-                
-                # Optionally, you can change the page here
-                st.session_state.page = "Focused Physical Examination"  # Change to the next page
-                st.rerun()  # Rerun to navigate to the next page
-            else:
-                st.error("Please ask at least one question before saving.")
 
     else:
         st.warning("Session time is up. Please end the session.")
-        if st.button("End Session"):
-            st.session_state.start_time = None  # Reset start_time only when ending session
-            st.session_state.page = "Focused Physical Examination"
-            st.success("Session ended. You can start a new session.")
 
-    # Option to move to a new screen
+    # End session button
     if st.button("End Session"):
-        st.session_state.start_time = None
+        # Collect session data and upload to Firebase upon ending session
+        session_data = collect_session_data()  # Collect session data
+        session_data['questions_asked'] = st.session_state.session_data['questions_asked']
+        upload_message = upload_to_firebase(db, session_data)  # Upload to Firebase
+        st.success("Your questions have been saved successfully.")
+
+        st.session_state.start_time = None  # Reset start_time
         st.session_state.page = "Focused Physical Examination"
+        st.write("Session ended. You can start a new session.")
         st.rerun()
-        st.write("Redirecting to a new screen...")
 
