@@ -54,25 +54,25 @@ def main():
     elif st.session_state.page == "History with AI":
         run_virtual_patient(db)
     elif st.session_state.page == "Focused Physical Examination":
-        display_focused_physical_examination()
+        display_focused_physical_examination(db)
     elif st.session_state.page == "Physical Examination Components":
         display_physical_examination()
     elif st.session_state.page == "History Illness Script":
-        history_illness_script()
+        history_illness_script(db)
     elif st.session_state.page == "Physical Examination Features":
-        display_physical_examination_features()
+        display_physical_examination_features(db)
     elif st.session_state.page == "Laboratory Tests":
-        display_laboratory_tests()
+        display_laboratory_tests(db)
     elif st.session_state.page == "Radiology Tests":
-        display_radiological_tests()
+        display_radiological_tests(db)
     elif st.session_state.page == "Other Tests":
-        display_other_tests()
+        display_other_tests(db)
     elif st.session_state.page == "Results":
         display_results_image()
     elif st.session_state.page == "Laboratory Features":
-        display_laboratory_features()
+        display_laboratory_features(db)
     elif st.session_state.page == "Treatments":
-        display_treatments()
+        display_treatments(db)
     elif st.session_state.page == "Simple Success":
         display_simple_success1()
 
@@ -84,14 +84,6 @@ def save_session_data(db):
     except Exception as e:
         st.error(f"Error saving progress: {e}")
 
-
-def collect_session_data():
-    session_data = {
-        "unique_code": st.session_state.get("unique_code", ""),
-        "diagnoses": st.session_state.get("diagnoses", []),
-        # ... add other session state variables here
-    }
-    return session_data
 
 if __name__ == "__main__":
     main()
