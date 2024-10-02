@@ -4,7 +4,7 @@ from utils.session_management import collect_session_data  #######NEED THIS
 from utils.firebase_operations import upload_to_firebase  
 
 
-def main(db):
+def main(db,document_id):
     st.title("Intervention Description Entry")
 
     # Prompt for user input
@@ -18,12 +18,17 @@ def main(db):
             session_data = collect_session_data()  # Collect session data
             
             # Append interventions to the session data
-            session_data['interventions'].append({
-                "interventions": interventions
-            })
+            #session_data['interventions'].append({
+            #    "interventions": interventions
+            #})
+
+            # Create entry with the diagnoses data
+                entry = {
+                    "interventions": interventions
+                }
             
             # Upload the session data to Firebase
-            upload_message = upload_to_firebase(db, session_data)  # Upload to Firebase
+            upload_message = upload_to_firebase(db, 'your_collection_name', document_id, entry)  # Upload to Firebase
             
             st.success("Your interventions have been saved successfully.")
             
