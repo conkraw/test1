@@ -1,4 +1,6 @@
 import streamlit as st
+from utils.session_management import collect_session_data  #######NEED THIS
+from utils.firebase_operations import upload_to_firebase  
 
 def display_focused_physical_examination():
     st.title("Focused Physical Examination Selection")
