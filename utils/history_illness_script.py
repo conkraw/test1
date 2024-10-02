@@ -12,7 +12,7 @@ def read_diagnoses_from_file():
         st.error(f"Error reading dx_list.txt: {e}")
         return []
 
-def main():
+def main(db,document_id):
     # Initialize session state
     if 'current_page' not in st.session_state:
         st.session_state.current_page = "historical_features"  # Start on historical features page
@@ -110,17 +110,27 @@ def main():
         # Submit button for historical features
         # Inside your submit button logic in history_illness_script.py
         if st.button("Submit Historical Features"):
+            entry = {
+                'assessments': {}
+            }
+
             assessments = {}
             for i in range(5):
                 for diagnosis in st.session_state.diagnoses:
                     assessment = st.session_state[f"select_{i}_{diagnosis}_hist"]
-                    if diagnosis not in assessments:
-                        assessments[diagnosis] = []
-                    assessments[diagnosis].append({
+                    if diagnosis not in entry['assessments']:
+                        entry['assessments'][diagnosis] = []
+                    entry['assessments'][diagnosis].append({
                         'historical_feature': st.session_state.historical_features[i],
                         'assessment': assessment
                     })
-        
+            session_data = collect_session_data()  # Collect session data
+           
+            # Combine entry with session data if needed (for example)
+            #session_data.update(entry)  # If
+            
+            upload_message = upload_to_firebase(db, 'your_collection_name', document_id, entry)
+
             st.session_state.page = "Physical Examination Features"  # Change to the Simple Success page
             st.success("Historical features submitted successfully.")
             st.rerun()  # Rerun to update the app
