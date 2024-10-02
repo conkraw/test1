@@ -28,5 +28,5 @@ def initialize_firebase():
 #    return "Data uploaded to Firebase."
 
 def upload_to_firebase(db, collection_name, document_id, entry):
-    db.collection(collection_name).document(document_id).set(entry)  
+    db.collection(collection_name).document(document_id).update(entry)  
     return "Data uploaded to Firebase."
