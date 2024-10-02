@@ -20,7 +20,7 @@ def login_page(users, db):
 
                     # Collect session data after setting the unique code
                     session_data = collect_session_data()
-                    upload_message = upload_to_firebase(db, session_data) 
+                    upload_message = upload_to_firebase(db, session_data,document_id,entry) 
                     
                     # Navigate to the intake form page
                     st.session_state.page = "intake_form"  # Change to assessment page
