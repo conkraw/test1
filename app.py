@@ -65,7 +65,7 @@ def main():
     elif st.session_state.page == "Laboratory Tests":
         display_laboratory_tests(db,st.session_state.document_id)
     elif st.session_state.page == "Radiology Tests":
-        display_radiological_tests(db)
+        display_radiological_tests(db,st.session_state.document_id)
     elif st.session_state.page == "Other Tests":
         display_other_tests(db)
     elif st.session_state.page == "Results":
