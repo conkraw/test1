@@ -27,7 +27,6 @@ def main(db,document_id):
                 "interventions": interventions}
             
             # Upload the session data to Firebase
-            #upload_message = upload_to_firebase(db, 'your_collection_name', document_id, entry)  # Upload to Firebase
             upload_message = upload_to_firebase(db, document_id, entry)
             
             st.success("Your interventions have been saved successfully.")
