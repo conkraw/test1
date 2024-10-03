@@ -84,7 +84,7 @@ def main():
         intervention_entry_main(db, st.session_state.document_id)
     elif st.session_state.page == "History with AI":
         run_virtual_patient(db, st.session_state.document_id)
-        elif st.session_state.page == "Focused Physical Examination":
+    elif st.session_state.page == "Focused Physical Examination":
         display_focused_physical_examination(db, st.session_state.document_id)  # Pass document ID
     elif st.session_state.page == "Physical Examination Components":
         display_physical_examination()
