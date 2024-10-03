@@ -1,7 +1,7 @@
 import streamlit as st
 from utils.file_operations import read_text_file, load_vital_signs
 from utils.session_management import collect_session_data  #######NEED THIS
-from utils.firebase_operations import upload_to_firebase, FIREBASE_COLLECTION_NAME ####NEED THIS
+from utils.firebase_operations import upload_to_firebase
 
 def display_intake_form(db,document_id):
     st.markdown(f"<h3 style='font-family: \"DejaVu Sans\";'>Welcome {st.session_state.user_name}! Here is the intake form.</h3>", unsafe_allow_html=True)
@@ -31,27 +31,6 @@ def display_intake_form(db,document_id):
     vital_signs_file = "vital_signs.txt"
     vital_signs = load_vital_signs(vital_signs_file)
 
-    existing_data = db.collection(FIREBASE_COLLECTION_NAME).document(document_id).get()
-    if existing_data.exists:
-        st.session_state.vs_data = existing_data.to_dict().get('vs_data', {})
-
-    # Populate session state with vital signs data if it exists
-    if 'vs_data' in st.session_state:
-        heart_rate_checked = st.session_state.vs_data.get('heart_rate', False)
-        respiratory_rate_checked = st.session_state.vs_data.get('respiratory_rate', False)
-        blood_pressure_checked = st.session_state.vs_data.get('blood_pressure', False)
-        pulseox_checked = st.session_state.vs_data.get('pulseox', False)
-        temperature_checked = st.session_state.vs_data.get('temperature', False)
-        weight_checked = st.session_state.vs_data.get('weight', False)
-    else:
-        heart_rate_checked = False
-        respiratory_rate_checked = False
-        blood_pressure_checked = False
-        pulseox_checked = False
-        temperature_checked = False
-        weight_checked = False
-
-    
     # Check if vital_signs is not empty before creating checkboxes
     if vital_signs:
         title_html = """
@@ -109,7 +88,6 @@ def display_intake_form(db,document_id):
             entry = {'vs_data': st.session_state.vs_data}  # This assumes you want to upload vs_data
 
             upload_message = upload_to_firebase(db, document_id, entry)
-            #upload_message = upload_to_firebase(db, 'your_collection_name', document_id, entry)   
             
             st.session_state.page = "diagnoses"  # Move to Diagnoses page
             st.rerun()  # Rerun the app to refresh the page
