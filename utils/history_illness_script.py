@@ -143,8 +143,9 @@ def main(db, document_id):
                 session_data = collect_session_data()  # Collect session data
 
                 # Upload to Firebase using the current diagnosis order
-                upload_message = upload_to_firebase(db, 'your_collection_name', document_id, entry)
-            
+                #upload_message = upload_to_firebase(db, 'your_collection_name', document_id, entry)
+                upload_message = upload_to_firebase(db, document_id, entry)
+                
                 st.session_state.page = "Physical Examination Features"  # Change to the Simple Success page
                 st.success("Historical features submitted successfully.")
                 st.rerun()  # Rerun to update the app
