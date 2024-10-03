@@ -1,5 +1,4 @@
 import streamlit as st
-import uuid
 from utils.file_operations import load_users
 from utils.welcome import welcome_page
 from utils.login import login_page
@@ -20,31 +19,31 @@ from utils.results import display_results_image
 from utils.laboratory_features import display_laboratory_features
 from utils.treatments import display_treatments
 from utils.firebase_operations import initialize_firebase, upload_to_firebase
-from utils.session_management import collect_session_data
-
-st.set_page_config(layout="wide")
+import uuid  # To generate unique document IDs
 
 def save_user_state(db):
-    if st.session_state.user_code:
+    if st.session_state.unique_code:  # Changed to unique_code
         entry = {
             "last_page": st.session_state.page,
+            # Add other session data if needed
         }
-        upload_to_firebase(db, st.session_state.user_code, entry)
+        upload_to_firebase(db, st.session_state.unique_code, entry)  # Upload using unique_code
 
 def load_last_page(db):
-    collection_name = st.secrets["FIREBASE_COLLECTION_NAME"]
-    if st.session_state.user_code:
-        user_data = db.collection(collection_name).document(st.session_state.user_code).get()
+    collection_name = st.secrets["FIREBASE_COLLECTION_NAME"]  # Get collection name from secrets
+    if st.session_state.unique_code:  # Changed to unique_code
+        user_data = db.collection(collection_name).document(st.session_state.unique_code).get()
         if user_data.exists:
-            return user_data.to_dict().get("last_page")
+            return user_data.to_dict().get("last_page", "welcome")  # Default to "welcome"
     return "welcome"
 
 def main():
+    # Initialize Firebase
     db = initialize_firebase()
-
+    
     # Initialize session state
-    if "user_code" not in st.session_state:
-        st.session_state.user_code = None
+    if "unique_code" not in st.session_state:  # Changed from user_code to unique_code
+        st.session_state.unique_code = None
         
     if "page" not in st.session_state:
         st.session_state.page = "welcome"
@@ -52,11 +51,16 @@ def main():
     if "document_id" not in st.session_state:
         st.session_state.document_id = str(uuid.uuid4())
 
+    # Debugging: Print current unique code and page
+    st.write("Unique Code:", st.session_state.unique_code)
+    st.write("Current Page:", st.session_state.page)
+
     # Load last page if user is logged in
-    if st.session_state.user_code:
+    if st.session_state.unique_code:  # Changed from user_code to unique_code
         last_page = load_last_page(db)
         if last_page:
             st.session_state.page = last_page
+            st.write("Loaded last page:", st.session_state.page)
 
     # Page routing
     if st.session_state.page == "welcome":
@@ -64,9 +68,11 @@ def main():
     elif st.session_state.page == "login":
         users = load_users()
         login_page(users, db, st.session_state.document_id)
-        if st.session_state.user_code:
+
+        # Check if login was successful
+        if st.session_state.unique_code:  # Ensure unique_code is set
             st.session_state.page = load_last_page(db) or "welcome"
-            st.experimental_rerun()
+            st.experimental_rerun()  # Refresh to navigate to the last page
     elif st.session_state.page == "intake_form":
         display_intake_form(db, st.session_state.document_id, save_user_state)
     elif st.session_state.page == "diagnoses":
@@ -76,7 +82,7 @@ def main():
     elif st.session_state.page == "History with AI":
         run_virtual_patient(db, st.session_state.document_id)
     elif st.session_state.page == "Focused Physical Examination":
-        display_focused_physical_examination(db, st.session_state.document_id)
+        display_focused_physical_examination(db, st.session_state.document_id)  # Pass document ID
     elif st.session_state.page == "Physical Examination Components":
         display_physical_examination()
     elif st.session_state.page == "History Illness Script":
@@ -100,7 +106,8 @@ def main():
     else:
         st.write("Page not found. Redirecting to welcome.")
         st.session_state.page = "welcome"
-        st.experimental_rerun()
+        st.experimental_rerun()  # Redirect to welcome page
 
 if __name__ == "__main__":
     main()
+
