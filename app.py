@@ -40,11 +40,6 @@ def main():
     if "document_id" not in st.session_state:
         st.session_state.document_id = str(uuid.uuid4())
 
-    if st.session_state.user_code:
-        last_page = load_last_page(db)
-        if last_page:
-            st.session_state.page = last_page
-
     # Page routing
     if st.session_state.page == "welcome":
         welcome_page()
