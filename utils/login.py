@@ -12,16 +12,17 @@ def login_page(users, db, document_id):
         if unique_code_input:
             try:
                 unique_code = int(unique_code_input.strip())  # Ensure the code is an integer
+                st.write(f"Entered Unique Code: {unique_code}")  # Debug output
+                
                 if unique_code in users['code'].values:
                     st.session_state.user_name = users.loc[users['code'] == unique_code, 'name'].values[0]
                     st.session_state.unique_code = unique_code
                     
                     # Prepare the entry data
                     entry = {
-                        "unique_code": unique_code,  # This is used for the upload
+                        "unique_code": unique_code,
                         "user_name": st.session_state.user_name,
                     }
-                    # Use the passed document_id here, which will be None initially
                     upload_message = upload_to_firebase(db, document_id, entry)
 
                     st.success(upload_message)  # Show success message
