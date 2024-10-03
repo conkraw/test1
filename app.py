@@ -41,9 +41,6 @@ def load_last_page(db):
             return user_data.to_dict().get("last_page")
     return "welcome"
 
-        
-
-
 def main():
     # Initialize Firebase
     db = initialize_firebase()
@@ -63,7 +60,7 @@ def main():
     st.write("User Code:", st.session_state.user_code)
     st.write("Current Page Before Loading Last Page:", st.session_state.page)
 
-    # Only load the last page if the user is logged in
+    # Load the last page if the user is logged in
     if st.session_state.user_code:
         last_page = load_last_page(db)
         if last_page:
@@ -78,9 +75,13 @@ def main():
     elif st.session_state.page == "login":
         users = load_users()
         login_page(users, db, st.session_state.document_id)  # Pass document ID
-        # Check if login was successful and set user_code
-        if st.session_state.user_code:  # Assuming user_code is set upon successful login
-            st.session_state.page = load_last_page(db)  # Load last page again to navigate correctly
+
+        # Check if login was successful
+        if st.session_state.user_code:  # Assuming this gets set on successful login
+            # Update the page to the last visited page after login
+            last_page = load_last_page(db)
+            st.session_state.page = last_page if last_page else "welcome"
+            st.experimental_rerun()  # Refresh to navigate correctly
     elif st.session_state.page == "intake_form":
         display_intake_form(db, st.session_state.document_id, save_user_state)
     elif st.session_state.page == "diagnoses":
@@ -111,7 +112,6 @@ def main():
         display_treatments(db, st.session_state.document_id)
     elif st.session_state.page == "Simple Success":
         display_simple_success1()
-
-
+        
 if __name__ == "__main__":
     main()
