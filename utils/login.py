@@ -19,7 +19,7 @@ def login_page(users, db, document_id):  # Accept document_id as a parameter
             try:
                 # Convert the input to an integer and check if it's valid
                 unique_code = int(unique_code_input.strip())
-                if unique_code in users['code'].astype(str].values:  # Ensure comparison is correct
+                if unique_code in users['code'].astype(str).values:  # Ensure comparison is correct
                     # Store the unique code in session state
                     st.session_state.user_name = users.loc[users['code'].astype(str] == unique_code, 'name'].values[0]
                     st.session_state.unique_code = unique_code
