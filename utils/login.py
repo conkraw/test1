@@ -8,7 +8,7 @@ def login_page(users, db, document_id):  # Accept document_id as a parameter
     st.markdown("<p style='font-family: \"DejaVu Sans\";'>Please enter your unique code to access the assessment.</p>", unsafe_allow_html=True)
     unique_code_input = st.text_input("Unique Code:")
     
-    if st.button("Submit"):
+    if st.button("Submit",key="login"):
         if unique_code_input:
             try:
                 # Convert the input to an integer and check if it's valid
