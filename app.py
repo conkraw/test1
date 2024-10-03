@@ -25,6 +25,14 @@ from utils.firebase_operations import initialize_firebase, upload_to_firebase
 from utils.session_management import collect_session_data
 import uuid  # To generate unique document IDs
 
+def save_user_state(db):
+    if st.session_state.user_code:
+        entry = {
+            "last_page": st.session_state.page,
+            # Add other session data if needed
+        }
+        upload_to_firebase(db, st.session_state.user_code, entry)
+        
 def main():
     # Initialize Firebase
     db = initialize_firebase()
@@ -51,7 +59,7 @@ def main():
         users = load_users()
         login_page(users, db, st.session_state.document_id)  # Pass document ID
     elif st.session_state.page == "intake_form":
-        display_intake_form(db, st.session_state.document_id)  # Pass document ID
+        display_intake_form(db, st.session_state.document_id, save_user_state)  # Pass document ID
     elif st.session_state.page == "diagnoses":
         display_diagnoses(db,st.session_state.document_id)
     elif st.session_state.page == "Intervention Entry":
@@ -81,13 +89,7 @@ def main():
     elif st.session_state.page == "Simple Success":
         display_simple_success1()
 
-def save_user_state(db):
-    if st.session_state.user_code:
-        entry = {
-            "last_page": st.session_state.page,
-            # Add other session data if needed
-        }
-        upload_to_firebase(db, st.session_state.user_code, entry)
-        
+
+
 if __name__ == "__main__":
     main()
