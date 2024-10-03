@@ -33,7 +33,7 @@ def display_diagnoses(db, document_id, save_user_state):
                     button_key = f"select_option_{i}_{option}"
                     if st.button(f"{option}", key=button_key):
                         st.session_state.diagnoses[i] = option
-                        st.rerun()  # Rerun to update the input field with the selected diagnosis
+                        st.rerun()
 
             if current_diagnosis:
                 st.write(f"**Selected:** {current_diagnosis}")
@@ -56,19 +56,17 @@ def display_diagnoses(db, document_id, save_user_state):
                 }
 
                 try:
+                    # Upload the data to Firebase
                     upload_message = upload_to_firebase(db, document_id, entry)
                     st.success("Diagnoses submitted successfully.")
                     
-                    # Save user state here
-                    save_user_state(db)  # Make sure this is called after successful submission
-                    
-                    st.session_state.page = "Intervention Entry"
+                    # Update the session state for last page
+                    st.session_state.page = "Intervention Entry"  # Set to next page
+                    save_user_state(db)  # Save user state, should reflect the updated page
                     st.rerun()  # Rerun to navigate to the next page
                 except Exception as e:
                     st.error(f"Error uploading data: {e}")
-                st.session_state.page = "diagnoses"  # Update last page to diagnoses
             else:
                 st.error("Please do not provide duplicate diagnoses.")
         else:
             st.error("Please select all 5 diagnoses.")
-
