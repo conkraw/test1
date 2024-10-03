@@ -12,7 +12,7 @@ def main(db,document_id):
     interventions = st.text_area("Interventions Description", height=200)
 
     # Button to save to a local file (or any other desired action)
-    if st.button("Save Intervention"):
+    if st.button("Save Intervention",key="interventions_submit_button"):
         if interventions:
             # Collect session data
             session_data = collect_session_data()  # Collect session data
