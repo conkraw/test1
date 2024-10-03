@@ -1,3 +1,7 @@
+import streamlit as st
+from utils.session_management import collect_session_data  #######NEED THIS
+from utils.firebase_operations import upload_to_firebase  
+
 def main(db, document_id):
     # Initialize session state
     if 'current_page' not in st.session_state:
