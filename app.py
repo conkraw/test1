@@ -35,7 +35,6 @@ def main():
     if "page" not in st.session_state:
         st.session_state.page = "welcome"
 
-    # Initialize document_id to None initially
     if "document_id" not in st.session_state:
         st.session_state.document_id = None
 
@@ -44,11 +43,13 @@ def main():
         welcome_page()
     elif st.session_state.page == "login":
         users = load_users()
+        st.write(users)  # Debug output to check loaded users
+        
         user_code = login_page(users, db, st.session_state.document_id)  
         
-        if user_code:  # If the user code is returned from login_page
-            st.session_state.user_code = user_code  # Store the user code in session state
-            st.session_state.document_id = user_code  # Set document ID to user code
+        if user_code:
+            st.session_state.user_code = user_code
+            st.session_state.document_id = user_code
             st.write(f"Document ID set to: {st.session_state.document_id}")  # Debug output
 
     elif st.session_state.page == "intake_form":
