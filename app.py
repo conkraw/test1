@@ -49,8 +49,6 @@ def main():
             print(f"Document ID set to: {st.session_state.document_id}")  # Debug output
     elif st.session_state.page == "intake_form":
         display_intake_form(db, st.session_state.document_id)
-    elif st.session_state.page == "intake_form":
-        display_intake_form(db, st.session_state.document_id)
     elif st.session_state.page == "diagnoses":
         display_diagnoses(db, st.session_state.document_id)
     elif st.session_state.page == "Intervention Entry":
