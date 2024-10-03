@@ -49,8 +49,8 @@ def main():
         welcome_page()
     elif st.session_state.page == "login":
         users = load_users()
-        # Capture user input and set document_id directly from the input
-        st.session_state.user_code = login_page(users, db)  
+        # Pass document_id to login_page and update user_code and document_id
+        st.session_state.user_code = login_page(users, db, st.session_state.document_id)  
         if st.session_state.user_code:
             st.session_state.document_id = st.session_state.user_code  # Set document ID to user code
     elif st.session_state.page == "intake_form":
