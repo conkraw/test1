@@ -32,7 +32,7 @@ def display_simple_success1():
         if st.button("End Session"):
             # Clear session state
             st.session_state.clear()
-            st.success("Session ended successfully.")
+            st.success("Session ended successfully. Please close this window or tab.")
 
     else:
         st.error("No results available. Please complete the previous steps first.")
@@ -40,3 +40,4 @@ def display_simple_success1():
 # To use the display_summary function, just call it in the main app logic
 if __name__ == "__main__":
     display_simple_success1()
+
