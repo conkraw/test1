@@ -76,7 +76,7 @@ def main():
         welcome_page()
         if st.button("Continue to Login"):
             st.session_state.page = "login"
-            st.experimental_rerun()  # Refresh to navigate to the login page
+            st.rerun()  # Refresh to navigate to the login page
     elif st.session_state.page == "login":
         users = load_users()
         login_page(users, db, st.session_state.document_id)
@@ -118,7 +118,7 @@ def main():
     else:
         st.write("Page not found. Redirecting to welcome.")
         st.session_state.page = "welcome"
-        st.experimental_rerun()  # Redirect to welcome page
+        st.rerun()  # Redirect to welcome page
 
 if __name__ == "__main__":
     main()
