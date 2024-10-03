@@ -67,7 +67,9 @@ def display_diagnoses(db, document_id):  #######NEED THIS INCLUDING DB
                 except Exception as e:
                     st.error(f"Error uploading data: {e}")
 
+                # Save user state here
                 save_user_state(db)
+                
                 st.session_state.page = "Intervention Entry"
                 st.rerun()  # Rerun to navigate to the next page
             else:
