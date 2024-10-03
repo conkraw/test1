@@ -7,7 +7,8 @@ import json
 # Initialize Firebase
 def initialize_firebase():
     FIREBASE_KEY_JSON = os.getenv('FIREBASE_KEY')
-
+    FIREBASE_COLLECTION_NAME = os.getenv('FIREBASE_COLLECTION_NAME')
+    
     if FIREBASE_KEY_JSON is None:
         raise ValueError("FIREBASE_KEY environment variable not set.")
 
