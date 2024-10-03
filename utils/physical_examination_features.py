@@ -110,25 +110,30 @@ def display_physical_examination_features(db, document_id):
 
     # Submit button for physical examination features
     if st.button("Submit Physical Examination Features"):
-        pefeatures = {}  # Change from assessments to pefeatures
-        for i in range(5):
-            for diagnosis in st.session_state.diagnoses:
-                assessment = st.session_state[f"select_{i}_{diagnosis}_phys"]
-                if diagnosis not in pefeatures:  # Change from assessments to pefeatures
-                    pefeatures[diagnosis] = []
-                pefeatures[diagnosis].append({
-                    'physical_feature': st.session_state.physical_examination_features[i],
-                    'assessment': assessment
-                })
-        
-        entry = {
-            'pefeatures': pefeatures,  # Include pefeatures in the entry
-            'diagnoses_s3': st.session_state.diagnoses_s3  # Include diagnoses_s3 in the entry
-        }
+        # Check if at least one physical examination feature is entered
+        if not any(st.session_state.physical_examination_features):
+            st.error("Please enter at least one physical examination feature.")
+        else:
+            pefeatures = {}  # Change from assessments to pefeatures
+            for i in range(5):
+                for diagnosis in st.session_state.diagnoses:
+                    assessment = st.session_state[f"select_{i}_{diagnosis}_phys"]
+                    if diagnosis not in pefeatures:  # Change from assessments to pefeatures
+                        pefeatures[diagnosis] = []
+                    pefeatures[diagnosis].append({
+                        'physical_feature': st.session_state.physical_examination_features[i],
+                        'assessment': assessment
+                    })
+            
+            entry = {
+                'pefeatures': pefeatures,  # Include pefeatures in the entry
+                'diagnoses_s3': st.session_state.diagnoses_s3  # Include diagnoses_s3 in the entry
+            }
 
-        # Upload to Firebase using the current diagnosis order
-        upload_message = upload_to_firebase(db, 'your_collection_name', document_id, entry)
+            # Upload to Firebase using the current diagnosis order
+            upload_message = upload_to_firebase(db, 'your_collection_name', document_id, entry)
 
-        st.session_state.page = "Laboratory Tests"  # Change to the Simple Success page
-        st.success("Physical examination features submitted successfully.")
-        st.rerun()  # Rerun to update the app
+            st.session_state.page = "Laboratory Tests"  # Change to the Simple Success page
+            st.success("Physical examination features submitted successfully.")
+            st.rerun()  # Rerun to update the app
+
