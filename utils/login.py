@@ -4,7 +4,7 @@ import streamlit as st
 from utils.session_management import collect_session_data 
 from utils.firebase_operations import upload_to_firebase
 
-def login_page(users, db):
+def login_page(users, db, document_id):
     print("Entering login_page...")  # Debug output
     unique_code_input = st.text_input("Unique Code:")
     
