@@ -64,7 +64,7 @@ def run_virtual_patient(db,document_id):
     if elapsed_time < 15:
         with st.form("question_form"):
             user_input = st.text_input("Ask the virtual patient typical history questions you would want to know for this case:")
-            submit_button = st.form_submit_button("Submit")
+            submit_button = st.form_submit_button("Ask")
 
             if submit_button and user_input:
                 st.session_state.session_data['questions_asked'].append(user_input)
