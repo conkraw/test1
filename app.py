@@ -68,7 +68,7 @@ def main():
         welcome_page()
     elif st.session_state.page == "login":
         users = load_users()
-        login_page(users, db)  # Adjusted to only pass users and db
+        login_page(users, db,st.session_state.document_id)  # Adjusted to only pass users and db
     elif st.session_state.page == "intake_form":
         display_intake_form(db, st.session_state.document_id, save_user_state)
     elif st.session_state.page == "diagnoses":
