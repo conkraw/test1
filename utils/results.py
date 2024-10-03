@@ -16,7 +16,10 @@ def read_results_from_file():
 def display_results_image():
     st.title("Results")
     results = read_results_from_file()
-        
+    
+    # Insert a blank option at the start of the results list
+    results.insert(0, "")  # Add a blank option
+
     # Create a dropdown in Streamlit for the user to select a result
     selected_result = st.selectbox("Select a result", results)
 
