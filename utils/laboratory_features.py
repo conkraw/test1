@@ -105,7 +105,7 @@ def display_laboratory_features():
                 )
 
     # Submit button for laboratory features
-    if st.button("Submit Laboratory Features"):
+    if st.button("Submit"):
         # Ensure at least one laboratory feature is provided
         if not any(st.session_state.laboratory_features):
             st.error("Please enter at least one laboratory feature.")
