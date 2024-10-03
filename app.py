@@ -112,3 +112,6 @@ def main():
     elif st.session_state.page == "Simple Success":
         display_simple_success1()
 
+
+if __name__ == "__main__":
+    main()
