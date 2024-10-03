@@ -48,8 +48,8 @@ def main():
     db = initialize_firebase()
     
     # Initialize session state
-    if "unique_code" not in st.session_state:  # Changed from user_code to unique_code
-        st.session_state.unique_code = None
+    if "user_code" not in st.session_state:
+        st.session_state.user_code = None 
         
     if "page" not in st.session_state:
         st.session_state.page = "welcome"
@@ -58,7 +58,7 @@ def main():
     if "document_id" not in st.session_state:
         st.session_state.document_id = str(uuid.uuid4())
 
-    if st.session_state.unique_code:  # Check for unique_code
+    if st.session_state.user_code:
         last_page = load_last_page(db)
         if last_page:
             st.session_state.page = last_page
@@ -68,7 +68,7 @@ def main():
         welcome_page()
     elif st.session_state.page == "login":
         users = load_users()
-        login_page(users, db, st.session_state.document_id)  # Pass document ID
+        login_page(users, db)  # Adjusted to only pass users and db
     elif st.session_state.page == "intake_form":
         display_intake_form(db, st.session_state.document_id, save_user_state)
     elif st.session_state.page == "diagnoses":
