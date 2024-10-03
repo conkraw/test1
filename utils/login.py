@@ -11,18 +11,19 @@ def login_page(users, db, document_id):
     if st.button("Submit"):
         if unique_code_input:
             try:
-                unique_code = int(unique_code_input.strip())  # Convert to integer
+                unique_code = int(unique_code_input.strip())
                 st.write(f"Entered Unique Code: {unique_code}")  # Debug output
                 
-                if unique_code in users['code'].values:  # Check if in users DataFrame
+                if unique_code in users['code'].values:
                     st.session_state.user_name = users.loc[users['code'] == unique_code, 'name'].values[0]
                     st.session_state.unique_code = unique_code
                     
-                    # Prepare entry data
                     entry = {
                         "unique_code": unique_code,
                         "user_name": st.session_state.user_name,
                     }
+                    
+                    # Upload data to Firebase using the current document_id
                     upload_message = upload_to_firebase(db, document_id, entry)
 
                     st.success(upload_message)  # Show success message
