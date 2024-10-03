@@ -142,8 +142,9 @@ def display_other_tests(db, document_id):  # Updated to include db and document_
             }
 
             # Upload to Firebase
-            upload_message = upload_to_firebase(db, 'your_collection_name', document_id, entry)
-
+            #upload_message = upload_to_firebase(db, 'your_collection_name', document_id, entry)
+            upload_message = upload_to_firebase(db, document_id, entry)
+            
             st.session_state.page = "Results"  # Change to the Simple Success page
             st.success("Other tests submitted successfully.")
             st.rerun()  # Rerun to update the app
