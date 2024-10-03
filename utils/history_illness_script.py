@@ -118,7 +118,7 @@ def main(db, document_id):
                     )
 
         # Submit button for historical features
-        if st.button("Submit Historical Features"):
+        if st.button("Submit"):
             if not any(st.session_state.historical_features):  # Check if at least one historical feature is entered
                 st.error("Please enter at least one historical feature.")
             else:
