@@ -91,7 +91,11 @@ def display_intake_form(db,document_id, save_user_state):
             upload_message = upload_to_firebase(db, document_id, entry)
 
             save_user_state(db)
+            
+            st.session_state.intake_submitted = True
+            
             st.session_state.page = "diagnoses"  # Move to Diagnoses page
+            
             st.rerun()  # Rerun the app to refresh the page
 
     else:
