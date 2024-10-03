@@ -15,14 +15,15 @@ def display_diagnoses(db, document_id):  #######NEED THIS INCLUDING DB
 
     dx_options = read_diagnoses_from_file()
 
-    st.markdown("""## DIFFERENTIAL DIAGNOSIS""")
+    st.markdown("""## DIFFERENTIAL DIAGNOSIS
+    Please search and select 5 possible diagnoses for the condition you think the patient has in order of likelihood. You will be allowed to alter your choices as you go through the case.""")
 
     cols = st.columns(5)
 
     for i, col in enumerate(cols):
         with col:
             current_diagnosis = st.session_state.diagnoses[i]
-            search_input = st.text_input(f"Diagnosis {i + 1}", value=current_diagnosis, key=f"diagnosis_search_{i}")
+            search_input = st.text_input(f"Diagnosis # {i + 1}", value=current_diagnosis, key=f"diagnosis_search_{i}")
 
             # Filter options based on the search input
             filtered_options = [dx for dx in dx_options if search_input.lower() in dx.lower()] if search_input else []
