@@ -32,6 +32,15 @@ def save_user_state(db):
             # Add other session data if needed
         }
         upload_to_firebase(db, st.session_state.user_code, entry)
+
+def load_last_page(db):
+    collection_name = st.secrets["FIREBASE_COLLECTION_NAME"]  # Get collection name from secrets
+    if st.session_state.user_code:
+        user_data = db.collection(collection_name).document(st.session_state.user_code).get()
+        if user_data.exists:
+            return user_data.to_dict().get("last_page")
+    return None
+
         
 def main():
     # Initialize Firebase
@@ -48,9 +57,10 @@ def main():
     if "document_id" not in st.session_state:
         st.session_state.document_id = str(uuid.uuid4())
 
-    # Debugging statements
-    #st.write(f"Current page: {st.session_state.page}")  
-    #st.write(f"Current Document ID: {st.session_state.document_id}")
+    if st.session_state.user_code:
+        last_page = load_last_page(db)
+        if last_page:
+            st.session_state.page = last_page
 
     # Page routing
     if st.session_state.page == "welcome":
