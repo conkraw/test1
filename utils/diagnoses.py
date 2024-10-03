@@ -15,8 +15,7 @@ def display_diagnoses(db, document_id):  #######NEED THIS INCLUDING DB
 
     dx_options = read_diagnoses_from_file()
 
-    st.markdown("""## DIFFERENTIAL DIAGNOSIS UPDATE
-                    Please review and update your differential diagnosis list as necessary.""")
+    st.markdown("""## DIFFERENTIAL DIAGNOSIS""")
 
     cols = st.columns(5)
 
