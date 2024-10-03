@@ -14,6 +14,7 @@ def read_results_from_file():
         return []
 
 def display_results_image():
+    st.title("Results")
     results = read_results_from_file()
         
     # Create a dropdown in Streamlit for the user to select a result
