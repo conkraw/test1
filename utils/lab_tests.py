@@ -38,7 +38,7 @@ def display_laboratory_tests(db, document_id):  # Updated to include db and docu
 
     st.title("Laboratory Tests")
 
-    st.markdown("""Please select up to 5 laboratory tests that you would order and describe how they influence the differential diagnosis.""")
+    st.markdown("""Of the following, please select up to 5 laboratory tests that you would order and describe how they influence the differential diagnosis.""")
 
     # Reorder section in the sidebar
     with st.sidebar:
