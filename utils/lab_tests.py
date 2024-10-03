@@ -119,25 +119,33 @@ def display_laboratory_tests(db, document_id):  # Updated to include db and docu
     # Submit button for laboratory tests
     if st.button("Submit Laboratory Tests"):
         lab_tests_data = {}  # Store lab tests and assessments
-        for i in range(5):
-            for diagnosis in st.session_state.diagnoses:
-                assessment = st.session_state[f"select_{i}_{diagnosis}_lab"]
-                if diagnosis not in lab_tests_data:
-                    lab_tests_data[diagnosis] = []
-                lab_tests_data[diagnosis].append({
-                    'laboratory_test': st.session_state[f"lab_row_{i}"],
-                    'assessment': assessment
-                })
+        # Check if at least one laboratory test is selected
+        if not any(st.session_state[f"lab_row_{i}"] for i in range(5)):
+            st.error("Please select at least one laboratory test.")
+        else:
+            for i in range(5):
+                for diagnosis in st.session_state.diagnoses:
+                    assessment = st.session_state[f"select_{i}_{diagnosis}_lab"]
+                    if diagnosis not in lab_tests_data:
+                        lab_tests_data[diagnosis] = []
+                    lab_tests_data[diagnosis].append({
+                        'laboratory_test': st.session_state[f"lab_row_{i}"],
+                        'assessment': assessment
+                    })
 
-        entry = {
-            'laboratory_tests': lab_tests_data,  # Include laboratory tests data
-            'diagnoses_s4': st.session_state.diagnoses  # Changed from diagnoses_s3 to diagnoses_s4
-        }
+            # Set diagnoses_s4 to the current state of diagnoses
+            st.session_state.diagnoses_s4 = [dx for dx in st.session_state.diagnoses if dx]  # Update with current order
 
-        # Upload to Firebase using the current diagnosis order
-        upload_message = upload_to_firebase(db, 'your_collection_name', document_id, entry)
+            entry = {
+                'laboratory_tests': lab_tests_data,  # Include laboratory tests data
+                'diagnoses_s4': st.session_state.diagnoses_s4  # Include diagnoses_s4 in the entry
+            }
 
-        st.session_state.page = "Radiology Tests"  # Change to the Simple Success page
-        st.success("Laboratory tests submitted successfully.")
-        st.rerun()  # Rerun to update the app
+            # Upload to Firebase using the current diagnosis order
+            upload_message = upload_to_firebase(db, 'your_collection_name', document_id, entry)
+
+            st.session_state.page = "Radiology Tests"  # Change to the Simple Success page
+            st.success("Laboratory tests submitted successfully.")
+            st.rerun()  # Rerun to update the app
+
 
