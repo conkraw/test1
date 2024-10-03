@@ -125,6 +125,9 @@ def display_physical_examination_features(db, document_id):
                         'assessment': assessment
                     })
             
+            # Always update diagnoses_s3 to the current state of diagnoses
+            st.session_state.diagnoses_s3 = [dx for dx in st.session_state.diagnoses if dx]  # Ensure it's always set
+
             entry = {
                 'pefeatures': pefeatures,  # Include pefeatures in the entry
                 'diagnoses_s3': st.session_state.diagnoses_s3  # Include diagnoses_s3 in the entry
@@ -136,4 +139,5 @@ def display_physical_examination_features(db, document_id):
             st.session_state.page = "Laboratory Tests"  # Change to the Simple Success page
             st.success("Physical examination features submitted successfully.")
             st.rerun()  # Rerun to update the app
+
 
