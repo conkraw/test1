@@ -30,5 +30,10 @@ def initialize_firebase():
 
 def upload_to_firebase(db, document_id, entry):
     global FIREBASE_COLLECTION_NAME  # Access the global variable
+    
+    if FIREBASE_COLLECTION_NAME is None:
+        raise ValueError("FIREBASE_COLLECTION_NAME is not set.")
+    
     db.collection(FIREBASE_COLLECTION_NAME).document(document_id).set(entry, merge=True) 
     return "Data uploaded to Firebase."
+
