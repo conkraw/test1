@@ -12,9 +12,9 @@ def login_page(users, db, document_id):  # Accept document_id as a parameter
                 # Convert the input to an integer and check if it's valid
                 unique_code = int(unique_code_input.strip())
                 if unique_code in users['code'].values:
-                    # Store the unique code in session state
+                    # Store the unique code in session state as a string
                     st.session_state.user_name = users.loc[users['code'] == unique_code, 'name'].values[0]
-                    st.session_state.user_code = unique_code  # Store unique_code in user_code
+                    st.session_state.user_code = str(unique_code)  # Convert to string
 
                     # Collect session data after setting the unique code
                     session_data = collect_session_data()
@@ -43,3 +43,4 @@ def login_page(users, db, document_id):  # Accept document_id as a parameter
             st.error("Please enter a code.")
     
     return None  # Return None if no valid login is made
+
