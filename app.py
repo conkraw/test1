@@ -52,22 +52,18 @@ def main():
     if "page" not in st.session_state:
         st.session_state.page = "welcome"
     
-    # Generate a unique document ID at the start of the session
     if "document_id" not in st.session_state:
         st.session_state.document_id = str(uuid.uuid4())
 
     # Debugging: Print current user code and page
     st.write("User Code:", st.session_state.user_code)
-    st.write("Current Page Before Loading Last Page:", st.session_state.page)
+    st.write("Current Page:", st.session_state.page)
 
-    # Load the last page if the user is logged in
+    # Load last page if user is logged in
     if st.session_state.user_code:
         last_page = load_last_page(db)
         if last_page:
             st.session_state.page = last_page
-
-    # Debugging: Print the page after loading last page
-    st.write("Current Page After Loading Last Page:", st.session_state.page)
 
     # Page routing
     if st.session_state.page == "welcome":
@@ -77,11 +73,9 @@ def main():
         login_page(users, db, st.session_state.document_id)  # Pass document ID
 
         # Check if login was successful
-        if st.session_state.user_code:  # Assuming this gets set on successful login
-            # Update the page to the last visited page after login
-            last_page = load_last_page(db)
-            st.session_state.page = last_page if last_page else "welcome"
-            st.experimental_rerun()  # Refresh to navigate correctly
+        if st.session_state.user_code:  # Ensure user code is set
+            st.session_state.page = load_last_page(db) or "welcome"
+            st.experimental_rerun()  # Refresh to navigate to the last page
     elif st.session_state.page == "intake_form":
         display_intake_form(db, st.session_state.document_id, save_user_state)
     elif st.session_state.page == "diagnoses":
@@ -90,28 +84,14 @@ def main():
         intervention_entry_main(db, st.session_state.document_id)
     elif st.session_state.page == "History with AI":
         run_virtual_patient(db, st.session_state.document_id)
-    elif st.session_state.page == "Focused Physical Examination":
-        display_focused_physical_examination(db, st.session_state.document_id)
-    elif st.session_state.page == "Physical Examination Components":
-        display_physical_examination()
-    elif st.session_state.page == "History Illness Script":
-        history_illness_script(db, st.session_state.document_id)
-    elif st.session_state.page == "Physical Examination Features":
-        display_physical_examination_features(db, st.session_state.document_id)
-    elif st.session_state.page == "Laboratory Tests":
-        display_laboratory_tests(db, st.session_state.document_id)
-    elif st.session_state.page == "Radiology Tests":
-        display_radiological_tests(db, st.session_state.document_id)
-    elif st.session_state.page == "Other Tests":
-        display_other_tests(db, st.session_state.document_id)
-    elif st.session_state.page == "Results":
-        display_results_image()
-    elif st.session_state.page == "Laboratory Features":
-        display_laboratory_features(db, st.session_state.document_id)
-    elif st.session_state.page == "Treatments":
-        display_treatments(db, st.session_state.document_id)
-    elif st.session_state.page == "Simple Success":
-        display_simple_success1()
-        
+    # Add other pages as needed...
+    else:
+        st.write("Page not found. Redirecting to welcome.")
+        st.session_state.page = "welcome"
+        st.experimental_rerun()  # Redirect to welcome page
+
+if __name__ == "__main__":
+    main()
+
 if __name__ == "__main__":
     main()
