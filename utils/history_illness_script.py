@@ -113,26 +113,29 @@ def main(db,document_id):
             entry = {
                 'assessments': {}
             }
-
+        
+            # Make sure to capture assessments in the current order of diagnoses
             assessments = {}
             for i in range(5):
                 for diagnosis in st.session_state.diagnoses:
                     assessment = st.session_state[f"select_{i}_{diagnosis}_hist"]
                     if diagnosis not in entry['assessments']:
                         entry['assessments'][diagnosis] = []
+                    # Create a structured entry with historical feature and its assessment
                     entry['assessments'][diagnosis].append({
                         'historical_feature': st.session_state.historical_features[i],
                         'assessment': assessment
                     })
+        
             session_data = collect_session_data()  # Collect session data
-           
-            # Combine entry with session data if needed (for example)
-            #session_data.update(entry)  # If
-            
+        
+            # If you need to update session_data with the entry
+            # session_data.update(entry)
+        
+            # Upload to Firebase using the current diagnosis order
             upload_message = upload_to_firebase(db, 'your_collection_name', document_id, entry)
-
+        
             st.session_state.page = "Physical Examination Features"  # Change to the Simple Success page
             st.success("Historical features submitted successfully.")
             st.rerun()  # Rerun to update the app
-
 
