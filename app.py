@@ -56,23 +56,21 @@ def main():
     if "document_id" not in st.session_state:
         st.session_state.document_id = str(uuid.uuid4())
 
-    # Page routing based on user interactions
+    # Load last visited page if user is logged in
     if st.session_state.user_code:
         last_page = load_last_page(db)
         if last_page:
             st.session_state.page = last_page
-
-    # Logic to switch to using unique_code as document ID
-    if st.session_state.user_code and st.session_state.user_code != "new_user":
-        st.session_state.document_id = st.session_state.user_code  # Use unique_code as document ID
 
     # Page routing
     if st.session_state.page == "welcome":
         welcome_page()
     elif st.session_state.page == "login":
         users = load_users()
-        if login_page(users, db, st.session_state.document_id):  # Assuming this function returns a user_code
-            st.session_state.user_code = login_page(users, db, st.session_state.document_id)  # Set user_code after login
+        unique_code = login_page(users, db, st.session_state.document_id)  # Assuming this returns the unique_code
+        if unique_code:
+            st.session_state.user_code = unique_code  # Set user_code from unique_code input
+            st.session_state.document_id = unique_code  # Use unique_code as document ID for future data
     elif st.session_state.page == "intake_form":
         display_intake_form(db, st.session_state.document_id)
     elif st.session_state.page == "diagnoses":
