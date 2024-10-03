@@ -53,7 +53,7 @@ def main():
         # Call login_page and capture the unique code input
         st.session_state.user_code = login_page(users, db, st.session_state.document_id)  
         
-        if st.session_state.user_code:  # If the user code is returned from login_page
+        #if st.session_state.user_code:  # If the user code is returned from login_page
             # You can still set the document ID based on user code if needed
             # st.session_state.document_id = st.session_state.user_code  
 
