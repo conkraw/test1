@@ -23,62 +23,84 @@ from utils.laboratory_features import display_laboratory_features
 from utils.treatments import display_treatments
 from utils.firebase_operations import initialize_firebase, upload_to_firebase
 from utils.session_management import collect_session_data
+import uuid  # To generate unique document IDs
 
+def save_user_state(db):
+    if st.session_state.user_code:
+        entry = {
+            "last_page": st.session_state.page,
+            # Add other session data if needed
+        }
+        upload_to_firebase(db, st.session_state.user_code, entry)
+
+def load_last_page(db):
+    collection_name = st.secrets["FIREBASE_COLLECTION_NAME"]  # Get collection name from secrets
+    if st.session_state.user_code:
+        user_data = db.collection(collection_name).document(st.session_state.user_code).get()
+        if user_data.exists:
+            return user_data.to_dict().get("last_page")
+    return "welcome"
+
+        
 def main():
+    # Initialize Firebase
     db = initialize_firebase()
     
-    if "user_code" not in st.session_state:
-        st.session_state.user_code = None 
+    # Initialize session state
+    if "user_code" not in st.session_state: ###
+        st.session_state.user_code = None ###
         
     if "page" not in st.session_state:
         st.session_state.page = "welcome"
-
+    
+    # Generate a unique document ID at the start of the session
     if "document_id" not in st.session_state:
-        st.session_state.document_id = None
+        st.session_state.document_id = str(uuid.uuid4())
 
+    if st.session_state.user_code:
+        last_page = load_last_page(db)
+        if last_page:
+            st.session_state.page = last_page
+
+    # Page routing
     if st.session_state.page == "welcome":
         welcome_page()
     elif st.session_state.page == "login":
         users = load_users()
-        print(users)  # Debug output to check loaded users
-        
-        unique_code_input = login_page(users, db)  # Get the raw input
-        
-        if unique_code_input:  # If the user input is returned from login_page
-            st.session_state.document_id = unique_code_input  # Set document ID to user input
-            print(f"Document ID set to: {st.session_state.document_id}")  # Debug output
+        login_page(users, db, st.session_state.document_id)  # Pass document ID
     elif st.session_state.page == "intake_form":
-        display_intake_form(db, st.session_state.document_id)
+        display_intake_form(db, st.session_state.document_id, save_user_state)
     elif st.session_state.page == "diagnoses":
-        display_diagnoses(db, st.session_state.document_id)
+        display_diagnoses(db,st.session_state.document_id,save_user_state)
     elif st.session_state.page == "Intervention Entry":
-        intervention_entry_main(db, st.session_state.document_id)
+        intervention_entry_main(db,st.session_state.document_id)
     elif st.session_state.page == "History with AI":
-        run_virtual_patient(db, st.session_state.document_id)
+        run_virtual_patient(db,st.session_state.document_id)
     elif st.session_state.page == "Focused Physical Examination":
-        display_focused_physical_examination(db, st.session_state.document_id)
+        display_focused_physical_examination(db, st.session_state.document_id)  # Pass document ID
     elif st.session_state.page == "Physical Examination Components":
         display_physical_examination()
     elif st.session_state.page == "History Illness Script":
-        history_illness_script(db, st.session_state.document_id)
+        history_illness_script(db,st.session_state.document_id)
     elif st.session_state.page == "Physical Examination Features":
-        display_physical_examination_features(db, st.session_state.document_id)
+        display_physical_examination_features(db,st.session_state.document_id)
     elif st.session_state.page == "Laboratory Tests":
-        display_laboratory_tests(db, st.session_state.document_id)
+        display_laboratory_tests(db,st.session_state.document_id)
     elif st.session_state.page == "Radiology Tests":
-        display_radiological_tests(db, st.session_state.document_id)
+        display_radiological_tests(db,st.session_state.document_id)
     elif st.session_state.page == "Other Tests":
-        display_other_tests(db, st.session_state.document_id)
+        display_other_tests(db,st.session_state.document_id)
     elif st.session_state.page == "Results":
         display_results_image()
     elif st.session_state.page == "Laboratory Features":
-        display_laboratory_features(db, st.session_state.document_id)
+        display_laboratory_features(db,st.session_state.document_id)
     elif st.session_state.page == "Treatments":
-        display_treatments(db, st.session_state.document_id)
+        display_treatments(db,st.session_state.document_id)
     elif st.session_state.page == "Simple Success":
         display_simple_success1()
 
+
+
 if __name__ == "__main__":
     main()
-
 
