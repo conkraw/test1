@@ -28,9 +28,6 @@ def display_focused_physical_examination(db,document_id):
          
         # Collect session data
         session_data = collect_session_data()  # Collect session data
-        
-
-   
 
     # Upload the session data to Firebase
         upload_message = upload_to_firebase(db, 'your_collection_name', document_id, entry)
