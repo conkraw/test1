@@ -69,9 +69,9 @@ def main():
         users = load_users()
         login_page(users, db, st.session_state.document_id)  # Pass document ID
     elif st.session_state.page == "intake_form":
-        display_intake_form(db, st.session_state.document_id, save_user_state)
+        display_intake_form(db, st.session_state.document_id)
     elif st.session_state.page == "diagnoses":
-        display_diagnoses(db,st.session_state.document_id,save_user_state)
+        display_diagnoses(db,st.session_state.document_id)
     elif st.session_state.page == "Intervention Entry":
         intervention_entry_main(db,st.session_state.document_id)
     elif st.session_state.page == "History with AI":
