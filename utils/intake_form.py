@@ -2,6 +2,7 @@ import streamlit as st
 from utils.file_operations import read_text_file, load_vital_signs
 from utils.session_management import collect_session_data  #######NEED THIS
 from utils.firebase_operations import upload_to_firebase
+from app import save_user_state
 
 def display_intake_form(db,document_id):
     st.markdown(f"<h3 style='font-family: \"DejaVu Sans\";'>Welcome {st.session_state.user_name}! Here is the intake form.</h3>", unsafe_allow_html=True)
