@@ -31,10 +31,7 @@ def display_treatments(db, document_id):
 
     st.title("Treatments App")
 
-    st.markdown("""
-        ### TREATMENTS
-        Please provide up to 5 treatments that influence the differential diagnosis.
-    """)
+    st.markdown("""Please provide up to 5 treatments and describe how they impact the diagnoses you have selected.""")
 
     # Reorder section in the sidebar
     with st.sidebar:
@@ -84,7 +81,6 @@ def display_treatments(db, document_id):
     # Display treatments
     cols = st.columns(len(st.session_state.diagnoses) + 1)
     with cols[0]:
-        st.markdown("Treatments")
 
     for diagnosis, col in zip(st.session_state.diagnoses, cols[1:]):
         with col:
