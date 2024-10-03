@@ -34,7 +34,13 @@ def display_diagnoses(db, document_id):  #######NEED THIS INCLUDING DB
                     button_key = f"select_option_{i}_{option}"
                     if st.button(f"{option}", key=button_key):
                         st.session_state.diagnoses[i] = option
+                        st.session_state.selected_option = True  # Flag that an option has been selected
                         st.rerun()  # Rerun to update the input field with the selected diagnosis
+                # Hide buttons if a selection has been made
+                if current_diagnosis:
+                    st.session_state.selected_option = True
+                else:
+                    st.session_state.selected_option = False
 
             # Show the selected diagnosis
             if current_diagnosis:
