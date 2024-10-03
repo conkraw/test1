@@ -1,3 +1,8 @@
+import streamlit as st
+from utils.file_operations import read_diagnoses_from_file
+from utils.session_management import collect_session_data
+from utils.firebase_operations import upload_to_firebase
+
 def display_diagnoses(db, document_id, save_user_state):
     # Ensure diagnoses are initialized
     if 'diagnoses' not in st.session_state:
@@ -12,7 +17,7 @@ def display_diagnoses(db, document_id, save_user_state):
 
     st.markdown("""## DIFFERENTIAL DIAGNOSIS
     Please search and select 5 possible diagnoses for the condition you think the patient has in order of likelihood. You will be allowed to alter your choices as you go through the case.""")
-    
+
     cols = st.columns(5)
 
     for i, col in enumerate(cols):
@@ -43,7 +48,7 @@ def display_diagnoses(db, document_id, save_user_state):
         diagnoses = [d.strip() for d in st.session_state.diagnoses]
         if all(diagnosis for diagnosis in diagnoses):
             if len(diagnoses) == len(set(diagnoses)):
-                session_data = collect_session_data() 
+                session_data = collect_session_data()
 
                 # Create entry with the diagnoses data
                 entry = {
@@ -58,10 +63,11 @@ def display_diagnoses(db, document_id, save_user_state):
                     # Upload the data to Firebase
                     upload_message = upload_to_firebase(db, document_id, entry)
                     st.success("Diagnoses submitted successfully.")
+
+                    # Save user state here
+                    save_user_state(db)  # Save user state after successful submission
                     
-                    # Update the session state for last page
                     st.session_state.page = "Intervention Entry"  # Set to next page
-                    save_user_state(db)  # Save user state, should reflect the updated page
                     st.rerun()  # Rerun to navigate to the next page
                 except Exception as e:
                     st.error(f"Error uploading data: {e}")
@@ -69,3 +75,4 @@ def display_diagnoses(db, document_id, save_user_state):
                 st.error("Please do not provide duplicate diagnoses.")
         else:
             st.error("Please select all 5 diagnoses.")
+
