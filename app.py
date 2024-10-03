@@ -41,6 +41,7 @@ def load_last_page(db):
             return user_data.to_dict().get("last_page")
     return "welcome"
 
+
 def main():
     # Initialize Firebase
     db = initialize_firebase()
