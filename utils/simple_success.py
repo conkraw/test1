@@ -1,6 +1,6 @@
 import streamlit as st
 
-def display_summary():
+def simple_success():
     # Check if the required session state variables exist
     if 'diagnoses' in st.session_state and 'treatments' in st.session_state:
         diagnoses = st.session_state.diagnoses
