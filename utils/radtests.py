@@ -144,8 +144,9 @@ def display_radiological_tests(db, document_id):  # Updated to include db and do
             }
 
             # Upload to Firebase
-            upload_message = upload_to_firebase(db, 'your_collection_name', document_id, entry)
-
+            #upload_message = upload_to_firebase(db, 'your_collection_name', document_id, entry)
+            upload_message = upload_to_firebase(db, document_id, entry)
+            
             st.session_state.page = "Other Tests"  # Change to the Simple Success page
             st.success("Radiological tests submitted successfully.")
             st.rerun()  # Rerun to update the app
