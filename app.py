@@ -40,14 +40,16 @@ def main():
         welcome_page()
     elif st.session_state.page == "login":
         users = load_users()
-        st.write(users)  # Debug output to check loaded users
+        print(users)  # Debug output to check loaded users
         
         unique_code_input = login_page(users, db)  # Get the raw input
         
         if unique_code_input:  # If the user input is returned from login_page
             st.session_state.document_id = unique_code_input  # Set document ID to user input
-            st.write(f"Document ID set to: {st.session_state.document_id}")  # Debug output
+            print(f"Document ID set to: {st.session_state.document_id}")  # Debug output
 
+    elif st.session_state.page == "intake_form":
+        display_intake_form(db, st.session_state.document_id)
     elif st.session_state.page == "intake_form":
         display_intake_form(db, st.session_state.document_id)
     elif st.session_state.page == "intake_form":
