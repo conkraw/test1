@@ -12,7 +12,7 @@ def read_diagnoses_from_file():
         st.error(f"Error reading dx_list.txt: {e}")
         return []
 
-def display_physical_examination_features():
+def display_physical_examination_features(db,document_id):
     # Initialize session state
     if 'current_page' not in st.session_state:
         st.session_state.current_page = "physical_examination_features"
