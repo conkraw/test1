@@ -48,7 +48,7 @@ def display_diagnoses(db, document_id, save_user_state):  #######NEED THIS INCLU
             if current_diagnosis and current_diagnosis in dx_options:
                 st.session_state.diagnoses[i] = current_diagnosis
 
-    if st.button("Submit"):
+    if st.button("Submit",key="diagnosis_submit_button"):
         diagnoses = [d.strip() for d in st.session_state.diagnoses]
         if all(diagnosis for diagnosis in diagnoses):
             if len(diagnoses) == len(set(diagnoses)):
