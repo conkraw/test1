@@ -26,12 +26,14 @@ from utils.firebase_operations import initialize_firebase, upload_to_firebase
 from utils.session_management import collect_session_data
 
 def save_user_state(db):
-    if st.session_state.unique_code:  # Use unique_code
+    if st.session_state.unique_code:
         entry = {
             "last_page": st.session_state.page,
             # Add other session data if needed
         }
-        upload_to_firebase(db, st.session_state.unique_code, entry)
+        # Convert unique_code to string
+        upload_to_firebase(db, str(st.session_state.unique_code), entry)
+
 
 def load_last_page(db):
     collection_name = st.secrets["FIREBASE_COLLECTION_NAME"]  # Get collection name from secrets
