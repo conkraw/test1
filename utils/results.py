@@ -41,7 +41,7 @@ def display_results_image():
         st.image(image_path, caption=selected_result, use_column_width=True)
 
     # Add a button to go to the next page
-    if st.button("Next Page"):
+    if st.button("Next Page",key="results_next_button"):
         st.session_state.page = "Laboratory Features"  # Change to the Simple Success page
         st.rerun()  # Rerun to update the app
 
