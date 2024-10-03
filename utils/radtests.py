@@ -114,7 +114,7 @@ def display_radiological_tests(db, document_id):  # Updated to include db and do
                 )
 
     # Submit button for radiological tests
-    if st.button("Submit"):
+    if st.button("Submit",key="radtests_submit_button"):
         assessments = {}
         at_least_one_selected = False
 
