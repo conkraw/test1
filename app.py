@@ -22,17 +22,17 @@ from utils.firebase_operations import initialize_firebase, upload_to_firebase
 import uuid  # To generate unique document IDs
 
 def save_user_state(db):
-    if st.session_state.unique_code:  # Changed to unique_code
+    if st.session_state.unique_code:  # Ensure unique_code is set
         entry = {
             "last_page": st.session_state.page,
             # Add other session data if needed
         }
-        upload_to_firebase(db, st.session_state.unique_code, entry)  # Upload using unique_code
+        upload_to_firebase(db, str(st.session_state.unique_code), entry)  # Ensure it's a string
 
 def load_last_page(db):
     collection_name = st.secrets["FIREBASE_COLLECTION_NAME"]  # Get collection name from secrets
-    if st.session_state.unique_code:  # Changed to unique_code
-        user_data = db.collection(collection_name).document(st.session_state.unique_code).get()
+    if st.session_state.unique_code:  # Ensure unique_code is set
+        user_data = db.collection(collection_name).document(str(st.session_state.unique_code)).get()  # Ensure it's a string
         if user_data.exists:
             return user_data.to_dict().get("last_page", "welcome")  # Default to "welcome"
     return "welcome"
@@ -42,7 +42,7 @@ def main():
     db = initialize_firebase()
     
     # Initialize session state
-    if "unique_code" not in st.session_state:  # Changed from user_code to unique_code
+    if "unique_code" not in st.session_state:
         st.session_state.unique_code = None
         
     if "page" not in st.session_state:
@@ -56,7 +56,7 @@ def main():
     st.write("Current Page:", st.session_state.page)
 
     # Load last page if user is logged in
-    if st.session_state.unique_code:  # Changed from user_code to unique_code
+    if st.session_state.unique_code:  # Ensure unique_code is set
         last_page = load_last_page(db)
         if last_page:
             st.session_state.page = last_page
@@ -110,4 +110,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
