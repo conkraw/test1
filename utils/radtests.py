@@ -38,10 +38,7 @@ def display_radiological_tests(db, document_id):  # Updated to include db and do
 
     st.title("Radiological Tests App")
 
-    st.markdown("""
-        ### RADIOLOGICAL TESTS
-        Please select up to 5 radiological tests that influence the differential diagnosis.
-    """)
+    st.markdown("""Please select up to 5 radiological tests that you would order and describe how they influence the differential diagnosis.""")
 
     # Reorder section in the sidebar
     with st.sidebar:
