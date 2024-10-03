@@ -3,8 +3,8 @@
 import pandas as pd
 
 def load_users():
-    return pd.read_csv('users.csv')
-    
+    #return pd.read_csv('users.csv')
+    return pd.read_csv('users.txt')
 def read_text_file(file_path):
     try:
         with open(file_path, 'r') as file:
