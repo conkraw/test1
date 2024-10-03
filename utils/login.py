@@ -11,15 +11,14 @@ def login_page(users, db, document_id):
     if st.button("Submit"):
         if unique_code_input:
             try:
-                unique_code = int(unique_code_input.strip())  # Ensure the code is an integer
+                unique_code = int(unique_code_input.strip())  # Convert to integer
                 st.write(f"Entered Unique Code: {unique_code}")  # Debug output
                 
-                if str(unique_code) in users['code'].astype(str).values:
-                #if unique_code in users['code'].values:
+                if unique_code in users['code'].values:  # Check if in users DataFrame
                     st.session_state.user_name = users.loc[users['code'] == unique_code, 'name'].values[0]
                     st.session_state.unique_code = unique_code
                     
-                    # Prepare the entry data
+                    # Prepare entry data
                     entry = {
                         "unique_code": unique_code,
                         "user_name": st.session_state.user_name,
@@ -37,3 +36,4 @@ def login_page(users, db, document_id):
         else:
             st.error("Please enter a code.")
     return None  # Return None if no valid code was entered
+
