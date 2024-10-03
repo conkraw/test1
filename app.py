@@ -23,7 +23,6 @@ from utils.laboratory_features import display_laboratory_features
 from utils.treatments import display_treatments
 from utils.firebase_operations import initialize_firebase, upload_to_firebase
 from utils.session_management import collect_session_data
-import uuid  # To generate unique document IDs
 
 def main():
     # Initialize Firebase
@@ -36,11 +35,8 @@ def main():
     if "page" not in st.session_state:
         st.session_state.page = "welcome"
     
-    # Use user-provided code as document ID
-    if "document_id" not in st.session_state and st.session_state.user_code:
-        st.session_state.document_id = st.session_state.user_code
-    else:
-        # Handle case where user code is not set yet
+    # Set document ID directly from user input
+    if "document_id" not in st.session_state:
         st.session_state.document_id = None
 
     if st.session_state.user_code:
@@ -53,10 +49,10 @@ def main():
         welcome_page()
     elif st.session_state.page == "login":
         users = load_users()
-        # Pass document_id to login_page and capture user_code
-        st.session_state.user_code = login_page(users, db, st.session_state.document_id)  
+        # Capture user input and set document_id directly from the input
+        st.session_state.user_code = login_page(users, db)  
         if st.session_state.user_code:
-            st.session_state.document_id = st.session_state.user_code  # Set document ID
+            st.session_state.document_id = st.session_state.user_code  # Set document ID to user code
     elif st.session_state.page == "intake_form":
         display_intake_form(db, st.session_state.document_id)
     elif st.session_state.page == "diagnoses":
@@ -90,4 +86,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
