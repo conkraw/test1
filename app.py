@@ -1,4 +1,7 @@
 import streamlit as st
+
+st.set_page_config(layout="wide")
+
 from utils.file_operations import load_users
 from utils.welcome import welcome_page
 from utils.login import login_page
@@ -21,8 +24,6 @@ from utils.treatments import display_treatments
 from utils.firebase_operations import initialize_firebase, upload_to_firebase
 from utils.session_management import collect_session_data
 import uuid  # To generate unique document IDs
-
-st.set_page_config(layout="wide")
 
 def main():
     # Initialize Firebase
