@@ -109,7 +109,7 @@ def display_physical_examination_features(db, document_id):
                 )
 
     # Submit button for physical examination features
-    if st.button("Submit Physical Examination Features"):
+    if st.button("Submit"):
         # Check if at least one physical examination feature is entered
         if not any(st.session_state.physical_examination_features):
             st.error("Please enter at least one physical examination feature.")
