@@ -85,7 +85,7 @@ def display_intake_form(db,document_id):
 
             # Ensure you define the entry structure, e.g., entry = st.session_state.vs_data
             
-            entry = st.session_state.vs_data  # This assumes you want to upload vs_data
+            entry = {'vs_data': st.session_state.vs_data}  # This assumes you want to upload vs_data
 
             upload_message = upload_to_firebase(db, document_id, entry)
             #upload_message = upload_to_firebase(db, 'your_collection_name', document_id, entry)   
