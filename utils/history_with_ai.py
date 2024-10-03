@@ -43,7 +43,7 @@ def get_chatgpt_response(user_input):
         return random.choice(alternative_responses)
 
 def run_virtual_patient(db,document_id):
-    st.title("Virtual Patient)
+    st.title("Virtual Patient")
 
     st.info(
         "You will have the opportunity to perform a history and ask for important physical examination details. "
