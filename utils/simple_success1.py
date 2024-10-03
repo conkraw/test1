@@ -28,7 +28,7 @@ def display_simple_success1():
                 else:
                     st.write("No treatments recorded for this diagnosis.")
 
-        st.markdown("### Thank you for your input!")
+        st.markdown("")
         st.button("Back to Home", on_click=lambda: st.session_state.update({"current_page": "home"}))
 
     else:
