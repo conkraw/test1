@@ -24,23 +24,6 @@ from utils.treatments import display_treatments
 from utils.firebase_operations import initialize_firebase, upload_to_firebase
 from utils.session_management import collect_session_data
 import uuid  # To generate unique document IDs
-
-def save_user_state(db):
-    if st.session_state.user_code:
-        entry = {
-            "last_page": st.session_state.page,
-            # Add other session data if needed
-        }
-        upload_to_firebase(db, st.session_state.user_code, entry)
-
-def load_last_page(db):
-    collection_name = st.secrets["FIREBASE_COLLECTION_NAME"]  # Get collection name from secrets
-    if st.session_state.user_code:
-        user_data = db.collection(collection_name).document(st.session_state.user_code).get()
-        if user_data.exists:
-            return user_data.to_dict().get("last_page")
-    return "welcome"
-
         
 def main():
     # Initialize Firebase
@@ -69,9 +52,9 @@ def main():
         users = load_users()
         login_page(users, db, st.session_state.document_id)  # Pass document ID
     elif st.session_state.page == "intake_form":
-        display_intake_form(db, st.session_state.document_id, save_user_state)
+        display_intake_form(db, st.session_state.document_id)
     elif st.session_state.page == "diagnoses":
-        display_diagnoses(db,st.session_state.document_id,save_user_state)
+        display_diagnoses(db,st.session_state.document_id)
     elif st.session_state.page == "Intervention Entry":
         intervention_entry_main(db,st.session_state.document_id)
     elif st.session_state.page == "History with AI":
