@@ -16,11 +16,12 @@ def login_page(users, db, document_id):
                     st.session_state.user_name = users.loc[users['code'] == unique_code, 'name'].values[0]
                     st.session_state.unique_code = unique_code
                     
-                    # Upload to Firebase with the provided document_id
+                    # Prepare the entry data
                     entry = {
-                        "unique_code": unique_code,
+                        "unique_code": unique_code,  # This is used for the upload
                         "user_name": st.session_state.user_name,
                     }
+                    # Use the passed document_id here, which will be None initially
                     upload_message = upload_to_firebase(db, document_id, entry)
 
                     st.success(upload_message)  # Show success message
@@ -34,5 +35,3 @@ def login_page(users, db, document_id):
         else:
             st.error("Please enter a code.")
     return None  # Return None if no valid code was entered
-
-
