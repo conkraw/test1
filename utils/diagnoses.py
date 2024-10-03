@@ -3,7 +3,7 @@ from utils.file_operations import read_diagnoses_from_file
 from utils.session_management import collect_session_data
 from utils.firebase_operations import upload_to_firebase
 
-def display_diagnoses(db, document_id, save_user_state):
+def display_diagnoses(db, document_id):
     # Ensure diagnoses are initialized
     if 'diagnoses' not in st.session_state:
         st.session_state.diagnoses = [""] * 5
@@ -63,9 +63,6 @@ def display_diagnoses(db, document_id, save_user_state):
                     upload_message = upload_to_firebase(db, document_id, entry)
                     st.success("Diagnoses submitted successfully.")
 
-                    # Save user state here
-                    save_user_state(db)
-                    
                     st.session_state.page = "Intervention Entry"  # Set to next page
                     st.rerun()
                 except Exception as e:
