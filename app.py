@@ -1,5 +1,4 @@
 import streamlit as st
-import uuid  # To generate unique document IDs
 
 st.set_page_config(layout="wide")
 
@@ -24,6 +23,7 @@ from utils.laboratory_features import display_laboratory_features
 from utils.treatments import display_treatments
 from utils.firebase_operations import initialize_firebase, upload_to_firebase
 from utils.session_management import collect_session_data
+import uuid  # To generate unique document IDs
 
 def save_user_state(db):
     if st.session_state.user_code:
@@ -41,14 +41,14 @@ def load_last_page(db):
             return user_data.to_dict().get("last_page")
     return "welcome"
 
-
+        
 def main():
     # Initialize Firebase
     db = initialize_firebase()
     
     # Initialize session state
-    if "user_code" not in st.session_state:
-        st.session_state.user_code = None
+    if "user_code" not in st.session_state: ###
+        st.session_state.user_code = None ###
         
     if "page" not in st.session_state:
         st.session_state.page = "welcome"
@@ -57,7 +57,6 @@ def main():
     if "document_id" not in st.session_state:
         st.session_state.document_id = str(uuid.uuid4())
 
-    # Load last visited page if user is logged in
     if st.session_state.user_code:
         last_page = load_last_page(db)
         if last_page:
@@ -68,38 +67,35 @@ def main():
         welcome_page()
     elif st.session_state.page == "login":
         users = load_users()
-        unique_code = login_page(users, db, st.session_state.document_id)  # Assuming this returns the unique_code
-        if unique_code:
-            st.session_state.user_code = unique_code  # Set user_code from unique_code input
-            st.session_state.document_id = unique_code  # Use unique_code as document ID for future data
+        login_page(users, db, st.session_state.document_id)  # Pass document ID
     elif st.session_state.page == "intake_form":
         display_intake_form(db, st.session_state.document_id)
     elif st.session_state.page == "diagnoses":
-        display_diagnoses(db, st.session_state.document_id)
+        display_diagnoses(db,st.session_state.document_id)
     elif st.session_state.page == "Intervention Entry":
-        intervention_entry_main(db, st.session_state.document_id)
+        intervention_entry_main(db,st.session_state.document_id)
     elif st.session_state.page == "History with AI":
-        run_virtual_patient(db, st.session_state.document_id)
+        run_virtual_patient(db,st.session_state.document_id)
     elif st.session_state.page == "Focused Physical Examination":
-        display_focused_physical_examination(db, st.session_state.document_id)
+        display_focused_physical_examination(db, st.session_state.document_id)  # Pass document ID
     elif st.session_state.page == "Physical Examination Components":
         display_physical_examination()
     elif st.session_state.page == "History Illness Script":
-        history_illness_script(db, st.session_state.document_id)
+        history_illness_script(db,st.session_state.document_id)
     elif st.session_state.page == "Physical Examination Features":
-        display_physical_examination_features(db, st.session_state.document_id)
+        display_physical_examination_features(db,st.session_state.document_id)
     elif st.session_state.page == "Laboratory Tests":
-        display_laboratory_tests(db, st.session_state.document_id)
+        display_laboratory_tests(db,st.session_state.document_id)
     elif st.session_state.page == "Radiology Tests":
-        display_radiological_tests(db, st.session_state.document_id)
+        display_radiological_tests(db,st.session_state.document_id)
     elif st.session_state.page == "Other Tests":
-        display_other_tests(db, st.session_state.document_id)
+        display_other_tests(db,st.session_state.document_id)
     elif st.session_state.page == "Results":
         display_results_image()
     elif st.session_state.page == "Laboratory Features":
-        display_laboratory_features(db, st.session_state.document_id)
+        display_laboratory_features(db,st.session_state.document_id)
     elif st.session_state.page == "Treatments":
-        display_treatments(db, st.session_state.document_id)
+        display_treatments(db,st.session_state.document_id)
     elif st.session_state.page == "Simple Success":
         display_simple_success1()
 
