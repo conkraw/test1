@@ -12,7 +12,7 @@ def read_diagnoses_from_file():
         st.error(f"Error reading dx_list.txt: {e}")
         return []
 
-def display_laboratory_features():
+def display_laboratory_features(db, document_id):
     # Initialize session state
     if 'current_page' not in st.session_state:
         st.session_state.current_page = "laboratory_features"
