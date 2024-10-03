@@ -23,9 +23,9 @@ def display_focused_physical_examination(db, document_id):
     if st.button("Submit"):
         # Ensure both selections have been made
         if not selected_exams1:
-            st.error("Please select at least one examination to exclude.")
+            st.error("Please select at least one examination that will allow you to exclude some unlikely, but important hypotheses.")
         elif not selected_exams2:
-            st.error("Please select at least one examination to confirm.")
+            st.error("Please select at least one examination to confirm the most likely hypothesis and to discriminate between others.")
         else:
             entry = {
                 'excluded_exams': selected_exams1,
