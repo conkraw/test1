@@ -36,12 +36,9 @@ def display_laboratory_tests(db, document_id):  # Updated to include db and docu
     lab_tests = read_lab_tests_from_file()
     dx_options.insert(0, "")  
 
-    st.title("Laboratory Tests App")
+    st.title("Laboratory Tests")
 
-    st.markdown("""
-        ### LABORATORY TESTS
-        Please select up to 5 laboratory tests that influence the differential diagnosis.
-    """)
+    st.markdown("""Please select up to 5 laboratory tests that would order and describe how they influence the differential diagnosis.""")
 
     # Reorder section in the sidebar
     with st.sidebar:
