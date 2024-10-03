@@ -126,8 +126,9 @@ def display_treatments(db, document_id):
             }
 
             # Upload to Firebase using the current diagnosis order
-            upload_message = upload_to_firebase(db, 'your_collection_name', document_id, entry)
-
+            #upload_message = upload_to_firebase(db, 'your_collection_name', document_id, entry)
+            upload_message = upload_to_firebase(db, document_id, entry)
+            
             st.session_state.page = "Simple Success"  # Change to the Simple Success page
             st.success("Treatments submitted successfully.")
             st.rerun()  # Rerun to update the app
