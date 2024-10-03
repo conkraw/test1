@@ -30,14 +30,20 @@ def save_user_state(db):
         entry = {
             "last_page": st.session_state.page,
         }
-        upload_to_firebase(db, st.session_state.unique_code, entry)
+        upload_to_firebase(db, str(st.session_state.unique_code), entry)
 
 def load_last_page(db):
     collection_name = st.secrets["FIREBASE_COLLECTION_NAME"]
+    
     if st.session_state.unique_code:
-        user_data = db.collection(collection_name).document(st.session_state.unique_code).get()
+        user_code = str(st.session_state.unique_code)  # Ensure it's a string
+        st.write("Loading last page for user code:", user_code)  # Debugging output
+        
+        user_data = db.collection(collection_name).document(user_code).get()
+        
         if user_data.exists:
-            return user_data.to_dict().get("last_page")
+            return user_data.to_dict().get("last_page", "welcome")
+    
     return "welcome"
 
 def main():
