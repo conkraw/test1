@@ -139,8 +139,9 @@ def display_laboratory_tests(db, document_id):  # Updated to include db and docu
             }
 
             # Upload to Firebase using the current diagnosis order
-            upload_message = upload_to_firebase(db, 'your_collection_name', document_id, entry)
-
+            #upload_message = upload_to_firebase(db, 'your_collection_name', document_id, entry)
+            upload_message = upload_to_firebase(db, document_id, entry)
+            
             st.session_state.page = "Radiology Tests"  # Change to the Simple Success page
             st.success("Laboratory tests submitted successfully.")
             st.rerun()  # Rerun to update the app
