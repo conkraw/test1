@@ -1,8 +1,3 @@
-import streamlit as st
-from utils.file_operations import read_diagnoses_from_file
-from utils.session_management import collect_session_data  #######NEED THIS
-from utils.firebase_operations import upload_to_firebase  #######NEED THIS
-
 def display_diagnoses(db, document_id, save_user_state):
     # Ensure diagnoses are initialized
     if 'diagnoses' not in st.session_state:
@@ -54,6 +49,10 @@ def display_diagnoses(db, document_id, save_user_state):
                 entry = {
                     "diagnoses_s1": diagnoses
                 }
+
+                # Log the entry before uploading
+                st.write("Uploading the following entry to Firebase:")
+                st.json(entry)  # Log the entry for debugging
 
                 try:
                     # Upload the data to Firebase
