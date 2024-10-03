@@ -50,25 +50,24 @@ def display_diagnoses(db, document_id, save_user_state):
             if len(diagnoses) == len(set(diagnoses)):
                 session_data = collect_session_data()
 
-                # Create entry with the diagnoses data
+                # Create entry with the diagnoses data, including last page
                 entry = {
-                    "diagnoses_s1": diagnoses
+                    "diagnoses_s1": diagnoses,
+                    "last_page": "diagnoses"  # Include the last_page in the entry
                 }
 
                 # Log the entry before uploading
                 st.write("Uploading the following entry to Firebase:")
-                st.json(entry)  # Log the entry for debugging
 
                 try:
-                    # Upload the data to Firebase
                     upload_message = upload_to_firebase(db, document_id, entry)
                     st.success("Diagnoses submitted successfully.")
 
                     # Save user state here
-                    save_user_state(db)  # Save user state after successful submission
+                    save_user_state(db)
                     
                     st.session_state.page = "Intervention Entry"  # Set to next page
-                    st.rerun()  # Rerun to navigate to the next page
+                    st.rerun()
                 except Exception as e:
                     st.error(f"Error uploading data: {e}")
             else:
