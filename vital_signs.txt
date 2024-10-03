@@ -2,6 +2,6 @@ type,vital_signs
 heart_rate,100 beats per minute
 blood_pressure,100 over 100 mm Hg
 respiratory_rate, 20 breaths per minute
-pulse_oximetry, 100% on Room Air
+pulseox, 100% on Room Air
 temperature, 38.6 Celsius
 weight, 100 kilograms
