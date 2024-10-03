@@ -20,7 +20,7 @@ def display_focused_physical_examination(db, document_id):
     st.markdown("<h5>Please select examinations necessary to confirm the most likely hypothesis and to discriminate between others:</h5>", unsafe_allow_html=True)
     selected_exams2 = st.multiselect("Select options:", options1, key="confirm_exams")
     
-    if st.button("Submit"):
+    if st.button("Submit",key="focused_pe_submit_button"):
         # Ensure both selections have been made
         if not selected_exams1:
             st.error("Please select at least one examination that will allow you to exclude some unlikely, but important hypotheses.")
