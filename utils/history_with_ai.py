@@ -64,7 +64,7 @@ def run_virtual_patient(db,document_id):
     if elapsed_time < 15:
         with st.form("question_form"):
             user_input = st.text_input("Ask the virtual patient typical history questions you would want to know for this case:")
-            submit_button = st.form_submit_button("Ask")
+            submit_button = st.form_submit_button("Ask",key="ask_button")
 
             if submit_button and user_input:
                 st.session_state.session_data['questions_asked'].append(user_input)
@@ -96,7 +96,7 @@ def run_virtual_patient(db,document_id):
     else:
         st.warning("Session time is up. Please end the session.")
 
-    if st.button("End History Taking Session"):
+    if st.button("End History Taking Session",key="end_session_button"):
         entry = collect_session_data()  # Collect session data
         entry['questions_asked'] = st.session_state.session_data['questions_asked']
         entry['responses'] = st.session_state.session_data['responses']
