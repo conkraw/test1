@@ -24,7 +24,7 @@ def display_results_image():
     selected_result = st.selectbox("Select a result", results)
 
     # Prepare the corresponding image file name
-    image_filename = selected_result.replace(" ", "_")  # Replace spaces with underscores
+    image_filename = selected_result.replace(" ", "_") if selected_result else ""  # Replace spaces with underscores only if selected_result is not blank
     image_extensions = ['.jpg', '.jpeg', '.png', '.gif', 
                        '.JPG', '.JPEG', '.PNG', '.GIF']  # Define possible extensions, including uppercase
 
@@ -37,13 +37,12 @@ def display_results_image():
             break
 
     # Display the selected result and the image
-    if image_path:
+    if selected_result and image_path:  # Only show image if a valid result is selected
         st.image(image_path, caption=selected_result, use_column_width=True)
-    else:
-        st.write("No image found for this result.")
 
     # Add a button to go to the next page
     if st.button("Next Page"):
         st.session_state.page = "Laboratory Features"  # Change to the Simple Success page
         st.rerun()  # Rerun to update the app
+
 
