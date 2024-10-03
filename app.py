@@ -25,10 +25,8 @@ from utils.firebase_operations import initialize_firebase, upload_to_firebase
 from utils.session_management import collect_session_data
 
 def main():
-    # Initialize Firebase
     db = initialize_firebase()
     
-    # Initialize session state
     if "user_code" not in st.session_state:
         st.session_state.user_code = None 
         
@@ -38,20 +36,20 @@ def main():
     if "document_id" not in st.session_state:
         st.session_state.document_id = None
 
-    # Page routing
     if st.session_state.page == "welcome":
         welcome_page()
     elif st.session_state.page == "login":
         users = load_users()
         st.write(users)  # Debug output to check loaded users
         
-        user_code = login_page(users, db, st.session_state.document_id)  
+        unique_code_input = login_page(users, db)  # Get the raw input
         
-        if user_code:
-            st.session_state.user_code = user_code
-            st.session_state.document_id = user_code
+        if unique_code_input:  # If the user input is returned from login_page
+            st.session_state.document_id = unique_code_input  # Set document ID to user input
             st.write(f"Document ID set to: {st.session_state.document_id}")  # Debug output
 
+    elif st.session_state.page == "intake_form":
+        display_intake_form(db, st.session_state.document_id)
     elif st.session_state.page == "intake_form":
         display_intake_form(db, st.session_state.document_id)
     elif st.session_state.page == "diagnoses":
