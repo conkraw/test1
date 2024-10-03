@@ -29,11 +29,14 @@ def display_simple_success1():
                     st.write("No treatments recorded for this diagnosis.")
 
         st.markdown("")
-        st.button("Back to Home", on_click=lambda: st.session_state.update({"current_page": "home"}))
+        if st.button("End Session"):
+            # Clear session state
+            st.session_state.clear()
+            st.success("Session ended successfully.")
 
     else:
         st.error("No results available. Please complete the previous steps first.")
 
 # To use the display_summary function, just call it in the main app logic
 if __name__ == "__main__":
-    display_summary()
+    display_simple_success1()
