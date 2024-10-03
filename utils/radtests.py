@@ -119,27 +119,37 @@ def display_radiological_tests(db, document_id):  # Updated to include db and do
     # Submit button for radiological tests
     if st.button("Submit Radiological Tests"):
         assessments = {}
+        at_least_one_selected = False
+
         for i in range(5):
+            selected_rad_test = st.session_state[f"rad_row_{i}"]
             for diagnosis in st.session_state.diagnoses:
                 assessment = st.session_state[f"select_{i}_{diagnosis}_rad"]
+                if selected_rad_test:  # Check if a radiological test is selected
+                    at_least_one_selected = True
                 if diagnosis not in assessments:
                     assessments[diagnosis] = []
                 assessments[diagnosis].append({
-                    'radiological_test': st.session_state[f"rad_row_{i}"],
+                    'radiological_test': selected_rad_test,
                     'assessment': assessment
                 })
-        
-        # Save diagnoses to Firebase
-        st.session_state.diagnoses_s4 = [dx for dx in st.session_state.diagnoses if dx]  # Update with current order
 
-        entry = {
-            'radiological_tests': assessments,  # Include radiological tests data
-            'diagnoses_s4': st.session_state.diagnoses_s4  # Include diagnoses_s4 in the entry
-        }
+        # Check if at least one radiological test is selected
+        if not at_least_one_selected:
+            st.error("Please select at least one radiological test.")
+        else:
+            # Save diagnoses to Firebase
+            st.session_state.diagnoses_s4 = [dx for dx in st.session_state.diagnoses if dx]  # Update with current order
 
-        # Upload to Firebase
-        upload_message = upload_to_firebase(db, 'your_collection_name', document_id, entry)
+            entry = {
+                'radiological_tests': assessments,  # Include radiological tests data
+                'diagnoses_s4': st.session_state.diagnoses_s4  # Include diagnoses_s4 in the entry
+            }
 
-        st.session_state.page = "Other Tests"  # Change to the Simple Success page
-        st.success("Radiological tests submitted successfully.")
-        st.rerun()  # Rerun to update the app
+            # Upload to Firebase
+            upload_message = upload_to_firebase(db, 'your_collection_name', document_id, entry)
+
+            st.session_state.page = "Other Tests"  # Change to the Simple Success page
+            st.success("Radiological tests submitted successfully.")
+            st.rerun()  # Rerun to update the app
+
