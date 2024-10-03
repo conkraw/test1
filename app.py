@@ -1,5 +1,5 @@
 import streamlit as st
-import uuid  # To generate unique document IDs
+import uuid  # This import can be removed if you don't use it elsewhere
 
 st.set_page_config(layout="wide")
 
@@ -36,9 +36,12 @@ def main():
     if "page" not in st.session_state:
         st.session_state.page = "welcome"
     
-    # Generate a unique document ID at the start of the session
-    if "document_id" not in st.session_state:
-        st.session_state.document_id = str(uuid.uuid4())
+    # Use user-provided code as document ID
+    if "document_id" not in st.session_state and st.session_state.user_code:
+        st.session_state.document_id = st.session_state.user_code
+    else:
+        # Handle case where user code is not set yet
+        st.session_state.document_id = None
 
     if st.session_state.user_code:
         last_page = load_last_page(db)
@@ -50,7 +53,10 @@ def main():
         welcome_page()
     elif st.session_state.page == "login":
         users = load_users()
-        login_page(users, db,st.session_state.document_id)  # Adjusted to only pass users and db
+        # Add an input field for the user to enter their unique code
+        st.session_state.user_code = login_page(users, db)  # Adjusted to return user code
+        if st.session_state.user_code:
+            st.session_state.document_id = st.session_state.user_code  # Set document ID
     elif st.session_state.page == "intake_form":
         display_intake_form(db, st.session_state.document_id)
     elif st.session_state.page == "diagnoses":
