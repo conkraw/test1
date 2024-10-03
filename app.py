@@ -47,9 +47,6 @@ def main():
         if unique_code_input:  # If the user input is returned from login_page
             st.session_state.document_id = unique_code_input  # Set document ID to user input
             print(f"Document ID set to: {st.session_state.document_id}")  # Debug output
-
-    elif st.session_state.page == "intake_form":
-        display_intake_form(db, st.session_state.document_id)
     elif st.session_state.page == "intake_form":
         display_intake_form(db, st.session_state.document_id)
     elif st.session_state.page == "intake_form":
