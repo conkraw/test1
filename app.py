@@ -35,10 +35,11 @@ def main():
     if "page" not in st.session_state:
         st.session_state.page = "welcome"
     
-    # Set document ID directly from user input
+    # Initialize document_id to None
     if "document_id" not in st.session_state:
         st.session_state.document_id = None
 
+    # Check for existing user code and page navigation
     if st.session_state.user_code:
         last_page = load_last_page(db)
         if last_page:
@@ -49,10 +50,13 @@ def main():
         welcome_page()
     elif st.session_state.page == "login":
         users = load_users()
-        # Pass document_id to login_page and update user_code and document_id
-        st.session_state.user_code = login_page(users, db, st.session_state.document_id)  
-        if st.session_state.user_code:
-            st.session_state.document_id = st.session_state.user_code  # Set document ID to user code
+        # Call login_page and capture the unique code input
+        user_code = login_page(users, db, st.session_state.document_id)  
+        
+        if user_code:  # If the user code is returned from login_page
+            st.session_state.user_code = user_code  # Store the user code in session state
+            st.session_state.document_id = user_code  # Set document ID to user code
+
     elif st.session_state.page == "intake_form":
         display_intake_form(db, st.session_state.document_id)
     elif st.session_state.page == "diagnoses":
@@ -86,3 +90,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
