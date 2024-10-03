@@ -36,8 +36,9 @@ def display_focused_physical_examination(db, document_id):
             session_data = collect_session_data()  # Collect session data
 
             # Upload the session data to Firebase
-            upload_message = upload_to_firebase(db, 'your_collection_name', document_id, entry)
-
+            #upload_message = upload_to_firebase(db, 'your_collection_name', document_id, entry)
+            upload_message = upload_to_firebase(db, document_id, entry)
+            
             # Change the session state to navigate to the next page
             st.session_state.page = "Physical Examination Components"
             st.rerun()
