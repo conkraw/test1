@@ -101,7 +101,7 @@ def display_treatments(db, document_id):
                 )
 
     # Submit button for treatments
-    if st.button("Submit"):
+    if st.button("Submit",key="treatments_submit_button"):
         # Ensure at least one treatment is provided
         if not any(st.session_state.treatments):
             st.error("Please enter at least one treatment.")
