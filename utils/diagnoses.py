@@ -3,7 +3,7 @@ from utils.file_operations import read_diagnoses_from_file
 from utils.session_management import collect_session_data  #######NEED THIS
 from utils.firebase_operations import upload_to_firebase  #######NEED THIS
 
-def display_diagnoses(db, document_id, save_user_state):  #######NEED THIS INCLUDING DB
+def display_diagnoses(db, document_id, save_user_state):
     # Ensure diagnoses are initialized
     if 'diagnoses' not in st.session_state:
         st.session_state.diagnoses = [""] * 5
@@ -17,7 +17,7 @@ def display_diagnoses(db, document_id, save_user_state):  #######NEED THIS INCLU
 
     st.markdown("""## DIFFERENTIAL DIAGNOSIS
     Please search and select 5 possible diagnoses for the condition you think the patient has in order of likelihood. You will be allowed to alter your choices as you go through the case.""")
-
+    
     cols = st.columns(5)
 
     for i, col in enumerate(cols):
@@ -25,53 +25,48 @@ def display_diagnoses(db, document_id, save_user_state):  #######NEED THIS INCLU
             current_diagnosis = st.session_state.diagnoses[i]
             search_input = st.text_input(f"Diagnosis # {i + 1}", value=current_diagnosis, key=f"diagnosis_search_{i}")
 
-            # Filter options based on the search input
             filtered_options = [dx for dx in dx_options if search_input.lower() in dx.lower()] if search_input else []
 
             if filtered_options:
                 st.write("**Suggestions:**")
-                for option in filtered_options[:5]:  # Show up to 5 suggestions
+                for option in filtered_options[:5]:
                     button_key = f"select_option_{i}_{option}"
                     if st.button(f"{option}", key=button_key):
                         st.session_state.diagnoses[i] = option
                         st.rerun()  # Rerun to update the input field with the selected diagnosis
 
-            # Show the selected diagnosis
             if current_diagnosis:
                 st.write(f"**Selected:** {current_diagnosis}")
 
-            # Display the warning only if no buttons are available
             if not filtered_options and search_input:
                 st.warning("Please select a diagnosis from the suggestions. If there are no suggestions, please alter your search and try again.")
 
-            # Update session state with the current input only if it matches an option
             if current_diagnosis and current_diagnosis in dx_options:
                 st.session_state.diagnoses[i] = current_diagnosis
 
-    if st.button("Submit",key="diagnosis_submit_button"):
+    if st.button("Submit"):
         diagnoses = [d.strip() for d in st.session_state.diagnoses]
         if all(diagnosis for diagnosis in diagnoses):
             if len(diagnoses) == len(set(diagnoses)):
-                session_data = collect_session_data() #######NEED THIS
-                
+                session_data = collect_session_data() 
+
                 # Create entry with the diagnoses data
                 entry = {
                     "diagnoses_s1": diagnoses
                 }
 
-                # Upload to Firebase
                 try:
-                    #upload_message = upload_to_firebase(db, 'your_collection_name', document_id, entry)
                     upload_message = upload_to_firebase(db, document_id, entry)
                     st.success("Diagnoses submitted successfully.")
+                    
+                    # Save user state here
+                    save_user_state(db)  # Make sure this is called after successful submission
+                    
+                    st.session_state.page = "Intervention Entry"
+                    st.rerun()  # Rerun to navigate to the next page
                 except Exception as e:
                     st.error(f"Error uploading data: {e}")
-
-                # Save user state here
-                save_user_state(db)
-                
-                st.session_state.page = "Intervention Entry"
-                st.rerun()  # Rerun to navigate to the next page
+                st.session_state.page = "diagnoses"  # Update last page to diagnoses
             else:
                 st.error("Please do not provide duplicate diagnoses.")
         else:
