@@ -1,4 +1,8 @@
 import streamlit as st
+import uuid  # To generate unique document IDs
+
+st.set_page_config(layout="wide")
+
 from utils.file_operations import load_users
 from utils.welcome import welcome_page
 from utils.login import login_page
@@ -19,22 +23,21 @@ from utils.results import display_results_image
 from utils.laboratory_features import display_laboratory_features
 from utils.treatments import display_treatments
 from utils.firebase_operations import initialize_firebase, upload_to_firebase
-import uuid  # To generate unique document IDs
+from utils.session_management import collect_session_data
 
 def save_user_state(db):
-    if st.session_state.unique_code:  # Ensure unique_code is set
+    if st.session_state.unique_code:
         entry = {
             "last_page": st.session_state.page,
-            # Add other session data if needed
         }
-        upload_to_firebase(db, str(st.session_state.unique_code), entry)  # Ensure it's a string
+        upload_to_firebase(db, st.session_state.unique_code, entry)
 
 def load_last_page(db):
-    collection_name = st.secrets["FIREBASE_COLLECTION_NAME"]  # Get collection name from secrets
-    if st.session_state.unique_code:  # Ensure unique_code is set
-        user_data = db.collection(collection_name).document(str(st.session_state.unique_code)).get()  # Ensure it's a string
+    collection_name = st.secrets["FIREBASE_COLLECTION_NAME"]
+    if st.session_state.unique_code:
+        user_data = db.collection(collection_name).document(st.session_state.unique_code).get()
         if user_data.exists:
-            return user_data.to_dict().get("last_page", "welcome")  # Default to "welcome"
+            return user_data.to_dict().get("last_page")
     return "welcome"
 
 def main():
@@ -56,7 +59,7 @@ def main():
     st.write("Current Page:", st.session_state.page)
 
     # Load last page if user is logged in
-    if st.session_state.unique_code:  # Ensure unique_code is set
+    if st.session_state.unique_code:
         last_page = load_last_page(db)
         if last_page:
             st.session_state.page = last_page
@@ -65,13 +68,16 @@ def main():
     # Page routing
     if st.session_state.page == "welcome":
         welcome_page()
+        if st.button("Continue to Login"):
+            st.session_state.page = "login"
+            st.experimental_rerun()  # Refresh to navigate to the login page
     elif st.session_state.page == "login":
         users = load_users()
         login_page(users, db, st.session_state.document_id)
 
         # Check if login was successful
-        if st.session_state.unique_code:  # Ensure unique_code is set
-            st.session_state.page = load_last_page(db) or "welcome"
+        if st.session_state.unique_code:
+            st.session_state.page = load_last_page(db) or "intake_form"
             st.experimental_rerun()  # Refresh to navigate to the last page
     elif st.session_state.page == "intake_form":
         display_intake_form(db, st.session_state.document_id, save_user_state)
@@ -82,7 +88,7 @@ def main():
     elif st.session_state.page == "History with AI":
         run_virtual_patient(db, st.session_state.document_id)
     elif st.session_state.page == "Focused Physical Examination":
-        display_focused_physical_examination(db, st.session_state.document_id)  # Pass document ID
+        display_focused_physical_examination(db, st.session_state.document_id)
     elif st.session_state.page == "Physical Examination Components":
         display_physical_examination()
     elif st.session_state.page == "History Illness Script":
@@ -110,3 +116,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
