@@ -6,6 +6,6 @@ def welcome_page():
     st.markdown("<h4 style='font-family: \"DejaVu Sans\";'>Instructions:</h4>", unsafe_allow_html=True)
     st.markdown("<p style='font-family: \"DejaVu Sans\";'>1. Please enter your unique code on the next page.<br>2. Follow the prompts to complete the assessment.</p>", unsafe_allow_html=True)
 
-    if st.button("Next"):
+    if st.button("Next",key="welcome_next_button"):
         st.session_state.page = "login"  # Change to login page
         st.rerun()  # Rerun to refresh the view
