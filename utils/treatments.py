@@ -81,7 +81,7 @@ def display_treatments(db, document_id):
     # Display treatments
     cols = st.columns(len(st.session_state.diagnoses) + 1)
     with cols[0]:
-
+        st.markdown("")
     for diagnosis, col in zip(st.session_state.diagnoses, cols[1:]):
         with col:
             st.markdown(diagnosis)
