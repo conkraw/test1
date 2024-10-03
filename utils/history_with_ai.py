@@ -43,11 +43,11 @@ def get_chatgpt_response(user_input):
         return random.choice(alternative_responses)
 
 def run_virtual_patient(db,document_id):
-    st.title("Virtual Patient: Case #1")
+    st.title("Virtual Patient)
 
     st.info(
         "You will have the opportunity to perform a history and ask for important physical examination details. "
-        "You will be limited to 15 minutes. Alternatively, you may end the session."
+        "You will be limited to 15 minutes. Alternatively, you may end the session and move to the next page."
     )
 
     if 'start_time' not in st.session_state or st.session_state.start_time is None:
@@ -63,7 +63,7 @@ def run_virtual_patient(db,document_id):
 
     if elapsed_time < 15:
         with st.form("question_form"):
-            user_input = st.text_input("Ask the virtual patient a question about their symptoms:")
+            user_input = st.text_input("Ask the virtual patient typical history questions you would want to know for this case:")
             submit_button = st.form_submit_button("Submit")
 
             if submit_button and user_input:
@@ -95,7 +95,7 @@ def run_virtual_patient(db,document_id):
     else:
         st.warning("Session time is up. Please end the session.")
 
-    if st.button("End Session"):
+    if st.button("End History Taking Session"):
         entry = collect_session_data()  # Collect session data
         entry['questions_asked'] = st.session_state.session_data['questions_asked']
         entry['responses'] = st.session_state.session_data['responses']
