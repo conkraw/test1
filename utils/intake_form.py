@@ -88,7 +88,8 @@ def display_intake_form(db,document_id):
             entry = {'vs_data': st.session_state.vs_data}  # This assumes you want to upload vs_data
 
             upload_message = upload_to_firebase(db, document_id, entry)
-            
+
+            save_user_state(db)
             st.session_state.page = "diagnoses"  # Move to Diagnoses page
             st.rerun()  # Rerun the app to refresh the page
 
