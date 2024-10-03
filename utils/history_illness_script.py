@@ -2,6 +2,16 @@ import streamlit as st
 from utils.session_management import collect_session_data  #######NEED THIS
 from utils.firebase_operations import upload_to_firebase  
 
+# Function to read diagnoses from a file
+def read_diagnoses_from_file():
+    try:
+        with open('dx_list.txt', 'r') as file:
+            diagnoses = [line.strip() for line in file.readlines() if line.strip()]
+        return diagnoses
+    except Exception as e:
+        st.error(f"Error reading dx_list.txt: {e}")
+        return []
+
 def main(db, document_id):
     # Initialize session state
     if 'current_page' not in st.session_state:
