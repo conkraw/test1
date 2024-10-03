@@ -1,30 +1,3 @@
-import streamlit as st
-import uuid  # This import can be removed if you don't use it elsewhere
-
-st.set_page_config(layout="wide")
-
-from utils.file_operations import load_users
-from utils.welcome import welcome_page
-from utils.login import login_page
-from utils.intake_form import display_intake_form
-from utils.diagnoses import display_diagnoses
-from utils.intervention_entry import main as intervention_entry_main
-from utils.history_with_ai import run_virtual_patient
-from utils.focused_physical_examination import display_focused_physical_examination
-from utils.physical_examination import main as display_physical_examination
-from utils.history_illness_script import main as history_illness_script
-from utils.simple_success import display_simple_success
-from utils.simple_success1 import display_simple_success1
-from utils.physical_examination_features import display_physical_examination_features
-from utils.lab_tests import display_laboratory_tests
-from utils.radtests import display_radiological_tests
-from utils.othertests import display_other_tests
-from utils.results import display_results_image
-from utils.laboratory_features import display_laboratory_features
-from utils.treatments import display_treatments
-from utils.firebase_operations import initialize_firebase, upload_to_firebase
-from utils.session_management import collect_session_data
-
 def main():
     # Initialize Firebase
     db = initialize_firebase()
@@ -53,8 +26,8 @@ def main():
         welcome_page()
     elif st.session_state.page == "login":
         users = load_users()
-        # Add an input field for the user to enter their unique code
-        st.session_state.user_code = login_page(users, db)  # Adjusted to return user code
+        # Pass document_id to login_page and capture user_code
+        st.session_state.user_code = login_page(users, db, st.session_state.document_id)  
         if st.session_state.user_code:
             st.session_state.document_id = st.session_state.user_code  # Set document ID
     elif st.session_state.page == "intake_form":
