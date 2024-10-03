@@ -80,7 +80,7 @@ def main():
 def save_session_data(db):
     session_data = collect_session_data()
     try:
-        upload_message = upload_to_firebase(db, 'your_collection_name', st.session_state.document_id, session_data)  # Use document ID
+        upload_message = upload_to_firebase(db, FIREBASE_COLLECTION_NAME, st.session_state.document_id, session_data)  # Use document ID
         st.success(upload_message)
     except Exception as e:
         st.error(f"Error saving progress: {e}")
