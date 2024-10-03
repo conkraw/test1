@@ -26,24 +26,19 @@ from utils.firebase_operations import initialize_firebase, upload_to_firebase
 from utils.session_management import collect_session_data
 
 def save_user_state(db):
-    if st.session_state.unique_code:
+    if st.session_state.unique_code:  # Changed to unique_code
         entry = {
             "last_page": st.session_state.page,
+            # Add other session data if needed
         }
-        upload_to_firebase(db, str(st.session_state.unique_code), entry)
+        upload_to_firebase(db, st.session_state.unique_code, entry)  # Changed to unique_code
 
 def load_last_page(db):
     collection_name = st.secrets["FIREBASE_COLLECTION_NAME"]
-    
-    if st.session_state.unique_code:
-        user_code = str(st.session_state.unique_code)  # Ensure it's a string
-        st.write("Loading last page for user code:", user_code)  # Debugging output
-        
-        user_data = db.collection(collection_name).document(user_code).get()
-        
+    if st.session_state.unique_code:  # Changed to unique_code
+        user_data = db.collection(collection_name).document(st.session_state.unique_code).get()  # Changed to unique_code
         if user_data.exists:
-            return user_data.to_dict().get("last_page", "welcome")
-    
+            return user_data.to_dict().get("last_page", "welcome")  # Default to welcome
     return "welcome"
 
 def main():
@@ -51,40 +46,27 @@ def main():
     db = initialize_firebase()
     
     # Initialize session state
-    if "unique_code" not in st.session_state:
-        st.session_state.unique_code = None
+    if "unique_code" not in st.session_state:  # Changed to unique_code
+        st.session_state.unique_code = None  # Changed to unique_code
         
     if "page" not in st.session_state:
         st.session_state.page = "welcome"
     
+    # Generate a unique document ID at the start of the session
     if "document_id" not in st.session_state:
         st.session_state.document_id = str(uuid.uuid4())
 
-    # Debugging: Print current unique code and page
-    st.write("Unique Code:", st.session_state.unique_code)
-    st.write("Current Page:", st.session_state.page)
-
-    # Load last page if user is logged in
-    if st.session_state.unique_code:
+    if st.session_state.unique_code:  # Changed to unique_code
         last_page = load_last_page(db)
         if last_page:
             st.session_state.page = last_page
-            st.write("Loaded last page:", st.session_state.page)
 
     # Page routing
     if st.session_state.page == "welcome":
         welcome_page()
-        if st.button("Continue to Login"):
-            st.session_state.page = "login"
-            st.rerun()  # Refresh to navigate to the login page
     elif st.session_state.page == "login":
         users = load_users()
         login_page(users, db, st.session_state.document_id)
-
-        # Check if login was successful
-        if st.session_state.unique_code:
-            st.session_state.page = load_last_page(db) or "intake_form"
-            st.experimental_rerun()  # Refresh to navigate to the last page
     elif st.session_state.page == "intake_form":
         display_intake_form(db, st.session_state.document_id, save_user_state)
     elif st.session_state.page == "diagnoses":
@@ -115,11 +97,6 @@ def main():
         display_treatments(db, st.session_state.document_id)
     elif st.session_state.page == "Simple Success":
         display_simple_success1()
-    else:
-        st.write("Page not found. Redirecting to welcome.")
-        st.session_state.page = "welcome"
-        st.rerun()  # Redirect to welcome page
 
 if __name__ == "__main__":
     main()
-
