@@ -46,34 +46,47 @@ def main():
     elif st.session_state.page == "login":
         users = load_users()
         login_page(users, db, st.session_state.document_id)  # Pass document ID
+        save_session_data(db)
     elif st.session_state.page == "intake_form":
         display_intake_form(db, st.session_state.document_id)  # Pass document ID
+        save_session_data(db)
     elif st.session_state.page == "diagnoses":
         display_diagnoses(db,st.session_state.document_id)
+        save_session_data(db)
     elif st.session_state.page == "Intervention Entry":
         intervention_entry_main(db,st.session_state.document_id)
+        save_session_data(db)
     elif st.session_state.page == "History with AI":
         run_virtual_patient(db,st.session_state.document_id)
+        save_session_data(db)
     elif st.session_state.page == "Focused Physical Examination":
         display_focused_physical_examination(db, st.session_state.document_id)  # Pass document ID
+        save_session_data(db)
     elif st.session_state.page == "Physical Examination Components":
         display_physical_examination()
     elif st.session_state.page == "History Illness Script":
         history_illness_script(db,st.session_state.document_id)
+        save_session_data(db)
     elif st.session_state.page == "Physical Examination Features":
         display_physical_examination_features(db,st.session_state.document_id)
+        save_session_data(db)
     elif st.session_state.page == "Laboratory Tests":
         display_laboratory_tests(db,st.session_state.document_id)
+        save_session_data(db)
     elif st.session_state.page == "Radiology Tests":
         display_radiological_tests(db,st.session_state.document_id)
+        save_session_data(db)
     elif st.session_state.page == "Other Tests":
         display_other_tests(db,st.session_state.document_id)
+        save_session_data(db)
     elif st.session_state.page == "Results":
         display_results_image()
     elif st.session_state.page == "Laboratory Features":
         display_laboratory_features(db,st.session_state.document_id)
+        save_session_data(db)
     elif st.session_state.page == "Treatments":
         display_treatments(db,st.session_state.document_id)
+        save_session_data(db)
     elif st.session_state.page == "Simple Success":
         display_simple_success1()
 
