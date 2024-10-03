@@ -1,5 +1,7 @@
+# login.py
+
 import streamlit as st
-from utils.session_management import collect_session_data
+from utils.session_management import collect_session_data 
 from utils.firebase_operations import upload_to_firebase
 
 def login_page(users, db, document_id):  # Accept document_id as a parameter
@@ -12,9 +14,9 @@ def login_page(users, db, document_id):  # Accept document_id as a parameter
                 # Convert the input to an integer and check if it's valid
                 unique_code = int(unique_code_input.strip())
                 if unique_code in users['code'].values:
-                    # Store the unique code in session state as a string
+                    # Store the unique code in session state
                     st.session_state.user_name = users.loc[users['code'] == unique_code, 'name'].values[0]
-                    st.session_state.user_code = str(unique_code)  # Convert to string
+                    st.session_state.unique_code = unique_code
 
                     # Collect session data after setting the unique code
                     session_data = collect_session_data()
@@ -33,14 +35,10 @@ def login_page(users, db, document_id):  # Accept document_id as a parameter
                     st.session_state.page = "intake_form"  # Change to assessment page
                     st.success(upload_message)  # Show success message
                     st.rerun()  # Rerun to refresh the view
-                    
-                    return unique_code  # Return the unique_code upon successful login
                 else:
                     st.error("Invalid code. Please try again.")
             except ValueError:
                 st.error("Please enter a valid code.")
         else:
             st.error("Please enter a code.")
-    
-    return None  # Return None if no valid login is made
 
