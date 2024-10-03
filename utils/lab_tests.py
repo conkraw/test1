@@ -131,7 +131,7 @@ def display_laboratory_tests(db, document_id):  # Updated to include db and docu
 
         entry = {
             'laboratory_tests': lab_tests_data,  # Include laboratory tests data
-            'diagnoses_s3': st.session_state.diagnoses  # Include diagnoses_s3 separately
+            'diagnoses_s4': st.session_state.diagnoses  # Changed from diagnoses_s3 to diagnoses_s4
         }
 
         # Upload to Firebase using the current diagnosis order
@@ -140,3 +140,4 @@ def display_laboratory_tests(db, document_id):  # Updated to include db and docu
         st.session_state.page = "Radiology Tests"  # Change to the Simple Success page
         st.success("Laboratory tests submitted successfully.")
         st.rerun()  # Rerun to update the app
+
