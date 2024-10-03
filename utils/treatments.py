@@ -29,7 +29,7 @@ def display_treatments(db, document_id):
     dx_options = read_diagnoses_from_file()
     dx_options.insert(0, "")  
 
-    st.title("Treatments App")
+    st.title("Treatments")
 
     st.markdown("""Please provide up to 5 treatments and describe how they impact the diagnoses you have selected.""")
 
