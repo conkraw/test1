@@ -68,8 +68,14 @@ def main():
     elif st.session_state.page == "login":
         users = load_users()
         login_page(users, db, st.session_state.document_id)  # Pass document ID
+    #elif st.session_state.page == "intake_form":
+    #    display_intake_form(db, st.session_state.document_id, save_user_state)  # Pass document ID
     elif st.session_state.page == "intake_form":
-        display_intake_form(db, st.session_state.document_id, save_user_state)  # Pass document ID
+        if "intake_submitted" not in st.session_state or not st.session_state.intake_submitted:
+            display_intake_form(db, st.session_state.document_id, save_user_state)
+        else:
+            st.session_state.page = "diagnoses"  # Redirect to diagnoses page
+            st.rerun()  # Rerun to navigate to the new page
     elif st.session_state.page == "diagnoses":
         display_diagnoses(db,st.session_state.document_id,save_user_state)
     elif st.session_state.page == "Intervention Entry":
