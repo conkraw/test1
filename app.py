@@ -35,9 +35,9 @@ def main():
     if "page" not in st.session_state:
         st.session_state.page = "welcome"
 
-    # Set a constant document ID
+    # Initialize document_id to None initially
     if "document_id" not in st.session_state:
-        st.session_state.document_id = "sigma"  # Set a fixed document ID
+        st.session_state.document_id = None
 
     # Check for existing user code and page navigation
     if st.session_state.user_code:
@@ -51,11 +51,11 @@ def main():
     elif st.session_state.page == "login":
         users = load_users()
         # Call login_page and capture the unique code input
-        st.session_state.user_code = login_page(users, db, st.session_state.document_id)  
+        user_code = login_page(users, db, st.session_state.document_id)  
         
-        #if st.session_state.user_code:  # If the user code is returned from login_page
-            # You can still set the document ID based on user code if needed
-            # st.session_state.document_id = st.session_state.user_code  
+        if user_code:  # If the user code is returned from login_page
+            st.session_state.user_code = user_code  # Store the user code in session state
+            st.session_state.document_id = user_code  # Set document ID to user code
 
     elif st.session_state.page == "intake_form":
         display_intake_form(db, st.session_state.document_id)
@@ -90,5 +90,4 @@ def main():
 
 if __name__ == "__main__":
     main()
-
 
