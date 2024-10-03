@@ -118,7 +118,7 @@ def display_other_tests(db, document_id):  # Updated to include db and document_
                     at_least_one_selected = True
 
     # Submit button for other tests
-    if st.button("Submit"):
+    if st.button("Submit",key="othertests_submit_button"):
         assessments = {}
         if not at_least_one_selected:
             st.error("Please select at least one test.")
