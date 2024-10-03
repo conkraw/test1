@@ -29,8 +29,11 @@ def main():
     db = initialize_firebase()
     
     # Initialize session state
+    if "user_code" not in st.session_state: ###
+        st.session_state.user_code = None ###
+        
     if "page" not in st.session_state:
-        st.session_state.page = "welcome"  # Default page
+        st.session_state.page = "welcome"
     
     # Generate a unique document ID at the start of the session
     if "document_id" not in st.session_state:
@@ -77,5 +80,13 @@ def main():
     elif st.session_state.page == "Simple Success":
         display_simple_success1()
 
+def save_user_state(db):
+    if st.session_state.user_code:
+        entry = {
+            "last_page": st.session_state.page,
+            # Add other session data if needed
+        }
+        upload_to_firebase(db, st.session_state.user_code, entry)
+        
 if __name__ == "__main__":
     main()
