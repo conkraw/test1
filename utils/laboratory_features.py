@@ -102,7 +102,7 @@ def display_laboratory_features(db, document_id):
                 )
 
     # Submit button for laboratory features
-    if st.button("Submit"):
+    if st.button("Submit",key="lab_features_submit_button"):
         # Ensure at least one laboratory feature is provided
         if not any(st.session_state.laboratory_features):
             st.error("Please enter at least one laboratory feature.")
