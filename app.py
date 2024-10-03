@@ -61,7 +61,7 @@ def main():
     elif st.session_state.page == "intake_form":
         display_intake_form(db, st.session_state.document_id, save_user_state)  # Pass document ID
     elif st.session_state.page == "diagnoses":
-        display_diagnoses(db,st.session_state.document_id)
+        display_diagnoses(db,st.session_state.document_id,save_user_state)
     elif st.session_state.page == "Intervention Entry":
         intervention_entry_main(db,st.session_state.document_id)
     elif st.session_state.page == "History with AI":
