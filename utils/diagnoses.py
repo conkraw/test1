@@ -61,7 +61,8 @@ def display_diagnoses(db, document_id):  #######NEED THIS INCLUDING DB
 
                 # Upload to Firebase
                 try:
-                    upload_message = upload_to_firebase(db, 'your_collection_name', document_id, entry)
+                    #upload_message = upload_to_firebase(db, 'your_collection_name', document_id, entry)
+                    upload_message = upload_to_firebase(db, document_id, entry)
                     st.success("Diagnoses submitted successfully.")
                 except Exception as e:
                     st.error(f"Error uploading data: {e}")
