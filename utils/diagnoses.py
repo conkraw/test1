@@ -34,21 +34,16 @@ def display_diagnoses(db, document_id):  #######NEED THIS INCLUDING DB
                     button_key = f"select_option_{i}_{option}"
                     if st.button(f"{option}", key=button_key):
                         st.session_state.diagnoses[i] = option
-                        st.session_state.selected_option = True  # Flag that an option has been selected
+                        st.session_state.selected_buttons[i] = True  # Track selection
                         st.rerun()  # Rerun to update the input field with the selected diagnosis
-                # Hide buttons if a selection has been made
-                if current_diagnosis:
-                    st.session_state.selected_option = True
-                else:
-                    st.session_state.selected_option = False
 
-            # Show the selected diagnosis
+            # Hide buttons if a diagnosis is already selected
             if current_diagnosis:
                 st.write(f"**Selected:** {current_diagnosis}")
-
-            # Display the warning only if no buttons are available
-            if not filtered_options and search_input:
-                st.warning("Please select a diagnosis from the suggestions. If there are no suggestions, please alter your search and try again.")
+            else:
+                # Only show suggestions if no diagnosis is selected
+                if filtered_options:
+                    st.warning("Please select a diagnosis from the suggestions.")
 
             # Update session state with the current input only if it matches an option
             if current_diagnosis and current_diagnosis in dx_options:
@@ -78,3 +73,4 @@ def display_diagnoses(db, document_id):  #######NEED THIS INCLUDING DB
                 st.error("Please do not provide duplicate diagnoses.")
         else:
             st.error("Please select all 5 diagnoses.")
+
