@@ -114,7 +114,7 @@ def display_laboratory_tests(db, document_id):  # Updated to include db and docu
                 )
 
     # Submit button for laboratory tests
-    if st.button("Submit"):
+    if st.button("Submit",key="labtests_submit_button"):
         lab_tests_data = {}  # Store lab tests and assessments
         # Check if at least one laboratory test is selected
         if not any(st.session_state[f"lab_row_{i}"] for i in range(5)):
