@@ -61,7 +61,7 @@ def main():
         st.session_state.document_id = None  
 
     if st.session_state.user_code:
-        last_page = load_last_page(db)
+        last_page = load_last_page(db, st.session_state.document_id)  # Pass the document_id
         if last_page:
             st.session_state.page = last_page
 
