@@ -18,11 +18,11 @@ def login_page(users, db, document_id):  # Accept document_id as a parameter
                 #session_data = collect_session_data()
                 
                 # Define the entry data (without uploading to Firebase)
-                #entry = {
-                #    "unique_code": unique_code,
-                #    "user_name": st.session_state.user_name,
-                #    # Add any other session data as needed
-                #}
+                entry = {
+                    "unique_code": unique_code,
+                    "user_name": st.session_state.user_name,
+                    # Add any other session data as needed
+                }
                 
                 # Navigate to the intake form page
                 st.session_state.page = "intake_form"  # Change to assessment page
