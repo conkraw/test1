@@ -1,7 +1,7 @@
 import streamlit as st
 from utils.session_management import collect_session_data 
 
-def login_page(users, db, document_id):  # Accept document_id as a parameter
+def login_page(users, db):  # Accept document_id as a parameter
     st.markdown("<p style='font-family: \"DejaVu Sans\";'>Please enter your unique code to access the assessment.</p>", unsafe_allow_html=True)
     unique_code_input = st.text_input("Unique Code:")
     
@@ -15,7 +15,7 @@ def login_page(users, db, document_id):  # Accept document_id as a parameter
                 st.session_state.unique_code = unique_code
 
                 # Collect session data after setting the unique code
-                session_data = collect_session_data()
+                #session_data = collect_session_data()
                 
                 # Define the entry data (without uploading to Firebase)
                 entry = {
