@@ -3,7 +3,16 @@ from utils.file_operations import read_text_file, load_vital_signs
 from utils.session_management import collect_session_data  #######NEED THIS
 from utils.firebase_operations import upload_to_firebase
 
-def display_intake_form(db,document_id):
+def display_vs_data():
+    # Display vital signs data from session state
+    if "vs_data" in st.session_state:
+        st.subheader("Previously Recorded Vital Signs")
+        for key, value in st.session_state.vs_data.items():
+            st.write(f"{key}: {'Abnormal' if value else 'Normal'}")
+    else:
+        st.error("No vital signs data found.")
+
+def display_intake_form(db, document_id):
     
     st.markdown(f"<h3 style='font-family: \"DejaVu Sans\";'>Welcome {st.session_state.user_name}! Here is the intake form.</h3>", unsafe_allow_html=True)
 
@@ -28,6 +37,9 @@ def display_intake_form(db,document_id):
     else:
         st.write("No text found in the document.")
 
+    # Display previously recorded vital signs
+    display_vs_data()  # Call to show the vitals from session state
+
     # Load vital signs
     vital_signs_file = "vital_signs.txt"
     vital_signs = load_vital_signs(vital_signs_file)
@@ -49,27 +61,51 @@ def display_intake_form(db,document_id):
 
             # Checkboxes for vital signs
             heart_rate = vital_signs.get("heart_rate", "N/A")
-            heart_rate_checkbox = st.checkbox(f"HEART RATE: {heart_rate}", key='heart_rate_checkbox')
+            heart_rate_checkbox = st.checkbox(
+                f"HEART RATE: {heart_rate}", 
+                value=st.session_state.vs_data.get('heart_rate', False), 
+                key='heart_rate_checkbox'
+            )
 
             respiratory_rate = vital_signs.get("respiratory_rate", "N/A")
-            respiratory_rate_checkbox = st.checkbox(f"RESPIRATORY RATE: {respiratory_rate}", key='respiratory_rate_checkbox')
+            respiratory_rate_checkbox = st.checkbox(
+                f"RESPIRATORY RATE: {respiratory_rate}", 
+                value=st.session_state.vs_data.get('respiratory_rate', False), 
+                key='respiratory_rate_checkbox'
+            )
 
             blood_pressure = vital_signs.get("blood_pressure", "N/A")
-            blood_pressure_checkbox = st.checkbox(f"BLOOD PRESSURE: {blood_pressure}", key='blood_pressure_checkbox')
+            blood_pressure_checkbox = st.checkbox(
+                f"BLOOD PRESSURE: {blood_pressure}", 
+                value=st.session_state.vs_data.get('blood_pressure', False), 
+                key='blood_pressure_checkbox'
+            )
 
             pulseox = vital_signs.get("pulseox", "N/A")
-            pulseox_checkbox = st.checkbox(f"PULSE OXIMETRY: {pulseox}", key='pulseox_checkbox')
+            pulseox_checkbox = st.checkbox(
+                f"PULSE OXIMETRY: {pulseox}", 
+                value=st.session_state.vs_data.get('pulseox', False), 
+                key='pulseox_checkbox'
+            )
 
             temperature = vital_signs.get("temperature", "N/A")
-            temperature_checkbox = st.checkbox(f"TEMPERATURE: {temperature}", key='temperature_checkbox')
+            temperature_checkbox = st.checkbox(
+                f"TEMPERATURE: {temperature}", 
+                value=st.session_state.vs_data.get('temperature', False), 
+                key='temperature_checkbox'
+            )
 
             weight = vital_signs.get("weight", "N/A")
-            weight_checkbox = st.checkbox(f"WEIGHT: {weight}", key='weight_checkbox')
+            weight_checkbox = st.checkbox(
+                f"WEIGHT: {weight}", 
+                value=st.session_state.vs_data.get('weight', False), 
+                key='weight_checkbox'
+            )
 
             st.markdown("</div>", unsafe_allow_html=True)
 
         # Button to proceed to the diagnoses page
-        if st.button("Next",key="intake_next_button"):
+        if st.button("Next", key="intake_next_button"):
             st.session_state.vs_data = { 
                 'unique_code': st.session_state.unique_code,
                 'heart_rate': heart_rate_checkbox,
@@ -96,4 +132,3 @@ def display_intake_form(db,document_id):
 
     else:
         st.error("No vital signs data available.")
-
