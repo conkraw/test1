@@ -31,7 +31,7 @@ def login_page(users):  # Accept document_id as a parameter
                 
                 # Navigate to the intake form page
                 st.session_state.page = "intake_form"  # Change to assessment page
-                st.success(upload_message)  # Show success message
+                #st.success(upload_message)  # Show success message
                 st.rerun()  # Rerun to refresh the view
             else:
                 st.error("Invalid code. Please try again.")
