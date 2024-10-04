@@ -49,3 +49,19 @@ def load_last_page(db, document_id):
         if user_data.exists:
             return user_data.to_dict().get("last_page")  # Return the last_page if found
     return "welcome"  # Default to 'welcome' if no last_page is found
+
+# Example function to retrieve diagnoses from Firebase
+
+def get_diagnoses_from_firebase(db, document_id):
+    collection_name = st.secrets["FIREBASE_COLLECTION_NAME"]
+    doc_ref = db.collection(collection_name).document(document_id)
+    
+    # Get the document from Firebase
+    user_data = doc_ref.get()
+    
+    if user_data.exists:
+        # Retrieve the diagnoses data (if it exists)
+        diagnoses = user_data.to_dict().get("diagnoses", None)
+        return diagnoses  # Return the stored diagnoses data
+    return None  # No data found
+
