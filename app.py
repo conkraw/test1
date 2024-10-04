@@ -24,6 +24,7 @@ from utils.treatments import display_treatments
 from utils.firebase_operations import initialize_firebase, upload_to_firebase
 from utils.session_management import collect_session_data
 from utils.firebase_operations import load_last_page 
+from utils.firebase_operations import get_diagnoses_from_firebase 
 import uuid  # To generate unique document IDs
 
 def save_user_state(db):
