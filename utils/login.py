@@ -1,7 +1,6 @@
 import streamlit as st
 from utils.session_management import collect_session_data 
 from utils.firebase_operations import upload_to_firebase
-from app import load_last_page
 
 #def login_page(users, db, document_id):  # Accept document_id as a parameter
 def login_page(users, db):
