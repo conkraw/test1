@@ -15,8 +15,8 @@ def login_page(users):
                 st.session_state.user_code = unique_code
                 st.session_state.page = "intake_form"  # Redirect to the intake form page
                 st.success("Login successful!")
-                st.rerun()
             else:
                 st.error("Invalid code. Please try again.")
         else:
             st.error("Please enter a code.")
+
