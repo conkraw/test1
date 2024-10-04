@@ -61,17 +61,20 @@ def main():
         welcome_page()
     elif st.session_state.page == "login":
         users = load_users()
-        login_page(users)  # Only pass db, the unique code will be handled inside login
+        login_page(users)  # No need to pass document_id here, as the unique code is handled within login_page
     elif st.session_state.page == "intake_form":
-        # The document ID should be set to the unique code entered during login
-        st.session_state.document_id = st.session_state.user_code  # Set the unique code as document_id
-        display_intake_form(db, st.session_state.document_id)  # Pass document_id
+        # Set the document_id to the user_code when transitioning to intake form
+        st.session_state.document_id = st.session_state.user_code
+        display_intake_form(db, st.session_state.document_id)  # Pass document_id to intake form
     elif st.session_state.page == "diagnoses":
         display_diagnoses(db, st.session_state.document_id)
     elif st.session_state.page == "Intervention Entry":
         intervention_entry_main(db, st.session_state.document_id)
     elif st.session_state.page == "History with AI":
-        run_virtual_patient(db, st.session_state.document_id)
+        if st.session_state.document_id:
+            run_virtual_patient(db, st.session_state.document_id)
+        else:
+            st.error("User code is not set. Please log in.")
     elif st.session_state.page == "Focused Physical Examination":
         display_focused_physical_examination(db, st.session_state.document_id)
     elif st.session_state.page == "Physical Examination Components":
@@ -97,3 +100,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
