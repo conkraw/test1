@@ -80,10 +80,10 @@ def main():
 
         if diagnoses:
         # Display the stored diagnoses data
-        st.write("Previously saved diagnoses:", diagnoses)
+            st.write("Previously saved diagnoses:", diagnoses)
         else:
         # No saved diagnoses, so prompt user to enter new data
-        st.warning("No saved diagnoses found. Please enter your diagnoses.")
+            st.warning("No saved diagnoses found. Please enter your diagnoses.")
     
         # Call the function to allow the user to enter new diagnoses
         display_diagnoses(db, st.session_state.document_id)
