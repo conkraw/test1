@@ -45,7 +45,7 @@ def load_last_page(db):
 def main():
     # Initialize Firebase
     db = initialize_firebase()
-    
+
     # Initialize session state variables
     if "user_code" not in st.session_state:  # Initialize user_code if not present
         st.session_state.user_code = None
@@ -56,10 +56,17 @@ def main():
     if "page" not in st.session_state:
         st.session_state.page = "welcome"
     
+    # Debugging: Print user_code and document_id
+    st.write(f"User code: {st.session_state.user_code}")
+    st.write(f"Document ID: {st.session_state.document_id}")
+    
     # Set document_id to user_code if the user is logged in (after user_code is set)
     if st.session_state.user_code:
         st.session_state.document_id = st.session_state.user_code  # Set document_id to user_code
-    
+        st.write(f"Document ID has been set to: {st.session_state.document_id}")
+    else:
+        st.write("User code is not set. Please log in.")
+
     # Load last page if user is logged in
     if st.session_state.user_code:
         last_page = load_last_page(db)
