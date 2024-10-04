@@ -55,7 +55,7 @@ def main():
     
     # Generate a unique document ID at the start of the session
     if "document_id" not in st.session_state:
-        st.session_state.document_id = str(uuid.uuid4())
+        st.session_state.document_id = None    
 
     if st.session_state.user_code:
         last_page = load_last_page(db)
@@ -67,8 +67,9 @@ def main():
         welcome_page()
     elif st.session_state.page == "login":
         users = load_users()
-        login_page(users, db, st.session_state.document_id)  # Pass document ID
+        login_page(users)  # Pass document ID
     elif st.session_state.page == "intake_form":
+        st.session_state.document_id = unique_code
         display_intake_form(db, st.session_state.document_id)
     elif st.session_state.page == "diagnoses":
         display_diagnoses(db,st.session_state.document_id)
