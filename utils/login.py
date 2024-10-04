@@ -1,4 +1,5 @@
 import streamlit as st
+from app import load_last_page 
 from utils.session_management import collect_session_data 
 from utils.firebase_operations import upload_to_firebase
 
