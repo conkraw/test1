@@ -33,15 +33,14 @@ def save_user_state(db):
         }
         upload_to_firebase(db, st.session_state.user_code, entry)
 
-def load_last_page(db):
-    collection_name = st.secrets["FIREBASE_COLLECTION_NAME"]  # Get collection name from secrets
-    if st.session_state.user_code:
-        user_data = db.collection(collection_name).document(st.session_state.user_code).get()
+def retrieve_last_page(db):
+    collection_name = st.secrets["FIREBASE_COLLECTION_NAME"]
+    if st.session_state.document_id:
+        user_data = db.collection(collection_name).document(st.session_state.document_id).get()
         if user_data.exists:
-            return user_data.to_dict().get("last_page")
+            return user_data.to_dict().get("last_page", "welcome")  # Default to "welcome"
     return "welcome"
-
-        
+    
 def main():
     # Initialize Firebase
     db = initialize_firebase()
@@ -57,8 +56,9 @@ def main():
     if "document_id" not in st.session_state:
         st.session_state.document_id = None    
 
-    if st.session_state.user_code:
-        last_page = load_last_page(db)
+    # Retrieve last page if document_id is present
+    if st.session_state.document_id:
+        last_page = retrieve_last_page(db)
         if last_page:
             st.session_state.page = last_page
 
@@ -99,6 +99,8 @@ def main():
         display_treatments(db,st.session_state.document_id)
     elif st.session_state.page == "Simple Success":
         display_simple_success1()
+
+     save_user_state(db)
 
 if __name__ == "__main__":
     main()
