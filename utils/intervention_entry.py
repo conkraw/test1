@@ -32,6 +32,7 @@ def main(db,document_id):
             st.success("Your interventions have been saved successfully.")
             
             st.session_state.page = "History with AI"  # Change to the next page
+            st.session_state.document_id = document_id 
             st.rerun()  # Rerun to navigate to the next page
         else:
             st.error("Please enter a description of the interventions.")
