@@ -70,7 +70,7 @@ def main():
     elif st.session_state.page == "login":
         users = load_users()
         #login_page(users, db, st.session_state.document_id)  # Pass document ID
-        login_page(users)  # Pass document ID
+        login_page(users,db)  # Pass document ID
     elif st.session_state.page == "intake_form":
         display_intake_form(db, st.session_state.document_id)
     elif st.session_state.page == "diagnoses":
