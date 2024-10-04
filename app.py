@@ -68,35 +68,36 @@ def main():
         users = load_users()
         login_page(users, db)  # No need to pass document_id here, as it's now handled in the login
     elif st.session_state.page == "intake_form":
-        display_intake_form(db)
+        display_intake_form(db, st.session_state.document_id)  # Pass document_id here
     elif st.session_state.page == "diagnoses":
-        display_diagnoses(db)
+        display_diagnoses(db, st.session_state.document_id)  # Pass document_id here
     elif st.session_state.page == "Intervention Entry":
-        intervention_entry_main(db)
+        intervention_entry_main(db, st.session_state.document_id)  # Pass document_id here
     elif st.session_state.page == "History with AI":
-        run_virtual_patient(db)
+        run_virtual_patient(db, st.session_state.document_id)  # Pass document_id here
     elif st.session_state.page == "Focused Physical Examination":
-        display_focused_physical_examination(db)
+        display_focused_physical_examination(db, st.session_state.document_id)  # Pass document_id here
     elif st.session_state.page == "Physical Examination Components":
         display_physical_examination()
     elif st.session_state.page == "History Illness Script":
-        history_illness_script(db)
+        history_illness_script(db, st.session_state.document_id)  # Pass document_id here
     elif st.session_state.page == "Physical Examination Features":
-        display_physical_examination_features(db)
+        display_physical_examination_features(db, st.session_state.document_id)  # Pass document_id here
     elif st.session_state.page == "Laboratory Tests":
-        display_laboratory_tests(db)
+        display_laboratory_tests(db, st.session_state.document_id)  # Pass document_id here
     elif st.session_state.page == "Radiology Tests":
-        display_radiological_tests(db)
+        display_radiological_tests(db, st.session_state.document_id)  # Pass document_id here
     elif st.session_state.page == "Other Tests":
-        display_other_tests(db)
+        display_other_tests(db, st.session_state.document_id)  # Pass document_id here
     elif st.session_state.page == "Results":
         display_results_image()
     elif st.session_state.page == "Laboratory Features":
-        display_laboratory_features(db)
+        display_laboratory_features(db, st.session_state.document_id)  # Pass document_id here
     elif st.session_state.page == "Treatments":
-        display_treatments(db)
+        display_treatments(db, st.session_state.document_id)  # Pass document_id here
     elif st.session_state.page == "Simple Success":
         display_simple_success1()
 
 if __name__ == "__main__":
     main()
+
