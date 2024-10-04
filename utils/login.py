@@ -1,18 +1,19 @@
-# login.py
-
 import streamlit as st
-from utils.session_management import collect_session_data 
+from utils.session_management import collect_session_data
 from utils.firebase_operations import upload_to_firebase
 
 def login_page(users, db, document_id):  # Accept document_id as a parameter
     st.markdown("<p style='font-family: \"DejaVu Sans\";'>Please enter your unique code to access the assessment.</p>", unsafe_allow_html=True)
+    
     unique_code_input = st.text_input("Unique Code:")
     
     if st.button("Submit"):
         if unique_code_input:
             try:
-                # Convert the input to an integer and check if it's valid
+                # Try converting the input to an integer and check if it's valid
                 unique_code = int(unique_code_input.strip())
+                
+                # Check if the unique_code is in the list of valid users
                 if unique_code in users['code'].values:
                     # Store the unique code in session state
                     st.session_state.user_name = users.loc[users['code'] == unique_code, 'name'].values[0]
@@ -38,7 +39,9 @@ def login_page(users, db, document_id):  # Accept document_id as a parameter
                 else:
                     st.error("Invalid code. Please try again.")
             except ValueError:
-                st.error("Please enter a valid code.")
+                # This block catches non-integer inputs
+                st.error("Please enter a valid code (only numbers are allowed).")
         else:
             st.error("Please enter a code.")
+
 
