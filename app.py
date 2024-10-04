@@ -40,7 +40,18 @@ def retrieve_last_page(db):
         if user_data.exists:
             return user_data.to_dict().get("last_page", "welcome")  # Default to "welcome"
     return "welcome"
-    
+
+def upload_all_session_data(db, document_id):
+    if document_id:
+        entry = {
+            "unique_code": st.session_state.get('unique_code'),
+            "vs_data": st.session_state.get('vs_data', []),
+            "diagnoses": st.session_state.get('diagnoses_s1', []),
+            "interventions": st.session_state.get('interventions', []),  # Example of collected data
+            # Add other session data as necessary
+        }
+        upload_to_firebase(db, document_id, entry)
+        
 def main():
     # Initialize Firebase
     db = initialize_firebase()
@@ -61,6 +72,9 @@ def main():
         last_page = retrieve_last_page(db)
         if last_page:
             st.session_state.page = last_page
+            
+            # Re-upload session data if returning to a page
+            upload_all_session_data(db, st.session_state.document_id)
 
     # Page routing
     if st.session_state.page == "welcome":
