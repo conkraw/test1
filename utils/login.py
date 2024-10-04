@@ -2,7 +2,8 @@ import streamlit as st
 from utils.session_management import collect_session_data
 from utils.firebase_operations import upload_to_firebase
 
-def login_page(users, db, document_id):  # Accept document_id as a parameter
+def login_page(users):
+#def login_page(users, db, document_id):  # Accept document_id as a parameter
     st.markdown("<p style='font-family: \"DejaVu Sans\";'>Please enter your unique code to access the assessment.</p>", unsafe_allow_html=True)
     
     unique_code_input = st.text_input("Unique Code:")
@@ -18,7 +19,7 @@ def login_page(users, db, document_id):  # Accept document_id as a parameter
                 st.session_state.unique_code = unique_code
 
                 # Collect session data after setting the unique code
-                session_data = collect_session_data()
+                #session_data = collect_session_data()
                 
                 # Define the entry data
                 entry = {
@@ -28,11 +29,11 @@ def login_page(users, db, document_id):  # Accept document_id as a parameter
                 }
                 
                 # Upload the session data to Firebase
-                upload_message = upload_to_firebase(db, document_id, entry)
+                #upload_message = upload_to_firebase(db, document_id, entry)
                 
                 # Navigate to the intake form page
                 st.session_state.page = "intake_form"  # Change to assessment page
-                st.success(upload_message)  # Show success message
+                #st.success(upload_message)  # Show success message
                 st.rerun()  # Rerun to refresh the view
             else:
                 st.error("Invalid code. Please try again.")
