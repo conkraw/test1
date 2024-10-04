@@ -61,7 +61,7 @@ def get_diagnoses_from_firebase(db, document_id):
     
     if user_data.exists:
         # Retrieve the diagnoses data (if it exists)
-        diagnoses = user_data.to_dict().get("diagnoses", None)
+        diagnoses = user_data.to_dict().get("diagnoses_s1", None)
         return diagnoses  # Return the stored diagnoses data
     return None  # No data found
 
