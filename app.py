@@ -75,7 +75,18 @@ def main():
     elif st.session_state.page == "intake_form":
         display_intake_form(db, st.session_state.document_id)
     elif st.session_state.page == "diagnoses":
-        display_diagnoses(db,st.session_state.document_id)
+    # Pull diagnoses data from Firebase
+    diagnoses = get_diagnoses_from_firebase(db, st.session_state.document_id)
+
+    if diagnoses:
+        # Display the stored diagnoses data
+        st.write("Previously saved diagnoses:", diagnoses)
+    else:
+        # No saved diagnoses, so prompt user to enter new data
+        st.warning("No saved diagnoses found. Please enter your diagnoses.")
+    
+    # Call the function to allow the user to enter new diagnoses
+    display_diagnoses(db, st.session_state.document_id)
     elif st.session_state.page == "Intervention Entry":
         intervention_entry_main(db,st.session_state.document_id)
     elif st.session_state.page == "History with AI":
