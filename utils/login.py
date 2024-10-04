@@ -27,7 +27,7 @@ def login_page(users):  # Accept document_id as a parameter
                 }
                 
                 # Upload the session data to Firebase
-                upload_message = upload_to_firebase(db, document_id, entry)
+                #upload_message = upload_to_firebase(db, document_id, entry)
                 
                 # Navigate to the intake form page
                 st.session_state.page = "intake_form"  # Change to assessment page
