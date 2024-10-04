@@ -75,20 +75,8 @@ def main():
         login_page(users,db)  # Pass document ID
     elif st.session_state.page == "intake_form":
         display_intake_form(db, st.session_state.document_id)
-    # Handling the "diagnoses" page
-    # Handling the "diagnoses" page
     elif st.session_state.page == "diagnoses":
-        # Pull saved diagnoses data from Firebase (in diagnoses_s1)
-        diagnoses = get_diagnoses_from_firebase(db, st.session_state.document_id)
-    
-        # Check if diagnoses are found
-        if diagnoses:
-            # If diagnoses are found, pre-fill the text area with the existing diagnosis
-            st.session_state.page = "next_page"  # Change "next_page" to the actual page name
-    
-        else:
-             display_diagnoses(db,st.session_state.document_id)
-
+        display_diagnoses(db,st.session_state.document_id)
     elif st.session_state.page == "Intervention Entry":
         intervention_entry_main(db,st.session_state.document_id)
     elif st.session_state.page == "History with AI":
