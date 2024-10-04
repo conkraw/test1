@@ -99,8 +99,7 @@ def main():
         display_treatments(db,st.session_state.document_id)
     elif st.session_state.page == "Simple Success":
         display_simple_success1()
-
-     save_user_state(db)
+    save_user_state(db)
 
 if __name__ == "__main__":
     main()
