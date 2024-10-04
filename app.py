@@ -76,41 +76,48 @@ def main():
     elif st.session_state.page == "intake_form":
         display_intake_form(db, st.session_state.document_id)
     # Handling the "diagnoses" page
+    # Handling the "diagnoses" page
     elif st.session_state.page == "diagnoses":
-        # Pull diagnoses data from Firebase
+        # Pull saved diagnoses data from Firebase (in diagnoses_s1)
         diagnoses = get_diagnoses_from_firebase(db, st.session_state.document_id)
     
+        # Check if diagnoses are found
         if diagnoses:
-            # If diagnoses are found, pre-fill the text area with existing diagnoses
+            # If diagnoses are found, pre-fill the text area with the existing diagnosis
             st.write("Previously saved diagnoses:")
             st.write(diagnoses)  # Display the saved diagnosis
     
-            # Provide the user the ability to update the diagnosis
-            st.warning("If you want to update the diagnoses, you can modify them below.")
+            # Pre-fill the text area with the saved diagnosis for editing
             default_diagnosis = diagnoses  # Use the previously saved diagnosis as default
+    
+            st.warning("You can modify the diagnoses if needed.")
+    
+            # Automatically move the user to the next page (after diagnoses) if saved diagnoses exist
+            st.session_state.page = "next_page"  # Change "next_page" to the actual page name
     
         else:
             # No saved diagnoses, so prompt user to enter new data
             st.warning("No saved diagnoses found. Please enter your diagnoses.")
             default_diagnosis = ""  # Empty string since no diagnoses are available
     
-        # Display form to allow the user to enter new diagnoses or modify existing ones
-        with st.form(key="diagnosis_form"):
-            updated_diagnosis = st.text_area("Enter new diagnosis(es):", value=default_diagnosis, height=150)
+            # Display form to allow the user to enter new diagnoses
+            with st.form(key="diagnosis_form"):
+                updated_diagnosis = st.text_area("Enter new diagnosis(es):", value=default_diagnosis, height=150)
     
-            # Add a submit button
-            submit_button = st.form_submit_button(label="Save Diagnosis")
+                # Add a submit button
+                submit_button = st.form_submit_button(label="Save Diagnosis")
     
-            if submit_button:
-                if updated_diagnosis:
-                    # Save the updated or new diagnoses to Firebase
-                    save_diagnosis_to_firebase(db, st.session_state.document_id, updated_diagnosis)
-                    st.success("Diagnosis saved successfully!")
-                else:
-                    st.error("Please enter a diagnosis before submitting.")
+                if submit_button:
+                    if updated_diagnosis:
+                        # Save the updated or new diagnoses to Firebase
+                        save_diagnosis_to_firebase(db, st.session_state.document_id, updated_diagnosis)
+                        st.success("Diagnosis saved successfully!")
     
-        # Optionally, you can display other components or move the user to the next page
-        display_diagnoses(db, st.session_state.document_id)
+                        # Move to the next page after saving
+                        st.session_state.page = "next_page"  # Change "next_page" to the actual page name
+                    else:
+                        st.error("Please enter a diagnosis before submitting.")
+
 
     elif st.session_state.page == "Intervention Entry":
         intervention_entry_main(db,st.session_state.document_id)
