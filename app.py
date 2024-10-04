@@ -33,13 +33,15 @@ def save_user_state(db):
         }
         upload_to_firebase(db, st.session_state.user_code, entry)
 
-def load_last_page(db):
+def load_last_page(db, document_id):
     collection_name = st.secrets["FIREBASE_COLLECTION_NAME"]  # Get collection name from secrets
-    if st.session_state.user_code:
-        user_data = db.collection(collection_name).document(st.session_state.user_code).get()
+    
+    # Check if the document ID exists in the database
+    if document_id:
+        user_data = db.collection(collection_name).document(document_id).get()
         if user_data.exists:
-            return user_data.to_dict().get("last_page")
-    return "welcome"
+            return user_data.to_dict().get("last_page")  # Return the last_page if found
+    return "welcome"  # Default to 'welcome' if no last_page is found
 
         
 def main():
@@ -54,7 +56,8 @@ def main():
         st.session_state.page = "welcome"
     
     # Generate a unique document ID at the start of the session
-    
+    if "document_id" not in st.session_state:
+        st.session_state.document_id = None  
 
     if st.session_state.user_code:
         last_page = load_last_page(db)
@@ -68,8 +71,6 @@ def main():
         users = load_users()
         #login_page(users, db, st.session_state.document_id)  # Pass document ID
         login_page(users)  # Pass document ID
-    elif "document_id" not in st.session_state:
-        st.session_state.document_id = unique_code
     elif st.session_state.page == "intake_form":
         display_intake_form(db, st.session_state.document_id)
     elif st.session_state.page == "diagnoses":
