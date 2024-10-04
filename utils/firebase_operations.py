@@ -37,3 +37,14 @@ def upload_to_firebase(db, document_id, entry):
     db.collection(FIREBASE_COLLECTION_NAME).document(document_id).set(entry, merge=True) 
     return "Data uploaded to Firebase."
 
+# utils/firebase_operations.py
+
+def load_last_page(db, document_id):
+    collection_name = st.secrets["FIREBASE_COLLECTION_NAME"]  # Get collection name from secrets
+    
+    # Check if the document ID exists in the database
+    if document_id:
+        user_data = db.collection(collection_name).document(document_id).get()
+        if user_data.exists:
+            return user_data.to_dict().get("last_page")  # Return the last_page if found
+    return "welcome"  # Default to 'welcome' if no last_page is found
