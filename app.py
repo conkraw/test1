@@ -46,10 +46,13 @@ def main():
     # Initialize Firebase
     db = initialize_firebase()
     
-    # Initialize session state
+    # Initialize session state variables
     if "user_code" not in st.session_state:  # Initialize user_code if not present
-        st.session_state.user_code = None 
+        st.session_state.user_code = None
         
+    if "document_id" not in st.session_state:  # Initialize document_id if not present
+        st.session_state.document_id = None
+    
     if "page" not in st.session_state:
         st.session_state.page = "welcome"
     
@@ -138,4 +141,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
