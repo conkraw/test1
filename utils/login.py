@@ -15,7 +15,7 @@ def login_page(users, db, document_id):  # Accept document_id as a parameter
                 st.session_state.unique_code = unique_code
 
                 # Collect session data after setting the unique code
-                #session_data = collect_session_data()
+                session_data = collect_session_data()
                 
                 # Define the entry data (without uploading to Firebase)
                 entry = {
