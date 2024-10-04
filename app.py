@@ -61,7 +61,7 @@ def main():
         welcome_page()
     elif st.session_state.page == "login":
         users = load_users()
-        login_page(users, db)  # Only pass db, the unique code will be handled inside login
+        login_page(users)  # Only pass db, the unique code will be handled inside login
     elif st.session_state.page == "intake_form":
         # The document ID should be set to the unique code entered during login
         st.session_state.document_id = st.session_state.user_code  # Set the unique code as document_id
