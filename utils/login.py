@@ -3,8 +3,8 @@ from utils.session_management import collect_session_data
 from utils.firebase_operations import upload_to_firebase
 from utils.firebase_operations import load_last_page 
 
-#def login_page(users, db, document_id):  # Accept document_id as a parameter
-def login_page(users, db):
+def login_page(users, db, document_id):  # Accept document_id as a parameter
+#def login_page(users, db):
     st.markdown("<p style='font-family: \"DejaVu Sans\";'>Please enter your unique code to access the assessment.</p>", unsafe_allow_html=True)
     unique_code_input = st.text_input("Unique Code:")
     
