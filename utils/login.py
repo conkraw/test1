@@ -23,7 +23,7 @@ def login_page(users, db, document_id):  # Accept document_id as a parameter
                 #last_page = load_last_page(db, st.session_state.document_id)
                 
                 # Set the last_page in session state and navigate the user to that page
-                st.session_state.page = last_page
+                #st.session_state.page = last_page
 
                 st.success(f"Welcome back! Redirecting to {last_page}...")
                 st.rerun()  # Rerun to refresh and redirect to the correct page
