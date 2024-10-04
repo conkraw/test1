@@ -23,8 +23,6 @@ from utils.laboratory_features import display_laboratory_features
 from utils.treatments import display_treatments
 from utils.firebase_operations import initialize_firebase, upload_to_firebase
 from utils.session_management import collect_session_data
-from utils.firebase_operations import load_last_page 
-from utils.firebase_operations import get_diagnoses_from_firebase 
 import uuid  # To generate unique document IDs
 
 def save_user_state(db):
@@ -35,15 +33,13 @@ def save_user_state(db):
         }
         upload_to_firebase(db, st.session_state.user_code, entry)
 
-def load_last_page(db, document_id):
+def load_last_page(db):
     collection_name = st.secrets["FIREBASE_COLLECTION_NAME"]  # Get collection name from secrets
-    
-    # Check if the document ID exists in the database
-    if document_id:
-        user_data = db.collection(collection_name).document(document_id).get()
+    if st.session_state.user_code:
+        user_data = db.collection(collection_name).document(st.session_state.user_code).get()
         if user_data.exists:
-            return user_data.to_dict().get("last_page")  # Return the last_page if found
-    return "welcome"  # Default to 'welcome' if no last_page is found
+            return user_data.to_dict().get("last_page")
+    return "welcome"
 
         
 def main():
@@ -59,10 +55,10 @@ def main():
     
     # Generate a unique document ID at the start of the session
     if "document_id" not in st.session_state:
-        st.session_state.document_id = None  
+        st.session_state.document_id = str(uuid.uuid4())
 
     if st.session_state.user_code:
-        last_page = load_last_page(db, st.session_state.document_id)  # Pass the document_id
+        last_page = load_last_page(db)
         if last_page:
             st.session_state.page = last_page
 
@@ -71,13 +67,11 @@ def main():
         welcome_page()
     elif st.session_state.page == "login":
         users = load_users()
-        #login_page(users, db, st.session_state.document_id)  # Pass document ID
-        login_page(users,db)  # Pass document ID
+        login_page(users, db, st.session_state.document_id)  # Pass document ID
     elif st.session_state.page == "intake_form":
         display_intake_form(db, st.session_state.document_id)
-    # First ensure vs_data is loaded before entering the diagnoses page
     elif st.session_state.page == "diagnoses":
-        display_diagnoses(db, st.session_state.document_id)
+        display_diagnoses(db,st.session_state.document_id)
     elif st.session_state.page == "Intervention Entry":
         intervention_entry_main(db,st.session_state.document_id)
     elif st.session_state.page == "History with AI":
