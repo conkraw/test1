@@ -2,7 +2,7 @@ import streamlit as st
 from utils.session_management import collect_session_data
 from utils.firebase_operations import upload_to_firebase
 
-def login_page(users):
+def login_page(users,db):
 #def login_page(users, db, document_id):  # Accept document_id as a parameter
     st.markdown("<p style='font-family: \"DejaVu Sans\";'>Please enter your unique code to access the assessment.</p>", unsafe_allow_html=True)
     
