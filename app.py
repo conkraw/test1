@@ -75,8 +75,51 @@ def main():
         login_page(users,db)  # Pass document ID
     elif st.session_state.page == "intake_form":
         display_intake_form(db, st.session_state.document_id)
+    # First ensure vs_data is loaded before entering the diagnoses page
     elif st.session_state.page == "diagnoses":
-        display_diagnoses(db,st.session_state.document_id)
+        # Check if 'vs_data' is in session_state
+        if 'vs_data' not in st.session_state:
+            # If vs_data is not available, redirect the user to the intake form
+            st.warning("Vital signs data is required to proceed. Redirecting to intake form...")
+            st.session_state.page = "intake_form"
+        else:
+            # If vs_data exists, proceed with loading the diagnoses page
+            diagnoses = st.session_state.diagnoses_s1 if 'diagnoses_s1' in st.session_state else None
+    
+            if diagnoses:
+                # If saved diagnoses exist, display them and move to the next page
+                st.write("Previously saved diagnoses:")
+                st.write(diagnoses)
+    
+                # Move the user to the next page (after diagnoses)
+                st.session_state.page = "next_page"  # Change 'next_page' to the actual page name
+            else:
+                # If no saved diagnoses, prompt the user to enter new ones
+                st.warning("No saved diagnoses found. Please enter your diagnoses.")
+    
+                # Display a form for the user to enter new diagnoses
+                with st.form(key="diagnosis_form"):
+                    updated_diagnosis = st.text_area("Enter new diagnosis:", height=150)
+    
+                    submit_button = st.form_submit_button(label="Save Diagnosis")
+    
+                    if submit_button:
+                        if updated_diagnosis:
+                            # Save the diagnosis to Firebase and session_state
+                            save_diagnosis_to_firebase(db, st.session_state.document_id, updated_diagnosis)
+    
+                            # Update session_state with new diagnosis
+                            if 'diagnoses_s1' not in st.session_state:
+                                st.session_state.diagnoses_s1 = []
+    
+                            st.session_state.diagnoses_s1.append(updated_diagnosis)
+    
+                            st.success("Diagnosis saved successfully!")
+                            # Move the user to the next page after saving
+                            st.session_state.page = "next_page"  # Replace 'next_page' with actual next page
+                        else:
+                            st.error("Please enter a diagnosis before submitting.")
+
     elif st.session_state.page == "Intervention Entry":
         intervention_entry_main(db,st.session_state.document_id)
     elif st.session_state.page == "History with AI":
