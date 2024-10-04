@@ -16,6 +16,8 @@ def login_page(users):  # Accept document_id as a parameter
                 st.session_state.user_name = users.loc[users['code'] == unique_code, 'name'].values[0]
                 st.session_state.unique_code = unique_code
 
+                st.session_state.document_id = unique_code 
+                
                 # Collect session data after setting the unique code
                 session_data = collect_session_data()
                 
